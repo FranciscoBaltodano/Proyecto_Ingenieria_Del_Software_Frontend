@@ -1,8 +1,7 @@
 import { Button, Menu, MenuItem } from '@mui/material';
-import PalletteIcon from '@mui/icons-material/Palette';
 import { useContext, useRef, useState } from 'react';
 import { ThemeContext } from '../theme/ThemeContext';
-
+import LightModeIcon from '@mui/icons-material/LightMode';
 export const ToggleTheme = () => {
   const { themeMode, switchThemeMode } = useContext(ThemeContext);
   const [openMenu, setOpenMenu] = useState(false);
@@ -24,8 +23,8 @@ export const ToggleTheme = () => {
   return (
     <>
       <Button
-        variant="contained"
-        startIcon={<PalletteIcon />}
+        variant="outlined"
+        startIcon={<LightModeIcon />}
         onClick={handleOpen} // Ejecuta la función aquí
         ref={buttonRef}
       >
