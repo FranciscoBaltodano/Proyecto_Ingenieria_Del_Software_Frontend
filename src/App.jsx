@@ -1,16 +1,13 @@
 import { AppRouter } from './router/AppRouter';
-import { Navbar } from './components/Navbar';
+import { Grid } from '@mui/material';
 
 function App() {
 
   return (
     <>
-      <Navbar />
-      <AppRouter />
+        <AppRouter />
     </>
   );
 };
 
 export default App
-
-

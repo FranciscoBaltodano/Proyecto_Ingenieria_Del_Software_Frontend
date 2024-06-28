@@ -10,26 +10,19 @@ import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import logoUNAH from '/assets/logoUNAH.png';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
-
+import { NavLink, useLocation } from 'react-router-dom';
+import logoUNAH from '/assets/logoUNAH.png';
+import logoUNAHconLetras from '/assets/logoUNAHconLetras.png'
 // tamaño de la barra lateral
 const drawerWidth = 240;
 
 const navItems = [
-  { label: 'Home', path: '/' },
-  { label: 'Login', path: '/login' },
-  { label: 'Admin', path: '/admin' },
-  { label: 'Admisiones', path: '/admisiones' },
-  { label: 'Estudiantes', path: '/estudiantes' },
-  { label: 'Notas', path: '/notas' },
-  { label: 'Matricula', path: '/matricula' },
-  { label: 'Docentes', path: '/docentes' },
+  { label: 'Inicio', path: '/admisiones/' },
+  { label: 'Oferta', path: '/admisiones/oferta' },
+  { label: 'Inscripciones', path: '/admisiones/inscripciones' },
 ];
-
 
 export const Navbar = (props) => {
   const { window } = props;
@@ -38,22 +31,12 @@ export const Navbar = (props) => {
 
   const getValueFromLocation = (pathname) => {
     switch (pathname) {
-      case '/':
+      case '/admisiones/':
         return 0;
-      case '/login':
+      case '/admisiones/oferta':
         return 1;
-      case '/admin':
+      case '/admisiones/inscripciones':
         return 2;
-      case '/admisiones':
-        return 3;
-      case '/estudiantes':
-        return 4;
-      case '/notas':
-        return 5;
-      case '/matricula':
-        return 6;
-      case '/docentes':
-        return 7;
       default:
         return 0;
     }
@@ -77,9 +60,12 @@ export const Navbar = (props) => {
   // barra lateral
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2, color: theme.palette.text.primary }}>
-        UNAH
-      </Typography>
+      <Button
+          component={NavLink}
+          to="/"
+          sx={{ marginLeft: 2, my: 2 }} >
+          <img src='/assets/logoUNAHconLetras.png' alt="UNAH" width="160" height="80"/>
+      </Button>
 
       <Tabs
         orientation="vertical"
@@ -102,18 +88,26 @@ export const Navbar = (props) => {
           />
         ))}
       </Tabs>
+      <Button
+        variant="contained"
+        component={NavLink}
+        to="/login">Acceder
+      </Button>
     </Box>
   );
+  // Fin de la Barra Lateral
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
+  // NavBar
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar variant='div' component="nav" sx={{
-        backgroundColor:'transparent',
-        boxShadow: 'none',
-        color: theme.palette.text.primary 
+      <AppBar component="nav" sx={{
+       backgroundColor: '#ffffff00', 
+       backdropFilter: 'blur(10px)', 
+       boxShadow: '0 4px 4px #00000040',
+       color: theme.palette.text.primary 
       }}>
         <Toolbar>
           {/* icono hamburguesa */}
@@ -122,20 +116,23 @@ export const Navbar = (props) => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { sm: 'block', md:'none'  } }}
           >
             <MenuIcon />
           </IconButton>
 
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+          <Box
+            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'none', md:'flex' } }}
           >
-            <img src={logoUNAH} alt="UNAH" width="50" height="50" />
-            UNAH
-          </Typography>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            <Button
+              component={NavLink}
+              to="/"
+              sx={{ marginLeft: 2 }} >
+              <img src='/assets/logoUNAHconLetras.png' alt="UNAH" width="110" height="50"/>
+            </Button>
+          </Box>
+
+          <Box sx={{ display: { xs: 'none', sm: 'none', md:'flex' } }}>
             <Tabs value={value} onChange={handleChange} centered>
               {navItems.map((item, index) => (
                 <Tab
@@ -150,12 +147,20 @@ export const Navbar = (props) => {
                   }}
                 />
               ))}
-                {/* <ToggleTheme /> */}
             </Tabs>
+            <Button
+              variant="contained"
+              component={NavLink}
+              to="/login"
+              sx={{ marginLeft: 2 }}  
+            >
+              Acceder
+            </Button>
           </Box>
 
         </Toolbar>
       </AppBar>
+
       <nav>
         <Drawer
           container={container}
@@ -166,16 +171,18 @@ export const Navbar = (props) => {
             keepMounted: true,
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', sm: 'block', md:'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
           {drawer}
         </Drawer>
       </nav>
+
       <Box component="main" sx={{ p: 1 }}>
         <Toolbar />
       </Box>
+
     </Box>
   );
 };
@@ -183,3 +190,4 @@ export const Navbar = (props) => {
 Navbar.propTypes = {
   window: PropTypes.func,
 };
+
