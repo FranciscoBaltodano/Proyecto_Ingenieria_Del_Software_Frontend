@@ -6,8 +6,6 @@ import { OfertaPage } from '../pages/OfertaPage';
 import { InscripcionesPage } from '../pages/InscripcionesPage';
 
 export const AdmisionesRoutes = () => {
-  console.log('Rendering AdmisionesRoutes');
-  
   return (
     <Routes>
       <Route path="/" element={<InicioPage />} />

@@ -64,7 +64,7 @@ export const Navbar = (props) => {
           component={NavLink}
           to="/"
           sx={{ marginLeft: 2, my: 2 }} >
-          <img src='/assets/logoUNAHconLetras.png' alt="UNAH" width="160" height="80"/>
+          <img src={logoUNAHconLetras} alt="UNAH" width="160" height="80"/>
       </Button>
 
       <Tabs
@@ -128,7 +128,7 @@ export const Navbar = (props) => {
               component={NavLink}
               to="/"
               sx={{ marginLeft: 2 }} >
-              <img src='/assets/logoUNAHconLetras.png' alt="UNAH" width="110" height="50"/>
+              <img src={logoUNAHconLetras} alt="UNAH" width="100" height="50"/>
             </Button>
           </Box>
 
