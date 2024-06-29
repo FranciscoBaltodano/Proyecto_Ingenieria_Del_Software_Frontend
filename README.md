@@ -5,7 +5,7 @@ Este proyecto pertenece a la clase de Ingenieria del Software, para la carrera d
 
 ## Stack de Tecnologias
 
-**Client:** React, Redux, Material UI, Jest
+**Client:** React, Redux, Material UI, Tailwind, Jest
 
 **Server:** Next JS
 
