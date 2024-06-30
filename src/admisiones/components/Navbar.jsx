@@ -104,7 +104,7 @@ export const Navbar = (props) => {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar component="nav" sx={{
-       backgroundColor: '#ffffff00', 
+       backgroundColor: '#ffffff', 
        backdropFilter: 'blur(10px)', 
        boxShadow: '0 4px 4px #00000040',
        color: theme.palette.text.primary 
