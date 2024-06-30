@@ -1,6 +1,7 @@
 import React from 'react'
 import { AdmisionesLayout } from '../layout/AdmisionesLayout'
-
+import { NavLink } from 'react-router-dom'
+import { Button } from '@mui/material'
 /**
  * Componente que representa la página de inscripciones.
  * 
@@ -49,9 +50,15 @@ a fin de que no cometas errores durante la inscripción.</p>
         <div>
           <br  />
           <br />  
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => window.location.href = '/SolicitudPage'}>
+        
+        <Button variant='contained'>
+          <NavLink to='/admisiones/solicitud'>
+            Inscribirse
+          </NavLink>
+        </Button>
+        {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => window.location.href = '/SolicitudPage'}>
           Inscribirse
-        </button>
+        </button> */}
         </div>
 
 
