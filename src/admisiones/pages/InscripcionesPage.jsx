@@ -49,7 +49,7 @@ a fin de que no cometas errores durante la inscripción.</p>
         <div>
           <br  />
           <br />  
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => window.location.href = 'https://example.com'}>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => window.location.href = '/SolicitudPage'}>
           Inscribirse
         </button>
         </div>
