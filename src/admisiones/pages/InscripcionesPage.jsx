@@ -10,7 +10,7 @@ import { AdmisionesLayout } from '../layout/AdmisionesLayout'
 export const InscripcionesPage = () => {
   return (
     <AdmisionesLayout>
-      <section className='w-screen '>
+      <section className=''>
         <br />
         <div className='flex text-4xl justify-center items-center'>
           <strong><h1>INSCRIPCIONES PARA LAS PRUEBAS DE ADMISIÓN</h1></strong>
