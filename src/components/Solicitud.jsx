@@ -53,6 +53,7 @@ export const Solicitud = () => {
             <MenuItem value="salvadoreña">Salvadoreña</MenuItem>
             <MenuItem value="guatemalteca">Guatemalteca</MenuItem> 
             <MenuItem value="nicaragüense">Peruano</MenuItem>
+            <MenuItem value="nicaragüense">Mexicano</MenuItem>
           </Select>
         </FormControl>
 
