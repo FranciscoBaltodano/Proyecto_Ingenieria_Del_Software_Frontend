@@ -1,6 +1,6 @@
 import React from 'react'
 import { AdmisionesLayout } from '../layout/AdmisionesLayout'
-import { Solicitud } from '../components/Solicitud'
+import { Solicitud } from '../components/Solicitud';
 
 
 export const  SolicitudPage = () => {
