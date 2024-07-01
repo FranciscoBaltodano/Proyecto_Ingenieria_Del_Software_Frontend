@@ -14,12 +14,15 @@ export const Solicitud = () => {
   const onSubmit = data => console.log(data);
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" class='flex flex-col justify-center items-center w-12/12 bg-slate-200'>
+       <strong><h2>Selecciona tu Nacionalidad</h2></strong>
+       <br /> 
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}
-      >
+        class='flex flex-row gap-2 w-11/12 justify-center items-center'
+      > 
+       
         <FormControl fullWidth>
           <InputLabel>Nacionalidad</InputLabel>
           <Select
@@ -30,6 +33,7 @@ export const Solicitud = () => {
             <MenuItem value="salvadoreña">Salvadoreña</MenuItem>
             <MenuItem value="guatemalteca">Guatemalteca</MenuItem>
             <MenuItem value="nicaragüense">Nicaragüense</MenuItem>
+            <MenuItem value="nicaragüense">Peruano</MenuItem>
           </Select>
         </FormControl>
 
@@ -57,10 +61,12 @@ export const Solicitud = () => {
           />
         </Box>
 
-        <Button type="submit" variant="contained" color="primary">
+       
+      </Box>
+      <br />
+      <Button type="submit" variant="contained" color="primary" className=''>
           Enviar
         </Button>
-      </Box>
     </Container>
   );
 }
