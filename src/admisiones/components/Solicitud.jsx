@@ -3,15 +3,22 @@ import { useForm } from 'react-hook-form';
 import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Container, Box } from '@mui/material';
 
 export const Solicitud = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm({
+    defaultValues: {
+      Nacionalidad: '',
+      Identidad: '',
+      'Confirma tu número de identidad': ''
+    }
+  });
+  const identidad = watch("Identidad");
   const onSubmit = data => console.log(data);
-  
+
   return (
     <Container maxWidth="sm">
-      <Box 
-        component="form" 
-        onSubmit={handleSubmit(onSubmit)} 
-        sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}
       >
         <FormControl fullWidth>
           <InputLabel>Nacionalidad</InputLabel>
@@ -26,23 +33,29 @@ export const Solicitud = () => {
           </Select>
         </FormControl>
 
-        <TextField
-          label="Identidad"
-          type="number"
-          {...register("Identidad", { required: true, maxLength: 13 })}
-          error={!!errors.Identidad}
-          helperText={errors.Identidad ? 'Número de identidad es requerido y debe tener un máximo de 13 dígitos' : ''}
-          fullWidth
-        />
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
+          <TextField
+            label="Identidad"
+            type="number"
+            {...register("Identidad", { required: true, maxLength: 13 })}
+            error={!!errors.Identidad}
+            helperText={errors.Identidad ? 'Número de identidad es requerido y debe tener un máximo de 13 dígitos' : ''}
+            fullWidth
+          />
 
-        <TextField
-          label="Confirma tu número de identidad"
-          type="number"
-          {...register("Confirma tu número de identidad", { maxLength: 13, pattern: /Identidad/i })}
-          error={!!errors['Confirma tu número de identidad']}
-          helperText={errors['Confirma tu número de identidad'] ? 'El número debe coincidir con el de identidad y tener un máximo de 13 dígitos' : ''}
-          fullWidth
-        />
+          <TextField
+            label="Confirma tu número de identidad"
+            type="number"
+            {...register("Confirma tu número de identidad", {
+              required: true,
+              validate: value => value === identidad || "Los números de identidad no coinciden",
+              maxLength: 13
+            })}
+            error={!!errors['Confirma tu número de identidad']}
+            helperText={errors['Confirma tu número de identidad'] ? 'Los números de identidad no coinciden o tienen más de 13 dígitos' : ''}
+            fullWidth
+          />
+        </Box>
 
         <Button type="submit" variant="contained" color="primary">
           Enviar
