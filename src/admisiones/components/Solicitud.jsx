@@ -21,25 +21,36 @@ export const Solicitud = () => {
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        class='flex flex-row gap-2 '
+        className='flex flex-row gap-2  border-b-2 border-black pb-2 w-11/12'
       > 
        
-        <FormControl className='w-52'>
-          <InputLabel>Nacionalidad</InputLabel>
-          <Select
-            {...register("Nacionalidad", { required: true })}
-            label="Nacionalidad"
-          >
-            <MenuItem value="hondureña">Hondureña</MenuItem>
-            <MenuItem value="salvadoreña">Salvadoreña</MenuItem>
-            <MenuItem value="guatemalteca">Guatemalteca</MenuItem>
-            <MenuItem value="nicaragüense">Nicaragüense</MenuItem>
-            <MenuItem value="nicaragüense">Peruano</MenuItem>
-          </Select>
-        </FormControl>
+
+
+        <div className=''>
+        <strong><h2>Nacionalidad</h2></strong>
+        <FormControl className='w-64'>
+
+         <InputLabel className='flex justify-center items-center'>Nacionalidad</InputLabel>
+       <Select
+         {...register("Nacionalidad", { required: true })}
+         label="Nacionalidad" className='w-full'
+       >
+         <MenuItem value="hondureña">Hondureña</MenuItem>
+         <MenuItem value="salvadoreña">Salvadoreña</MenuItem>
+         <MenuItem value="guatemalteca">Guatemalteca</MenuItem>
+         <MenuItem value="nicaragüense">Nicaragüense</MenuItem>
+         <MenuItem value="nicaragüense">Peruano</MenuItem>
+       </Select>
+      
+     
+     </FormControl>
+        </div>
+
 
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }} className='w-90'>
-          <TextField
+         <div className='w-full'>
+          <strong><h2>Número de identidad</h2></strong>
+         <TextField
             label="Identidad"
             type="number"
             {...register("Identidad", { required: true, maxLength: 13 })}
@@ -48,7 +59,11 @@ export const Solicitud = () => {
             fullWidth
           />
 
-          <TextField
+         </div>
+
+        <div className='w-full'>
+        <strong><h2 >Confirma tu identidad</h2></strong>
+        <TextField
             label="Confirma tu número de identidad"
             type="number"
             {...register("Confirma tu número de identidad", {
@@ -60,6 +75,8 @@ export const Solicitud = () => {
             helperText={errors['Confirma tu número de identidad'] ? 'Los números de identidad no coinciden o tienen más de 13 dígitos' : ''}
             fullWidth
           />
+        </div>
+         
         </Box>
 
       </Box>
