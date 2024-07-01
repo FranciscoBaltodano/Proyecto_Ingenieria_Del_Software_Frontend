@@ -82,7 +82,7 @@ export const Solicitud = () => {
         </Box>
 
         <Button type="submit" variant="contained" color="primary">
-          Enviar
+          Enviarss
         </Button>
       </Box>
     </Container>
