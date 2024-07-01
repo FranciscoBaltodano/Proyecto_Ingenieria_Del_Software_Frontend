@@ -14,7 +14,7 @@ export const Solicitud = () => {
   const onSubmit = data => console.log(data);
 
   return (
-    <Container maxWidth="sm" class='flex flex-col justify-center items-center w-12/12 bg-slate-200'>
+    <Container maxWidth="sm" class='flex flex-col justify-center items-center w-11/12 bg-slate-200'>
        <strong><h2>Selecciona tu Nacionalidad</h2></strong>
        <br /> 
       <Box
