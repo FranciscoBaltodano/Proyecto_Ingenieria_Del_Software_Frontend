@@ -14,16 +14,17 @@ export const Solicitud = () => {
   const onSubmit = data => console.log(data);
 
   return (
-    <Container maxWidth="sm" class='flex flex-col justify-center items-center w-11/12 bg-slate-200'>
+  
+         <Container className='flex flex-col items-center justify-center' >
        <strong><h2>Selecciona tu Nacionalidad</h2></strong>
        <br /> 
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        class='flex flex-row gap-2 w-11/12 justify-center items-center'
+        class='flex flex-row gap-2 '
       > 
        
-        <FormControl fullWidth>
+        <FormControl className='w-52'>
           <InputLabel>Nacionalidad</InputLabel>
           <Select
             {...register("Nacionalidad", { required: true })}
@@ -37,7 +38,7 @@ export const Solicitud = () => {
           </Select>
         </FormControl>
 
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }} className='w-90'>
           <TextField
             label="Identidad"
             type="number"
@@ -61,12 +62,14 @@ export const Solicitud = () => {
           />
         </Box>
 
-       
       </Box>
+
+      <hr />
       <br />
       <Button type="submit" variant="contained" color="primary" className=''>
           Enviar
         </Button>
     </Container>
+   
   );
 }
