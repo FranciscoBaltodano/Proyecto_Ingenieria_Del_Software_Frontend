@@ -4,10 +4,11 @@ import { LoginRoutes } from "../login/routes/LoginRoutes";
 import { AdministradorRoutes } from "../administrador/routes/AdministradorRoutes";
 import { IngresoNotasRoutes } from "../ingresoNotas/routes/IngresoNotasRoutes";
 import { ProcesoMatriculaRoutes } from "../procesoMatricula/routes/ProcesoMatriculaRoutes";
-import { DocentesRoutes } from "../docentes/routes/DocentesRoutes";
+//import { DocentesRoutes } from "../docentes/routes/DocentesRoutes";
 import { AdmisionesRoutes } from "../admisiones/routes/AdmisionesRoutes";
 import { CoordinadoresRoutes } from "../docentes/coordinadores/routes/CoordinadoresRoutes";
-
+import {JefeDepartamentoRoutes} from "../docentes/jefeDepartamento/routes/JefeDepartamentoRoutes";
+import {DocenteRoutes} from "../docentes/docente/routes/DocenteRoures";
  // Asegúrate de importar correctamente tu componente Formulario
 export const AppRouter = () => {
   return (
@@ -16,17 +17,17 @@ export const AppRouter = () => {
         <Route path="login/*"            element={<LoginRoutes/>} />
         <Route path="admin/*"            element={<AdministradorRoutes/>} />
 
-        <Route path="coordinadores/*"    element={<CoordinadoresRoutes/>} /> 
+       
         <Route path="admisiones/*"       element={<AdmisionesRoutes/>} />
         <Route path="estudiantes/*"      element={<EstudiantesRoutes/>} />
         <Route path="notas/*"            element={<IngresoNotasRoutes/>} />
         <Route path="matricula/*"        element={<ProcesoMatriculaRoutes/>} />
 
         
-        <Route path="docentes/*"         element={<DocentesRoutes/>} />
-        {/* <Route path="jefeDepartamento/" component={</>} /> */}
-         
-        {/* <Route path="/"                 component={NotFound} /> */}
+        <Route path="docentes/*"         element={<DocenteRoutes/>} />
+        <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} /> 
+        <Route path="coordinadores/*"    element={<CoordinadoresRoutes/>} /> 
+        
     </Routes>
   );
 };

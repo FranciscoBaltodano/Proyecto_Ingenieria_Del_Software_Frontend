@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button, FormControl, Grid, TextField } from "@mui/material";
 import { useForm } from 'react-hook-form';
-import { Link } from "react-router-dom";
+import { Link,  useNavigate} from "react-router-dom";
 
 export const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const navigate = useNavigate();
   
   const onSubmit = async (data) => {
     try {
@@ -22,11 +23,32 @@ export const LoginForm = () => {
       
       const result = await response.json();
       console.log(result);
-      // Aquí puedes manejar la respuesta, por ejemplo, guardando el token en localStorage
-      // y redirigiendo al usuario a la página principal
+      
+      // Guardar el token en localStorage
+      localStorage.setItem('token', result.token);
+      
+      // Redirigir basado en los roles
+      handleRedirect(result.user.roles);
     } catch (error) {
       console.error('Error:', error);
       // Aquí puedes manejar los errores, por ejemplo, mostrando un mensaje al usuario
+    }
+  };
+
+  const handleRedirect = (roles) => {
+    if (roles.includes('administrador')) {
+      navigate('/admin');
+    } else if (roles.includes('jefe_departamento')) {
+      navigate('/jefe-departamento');
+    } else if (roles.includes('coordinador')) {
+      navigate('/coordinador');
+    } else if (roles.includes('docente')) {
+      navigate('/docente');
+    } else if (roles.includes('estudiante')) {
+      navigate('/estudiante');
+    } else {
+      // Ruta por defecto si no se reconoce el rol
+      navigate('/dashboard');
     }
   };
 
