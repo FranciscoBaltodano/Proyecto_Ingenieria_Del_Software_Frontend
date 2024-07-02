@@ -8,8 +8,10 @@ import { ProcesoMatriculaRoutes } from "../procesoMatricula/routes/ProcesoMatric
 import { AdmisionesRoutes } from "../admisiones/routes/AdmisionesRoutes";
 import { CoordinadoresRoutes } from "../docentes/coordinadores/routes/CoordinadoresRoutes";
 import {JefeDepartamentoRoutes} from "../docentes/jefeDepartamento/routes/JefeDepartamentoRoutes";
-// import {DocenteRoutes} from "../docentes/docente/routes/DocenteRoutes";
- // Asegúrate de importar correctamente tu componente Formulario
+
+import {DocenteRoutes} from "../docentes/docente/routes/DocenteRoutes";
+import {ProtectedRoute} from "../components/ProtectedRoute";
+
 export const AppRouter = () => {
   return (
     <Routes>
@@ -17,16 +19,28 @@ export const AppRouter = () => {
         <Route path="login/*"            element={<LoginRoutes/>} />
         
 
+       
         <Route path="admisiones/*"       element={<AdmisionesRoutes/>} />
         <Route path="estudiantes/*"      element={<EstudiantesRoutes/>} />
         <Route path="notas/*"            element={<IngresoNotasRoutes/>} />
         <Route path="matricula/*"        element={<ProcesoMatriculaRoutes/>} />
 
         
-        <Route path="docentes/*"         element={<DocenteRoutes/>} />
-        <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} /> 
-        <Route path="coordinadores/*"    element={<CoordinadoresRoutes/>} /> 
         
+         <Route element= {<ProtectedRoute allowedRoles={['docente']}/>}>
+          <Route path="docentes/*"         element={<DocenteRoutes/>} />
+         </Route>
+        <Route element = {<ProtectedRoute allowedRoles={['docente, jefedepartamento']}/>}>
+          <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} />
+        </Route>
+        <Route element= {<ProtectedRoute allowedRoles={['docente', 'coordinador']}/>}>
+          <Route path="coordinadores/*"    element={<CoordinadoresRoutes/>} />
+        </Route>
+        <Route element = {<ProtectedRoute allowedRoles = {['administrador']}/>}>
+          <Route path="admin/*"            element={<AdministradorRoutes/>} />
+        </Route> 
+        
+
     </Routes>
   );
 };
