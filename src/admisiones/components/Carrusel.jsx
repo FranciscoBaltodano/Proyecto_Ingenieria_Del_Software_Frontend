@@ -45,7 +45,7 @@ export const Carrusel = () => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            opacity: 0.3,
+            opacity: 0.9,
             transition: 'opacity 0.5s ease-in-out'
           }}
         />
