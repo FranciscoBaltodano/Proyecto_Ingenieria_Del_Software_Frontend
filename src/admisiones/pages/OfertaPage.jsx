@@ -23,11 +23,12 @@ export const OfertaPage = () => {
   };
 
   return (
-    <AdmisionesLayout>
+    <Grid sx={{marginTop:'100px', marginLeft:'10px'}}>
+
       <Typography variant="h4" >
         Oferta Académica
       </Typography>
-
+      
       {/* Campo de búsqueda */}
       <TextField
         placeholder="Buscar por nombre de carrera"
@@ -44,6 +45,8 @@ export const OfertaPage = () => {
           ),
         }}
       />
+
+    <AdmisionesLayout>
 
       <Grid container spacing={3}>
         {/* Si no hay carreras mostrara el mensaje */}
@@ -117,5 +120,6 @@ export const OfertaPage = () => {
 
       </Grid>
     </AdmisionesLayout>
+    </Grid>
   );
 };

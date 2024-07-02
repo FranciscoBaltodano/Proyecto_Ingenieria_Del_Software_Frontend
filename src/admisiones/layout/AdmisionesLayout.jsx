@@ -15,5 +15,5 @@ export const AdmisionesLayout = ({children}) => {
           <Footer />
         </Grid>
     </>
-  )
-}
+  );
+};
