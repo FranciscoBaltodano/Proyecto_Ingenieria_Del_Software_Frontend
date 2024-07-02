@@ -1,12 +1,29 @@
-import React from 'react';
-import { Button, FormControl, Grid, TextField } from "@mui/material";
-import { useForm } from 'react-hook-form';
-import { Link,  useNavigate} from "react-router-dom";
+
+
+import React, { useState } from 'react';
+import { Button, FormControl, Grid, TextField, Select, MenuItem } from "@mui/material";
+import { useForm, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';  // Importa useNavigate para redireccionar
 
 export const LoginForm = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const navigate = useNavigate();
-  
+  const { control, handleSubmit, formState: { errors } } = useForm();
+  const [userType, setUserType] = useState('estudiante');
+  const navigate = useNavigate();  // Usa useNavigate para redireccionar
+
+  const handleRedirect = (roles) => {
+    if (roles.includes('administrador')) {
+      navigate('/admin');
+    } else if (roles.includes('docente')) {
+      navigate('/docentes');
+    } else if (roles.includes('coordinador')) {
+      navigate('/coordinadores');
+    } else if (roles.includes('jefedepartamento')) {
+      navigate('/jefedepartamento');
+    } else {
+      navigate('/estudiantes');
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
       const response = await fetch('http://localhost:3000/api/auth/login', {
@@ -14,77 +31,81 @@ export const LoginForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          [userType === 'empleado' ? 'numeroEmpleado' : 'numeroCuenta']: data.identifier,
+          contrasena: data.contrasena
+        }),
       });
-      
+
       if (!response.ok) {
-        throw new Error('Error en la autenticación');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error en la autenticación');
       }
-      
+
       const result = await response.json();
-      console.log(result);
-      
+      console.log('Resultado del login:', result);
+
       // Guardar el token en localStorage
       localStorage.setItem('token', result.token);
-      
+
       // Redirigir basado en los roles
       handleRedirect(result.user.roles);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:', error.message);
       // Aquí puedes manejar los errores, por ejemplo, mostrando un mensaje al usuario
-    }
-  };
-
-  const handleRedirect = (roles) => {
-    if (roles.includes('administrador')) {
-      navigate('/admin');
-    } else if (roles.includes('jefe_departamento')) {
-      navigate('/jefe-departamento');
-    } else if (roles.includes('coordinador')) {
-      navigate('/coordinador');
-    } else if (roles.includes('docente')) {
-      navigate('/docente');
-    } else if (roles.includes('estudiante')) {
-      navigate('/estudiante');
-    } else {
-      // Ruta por defecto si no se reconoce el rol
-      navigate('/dashboard');
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container>
-        <FormControl fullWidth margin="normal" sx={{gap: '20px'}}>
-          <TextField 
-            error={!!errors.identifier} 
-            helperText={errors.identifier ? errors.identifier.message : ''}
-            {...register('identifier', { required: 'El campo es requerido' })}
-            id="identifier" 
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <FormControl fullWidth>
+            <Select
+              value={userType}
+              onChange={(e) => setUserType(e.target.value)}
+            >
+              <MenuItem value="estudiante">Estudiante</MenuItem>
+              <MenuItem value="empleado">Empleado</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <Controller
             name="identifier"
-            type="text"
-            placeholder="Ingrese su número de cuenta o empleado"
-            label="Número de cuenta o empleado"
-            variant="outlined"
+            control={control}
+            rules={{ required: 'Este campo es requerido' }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                label={userType === 'empleado' ? 'Número de Empleado' : 'Número de Cuenta'}
+                error={!!errors.identifier}
+                helperText={errors.identifier?.message}
+              />
+            )}
           />
-          <TextField 
-            error={!!errors.contrasena}
-            helperText={errors.contrasena ? errors.contrasena.message : ''}
-            {...register('contrasena', { required: 'La contraseña es requerida' })}
-            id="contrasena"
+        </Grid>
+        <Grid item xs={12}>
+          <Controller
             name="contrasena"
-            type="password"
-            placeholder="Ingrese la contraseña"
-            label="Contraseña"
-            variant="outlined"
+            control={control}
+            rules={{ required: 'La contraseña es requerida' }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                type="password"
+                label="Contraseña"
+                error={!!errors.contrasena}
+                helperText={errors.contrasena?.message}
+              />
+            )}
           />
-        </FormControl>
-        <Grid item xs={12} display='flex' flexDirection='column' alignItems='end' sx={{ marginTop: 2 }}>
-          <Button variant='text' component={Link} to='/login/recuperar' sx={{ fontSize:'9px', color:'grey'}}>
-            ¿Olvidó su nombre de usuario o contraseña?
-          </Button>
-          <Button variant="contained" color="primary" type="submit" sx={{ width: '100%'}}>
-            Acceder
+        </Grid>
+        <Grid item xs={12}>
+          <Button type="submit" fullWidth variant="contained" color="primary">
+            Iniciar Sesión
           </Button>
         </Grid>
       </Grid>
