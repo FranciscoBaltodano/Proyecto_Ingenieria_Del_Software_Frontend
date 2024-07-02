@@ -1,12 +1,14 @@
-import React from 'react'
-import { AdmisionesLayout } from '../layout/AdmisionesLayout'
-import { Solicitud } from '../components/Solicitud';
+import { Form } from '../components/Form';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 
 
 export const  SolicitudPage = () => {
   return (
-    <AdmisionesLayout className='flex flex-col'>
-        <Solicitud />  
-    </AdmisionesLayout>
+    <div>
+      <Navbar />
+      <Form />
+      <Footer />
+    </div>
   );
 }

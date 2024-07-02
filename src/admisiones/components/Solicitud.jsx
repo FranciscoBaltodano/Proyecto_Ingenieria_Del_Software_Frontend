@@ -1,92 +1,135 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Container, Box } from '@mui/material';
+import { centros } from '../data/centros';
+//import { useForm } from 'react-hook-form';
+//import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Container, Box } from '@mui/material';
+
+
+
 
 export const Solicitud = () => {
-  const { register, handleSubmit, formState: { errors }, watch } = useForm({
-    defaultValues: {
-      Nacionalidad: '',
-      Identidad: '',
-      'Confirma tu número de identidad': ''
-    }
-  });
-  const identidad = watch("Identidad");
-  const onSubmit = data => console.log(data);
+    
+function centrosR() {
+  var select = document.getElementById('centro-regional');
 
-  return (
-  
-         <Container className='flex flex-col items-center justify-center' >
-       <strong><h2>Selecciona tu Nacionalidad</h2></strong>
-       <br /> 
-      <Box
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-row gap-2  border-b-2 border-black pb-2 w-11/12'
-      > 
-       
-
-
-        <div className=''>
-        <strong><h2>Nacionalidad</h2></strong>
-        <FormControl className='w-64'>
-
-         <InputLabel className='flex justify-center items-center'>Nacionalidad</InputLabel>
-       <Select
-         {...register("Nacionalidad", { required: true })}
-         label="Nacionalidad" className='w-full'
-       >
-         <MenuItem value="hondureña">Hondureña</MenuItem>
-         <MenuItem value="salvadoreña">Salvadoreña</MenuItem>
-         <MenuItem value="guatemalteca">Guatemalteca</MenuItem>
-         <MenuItem value="nicaragüense">Nicaragüense</MenuItem>
-         <MenuItem value="nicaragüense">Peruano</MenuItem>
-       </Select>
-      
-     
-     </FormControl>
-        </div>
-
-
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }} className='w-90'>
-         <div className='w-full'>
-          <strong><h2>Número de identidad</h2></strong>
-         <TextField
-            label="Identidad"
-            type="number"
-            {...register("Identidad", { required: true, maxLength: 13 })}
-            error={!!errors.Identidad}
-            helperText={errors.Identidad ? 'Número de identidad es requerido y debe tener un máximo de 13 dígitos' : ''}
-            fullWidth
-          />
-
-         </div>
-
-        <div className='w-full'>
-        <strong><h2 >Confirma tu identidad</h2></strong>
-        <TextField
-            label="Confirma tu número de identidad"
-            type="number"
-            {...register("Confirma tu número de identidad", {
-              required: true,
-              validate: value => value === identidad || "Los números de identidad no coinciden",
-              maxLength: 13
-            })}
-            error={!!errors['Confirma tu número de identidad']}
-            helperText={errors['Confirma tu número de identidad'] ? 'Los números de identidad no coinciden o tienen más de 13 dígitos' : ''}
-            fullWidth
-          />
-        </div>
-         
-        </Box>
-
-      </Box>
-
-      <hr />
-      <br />
-      <Button type="submit" variant="contained" color="primary" className=''>
-          Enviar
-        </Button>
-    </Container>
-   
-  );
+  // Recorrer el arreglo de objetos del JSON
+  for (var i = 0; i < centros.length; i++) {
+    // Crear una nueva opción para el Select
+    var option = document.createElement('option');
+    // Establecer el valor y texto de la opción
+    option.value = centros[i].valor;
+    option.textContent = centros[i].texto;
+    // Agregar la opción al Select
+    select.appendChild(option);
+  }
 }
+
+
+return (
+
+      <div className="p-6 bg-card text-card-foreground flex flex-col rounded-lg shadow-md max-w-4xl mx-auto items-center w-11/12">
+        <h1 className="text-xl font-bold">Llena la solicitud de inscripción</h1>
+        <p className="text-muted-foreground">Completa todos los campos y se parte de nuestra comunidad</p>
+        <div className="my-4 border-t border-border"></div>
+        <h2 className="text-lg font-semibold">Datos Generales</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1  lg:grid-cols-3 xl:grid-cols-3 gap-4 mt-4">
+          <div>
+            <label htmlFor="numero-identidad" className="block font-medium">Numero De Identidad</label>
+            <input required id="numero-identidad" type="number" placeholder="Ingrese su numero de identidad" pattern="\d{13}" className="w-full p-2 border border-input rounded"/>
+          </div>
+          <div>
+            <label htmlFor="primer-nombre" className="block font-medium">Primer Nombre</label>
+            <input required id="primer-nombre" type="text" placeholder="Ingrese su primer nombre" className="w-full p-2 border border-input rounded"/>
+          </div>
+          <div>
+            <label htmlFor="segundo-nombre" className="block font-medium">Segundo Nombre</label>
+            <input id="segundo-nombre" type="text" placeholder="Ingrese su segundo nombre" className="w-full p-2 border border-input rounded"/>
+          </div>
+          <div>
+            <label required htmlFor="primer-apellido" className="block font-medium">Primer Apellido</label>
+            <input id="primer-apellido" type="text" placeholder="Ingrese su primer apellido" className="w-full p-2 border border-input rounded"/>
+          </div>
+          <div>
+            <label htmlFor="segundo-apellido" className="block font-medium">Segundo Apellido</label>
+            <input id="segundo-apellido" type="text" placeholder="Ingrese su segundo apellido" className="w-full p-2 border border-input rounded"/>
+          </div>
+          <div>
+            <label htmlFor="correo-electronico" className="block font-medium">Correo Electronico</label>
+            <input id="correo-electronico" type="email" placeholder="Ingrese su correo electronico" className="w-full p-2 border border-input rounded" />
+          </div>
+          {/* <div>
+            <label htmlFor="confirma-correo" className="block font-medium">Confirma Tu Correo Electronico</label>
+            <input id="confirma-correo" type="email" placeholder="Confirma tu correo" className="w-full p-2 border border-input rounded"/>
+          </div> */}
+        </div>
+        <div className="my-4 border-t border-border"></div>
+        <h2 className="text-lg font-semibold">Datos De Carrera Y Centro Regional</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label htmlFor="centro-regional" className="block font-medium" id='centro-regional'>Centro Regional</label>
+            <select id='centro-regional' className="w-full p-2 border border-input rounded placeholder:slecciona" onClick={centrosR} >
+              <option value="" disabled selected>{'Elegir'}</option>
+              <option value="UNAH-CU">UNAH-CU</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="carrera-principal" className="block font-medium">Carrera Principal</label>
+            <select id="carrera-principal" className="w-full p-2 border border-input rounded">
+            <option value="" disabled selected>{'Elegir'}</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="carrera-secundundefined" className="block font-medium">Carrera Secundaria</label>
+            <select id="carrera-secundundefined" className="w-full p-2 border border-input rounded">
+            <option value="" disabled selected>{'Elegir'}</option>
+            </select>
+          </div>
+        </div>
+        <div className="my-4 border-t border-border"></div>
+        <h2 className="text-lg font-semibold">Subida De Certificado De Estudio</h2>
+        <div className="mt-4">
+          <label htmlFor="certificado-secundundefined" className="block font-medium">Suba Una Foto De Su Certificado De Estudio De Secundundefined</label>
+          <div className="flex items-center mt-2">
+            <input id="certificado-secundundefined" type="file" accept="image/*" className="flex-grow p-2 border border-input rounded"/>
+            <button className="ml-2 bg-primary text-primary-foreground p-2 rounded">Subir Foto</button>
+          </div>
+        </div>
+        <div className="mt-6 flex justify-center">
+          <button id='subir-foto' className="bg-primary text-primary-foreground p-2 rounded" onClick={handleSubirFoto}>Enviar Formulario</button>
+        </div>
+      </div>
+
+      
+      
+);
+
+function handleSubirFoto() {
+  const botonSubirFoto = document.getElementById('subir-foto');
+  const inputCertificado = document.getElementById('certificado-secundundefined');
+
+  botonSubirFoto.addEventListener('click', () => {
+    // Aquí puedes acceder al contenido del input:
+    const contenidoInput = inputCertificado.value;
+    console.log('Contenido del input:', contenidoInput);
+    // Aquí puedes enviar el contenido a través de una solicitud HTTP o realizar otras acciones según tus necesidades.
+  });
+}
+
+function centros() {
+  var select = document.getElementById('centro-regional');
+
+  // Recorrer el arreglo de objetos del JSON
+  for (var i = 0; i < centros.length; i++) {
+    // Crear una nueva opción para el Select
+    var option = document.createElement('option');
+    // Establecer el valor y texto de la opción
+    option.value = centros[i].valor;
+    option.textContent = centros[i].texto;
+    // Agregar la opción al Select
+    select.appendChild(option);
+  }
+}
+
+
+}
+
+
