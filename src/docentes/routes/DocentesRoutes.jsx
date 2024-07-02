@@ -4,7 +4,7 @@ import { CoordinadoresRoutes } from "../coordinadores/routes/CoordinadoresRoutes
 export const DocentesRoutes = () => {
   return (
     <Routes>
-      <Route path="coordinador/*"                 element={<CoordinadoresRoutes/>} />
+      <Route path="coordinador/*"  element={<CoordinadoresRoutes/>} />
 
     </Routes>
   )

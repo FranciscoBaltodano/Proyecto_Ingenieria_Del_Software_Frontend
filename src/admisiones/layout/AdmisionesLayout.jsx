@@ -8,7 +8,7 @@ export const AdmisionesLayout = ({children}) => {
     <>
         <Navbar />
         
-        <Grid container>
+        <Grid container display='flex' justifyContent='center' alignItems='center'>
           <Grid item mx={'10px'}>
             {children}
           </Grid>
