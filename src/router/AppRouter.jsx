@@ -8,7 +8,7 @@ import { ProcesoMatriculaRoutes } from "../procesoMatricula/routes/ProcesoMatric
 import { AdmisionesRoutes } from "../admisiones/routes/AdmisionesRoutes";
 import { CoordinadoresRoutes } from "../docentes/coordinadores/routes/CoordinadoresRoutes";
 import {JefeDepartamentoRoutes} from "../docentes/jefeDepartamento/routes/JefeDepartamentoRoutes";
-import {DocenteRoutes} from "../docentes/docente/routes/DocenteRoures";
+import {DocenteRoutes} from "../docentes/docente/routes/DocenteRoutes";
  // Asegúrate de importar correctamente tu componente Formulario
 export const AppRouter = () => {
   return (
