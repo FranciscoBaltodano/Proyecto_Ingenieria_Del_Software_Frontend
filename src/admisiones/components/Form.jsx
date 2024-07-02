@@ -1,37 +1,11 @@
 import { centros } from '../data/centros';
+import { carreras } from '../data/carreras';
 import { useForm } from 'react-hook-form';
 
 export const Form = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = data => console.log(data);
     console.log(errors);
-
-    function centrosR() {
-        var select = document.getElementById('centro-regional');
-        
-        // Recorrer el arreglo de objetos del JSON
-        for (var i = 0; i < centros.length; i++) {
-          // Crear una nueva opción para el Select
-          var option = document.createElement('option');
-          // Establecer el valor y texto de la opción
-          option.value = centros[i].valor;
-          option.textContent = centros[i].texto;
-          // Agregar la opción al Select
-          select.appendChild(option);
-        }
-      }
-
-      function handleSubirFoto() {
-        const botonSubirFoto = document.getElementById('subir-foto');
-        const inputCertificado = document.getElementById('certificado-secundundefined');
-      
-        botonSubirFoto.addEventListener('click', () => {
-          // Aquí puedes acceder al contenido del input:
-          const contenidoInput = inputCertificado.value;
-          console.log('Contenido del input:', contenidoInput);
-          // Aquí puedes enviar el contenido a través de una solicitud HTTP o realizar otras acciones según tus necesidades.
-        });
-      }
       
       
       return (
@@ -80,21 +54,27 @@ export const Form = () => {
                   <label htmlFor="centro-regional" className="block font-medium" id='centro-regional'>Centro Regional</label>
                   <select id='centro-regional' {...register("centros", { required: true })} className="w-full p-2 border border-input rounded placeholder:slecciona" >
                     <option value="" disabled selected>{'Elegir'}</option>
-                    <option value="UNAH-CU">UNAH-CU</option>
-                  </select>
+                    { centros.map((centros) => (
+                    <option key={centros.id} value={centros.id}>{centros.siglas}</option>
+                    ))}
+                    </select>
                 </div>
                 <div>
                   <label htmlFor="carrera-principal" className="block font-medium">Carrera Principal</label>
                   <select id="carrera-principal" {...register("carrera principal", { required: true })} className="w-full p-2 border border-input rounded">
                   <option value="" disabled selected>{'Elegir'}</option>
-                  <option value="Derecho">Derecho</option>
+                  { carreras.map(( carreras ) => (
+                    <option key={carreras.nombre} value={carreras.nombre}>{carreras.nombre}</option>
+                    ))}
                   </select>
                 </div>
                 <div>
                   <label htmlFor="carrera-secundundefined" className="block font-medium">Carrera Secundaria</label>
                   <select id="carrera-secundundefined" {...register("carrera secundaria", { required: true })} className="w-full p-2 border border-input rounded">
                   <option value="" disabled selected>{'Elegir'}</option>
-                  <option value="Mercadotecnia">Mercadotecnia</option>
+                  { carreras.map(( carreras ) => (
+                    <option key={carreras.nombre} value={carreras.nombre}>{carreras.nombre}</option>
+                    ))}
                   </select>
                 </div>
               </div>
