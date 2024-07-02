@@ -17,14 +17,13 @@ export const AppRouter = () => {
         <Route path="login/*"            element={<LoginRoutes/>} />
         
 
-       
         <Route path="admisiones/*"       element={<AdmisionesRoutes/>} />
         <Route path="estudiantes/*"      element={<EstudiantesRoutes/>} />
         <Route path="notas/*"            element={<IngresoNotasRoutes/>} />
         <Route path="matricula/*"        element={<ProcesoMatriculaRoutes/>} />
 
         
-        {/* <Route path="docentes/*"         element={<DocenteRoutes/>} /> */}
+        <Route path="docentes/*"         element={<DocenteRoutes/>} />
         <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} /> 
         <Route path="coordinadores/*"    element={<CoordinadoresRoutes/>} /> 
         
