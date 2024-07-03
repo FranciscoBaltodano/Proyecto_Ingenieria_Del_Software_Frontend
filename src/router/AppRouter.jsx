@@ -26,19 +26,25 @@ export const AppRouter = () => {
         {/* <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} /> 
         <Route path="coordinadores/*"    element={<CoordinadoresRoutes/>} /> 
         <Route path="administrador/*"    element={<AdministradorRoutes/>} /> */}
-        
-         <Route element= {<ProtectedRoute allowedRoles={['docente']}/>}>
-          <Route path="docentes/*"         element={<DocentesRoutes/>} />
-         </Route>
-        <Route element = {<ProtectedRoute allowedRoles={['docente, jefedepartamento']}/>}>
-          <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} />
-        </Route>
-        <Route element= {<ProtectedRoute allowedRoles={['docente', 'coordinador']}/>}>
-          <Route path="coordinadores/*"    element={<CoordinadoresRoutes/>} />
-        </Route>
-        <Route element = {<ProtectedRoute allowedRoles = {['administrador']}/>}>
-          <Route path="admin/*"            element={<AdministradorRoutes/>} />
-        </Route> 
+       <Route element={<ProtectedRoute allowedRoles={['Estudiante']}/>}>
+        <Route path="estudiantes/*" element={<EstudiantesRoutes/>} />
+      </Route>
+      
+      <Route element={<ProtectedRoute allowedRoles={['Docente']}/>}>
+        <Route path="docentes/*" element={<DocentesRoutes/>} />
+      </Route>
+      
+      <Route element={<ProtectedRoute allowedRoles={['Docente', 'JefeDepartamento']}/>}>
+        <Route path="jefedepartamento/*" element={<JefeDepartamentoRoutes/>} />
+      </Route>
+      
+      <Route element={<ProtectedRoute allowedRoles={['Docente', 'Coordinador']}/>}>
+        <Route path="coordinadores/*" element={<CoordinadoresRoutes/>} />
+      </Route>
+      
+      <Route element={<ProtectedRoute allowedRoles={['Administrador']}/>}>
+        <Route path="admin/*" element={<AdministradorRoutes/>} />
+      </Route> 
         
 
     </Routes>
