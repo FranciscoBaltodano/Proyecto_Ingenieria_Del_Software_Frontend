@@ -4,6 +4,8 @@ import { Button, Card, CardContent, Grid, Typography, TextField, InputAdornment 
 import { NavLink } from 'react-router-dom';
 import { carreras } from '../data/carreras';
 import SearchIcon from '@mui/icons-material/Search';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 
 export const OfertaPage = () => {
   const [busquedaValue, setBusquedaValue] = useState('');
@@ -23,9 +25,11 @@ export const OfertaPage = () => {
   };
 
   return (
-    <Grid sx={{marginTop:'100px', marginLeft:'10px'}}>
+    <Grid sx={{marginLeft:'10px'}}>
+  
+    <Navbar />
 
-      <Typography variant="h4" >
+    <Typography variant="h4" >
         Oferta Académica
       </Typography>
       
@@ -46,7 +50,6 @@ export const OfertaPage = () => {
         }}
       />
 
-    <AdmisionesLayout>
 
       <Grid container spacing={3}>
         {/* Si no hay carreras mostrara el mensaje */}
@@ -119,7 +122,7 @@ export const OfertaPage = () => {
         )}
 
       </Grid>
-    </AdmisionesLayout>
+        <Footer />
     </Grid>
   );
 };
