@@ -5,7 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 export const LoginForm = () => {
-  const { control, handleSubmit, formState: { errors }, reset } = useForm();
+  const { control, handleSubmit, formState: { errors }, reset } = useForm({
+    defaultValues: {
+      identifier: '',
+      contrasena: ''
+    }
+  });
   const [userType, setUserType] = useState('estudiante');
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
@@ -56,7 +61,6 @@ export const LoginForm = () => {
       // Redirigir basado en los roles
       handleRedirect(result.user.roles);
     } catch (error) {
-      console.error('Error:', error.message);
       setLoginError('Acceso inválido. Por favor, inténtelo otra vez.');
     }
   };
