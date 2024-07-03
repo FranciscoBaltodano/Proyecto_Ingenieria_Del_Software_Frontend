@@ -3,11 +3,11 @@ import { Box, IconButton } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-import carrusel1 from '/assets/admisiones/carrusel1.png';
-import carrusel2 from '/assets/admisiones/carrusel2.png';
-import carrusel3 from '/assets/admisiones/carrusel3.png';
-import carrusel4 from '/assets/admisiones/carrusel4.png';
-import carrusel5 from '/assets/admisiones/carrusel5.png';
+import carrusel1 from '/assets/admisiones/carrusel1.webp';
+import carrusel2 from '/assets/admisiones/carrusel2.webp';
+import carrusel3 from '/assets/admisiones/carrusel3.webp';
+import carrusel4 from '/assets/admisiones/carrusel4.webp';
+import carrusel5 from '/assets/admisiones/carrusel5.webp';
 
 const carruselItems = [carrusel1, carrusel2, carrusel3, carrusel4, carrusel5];
 

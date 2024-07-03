@@ -4,23 +4,26 @@ import { useState } from 'react';
 import { Button, FormControl, Grid, TextField, Select, MenuItem } from "@mui/material";
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';  // Importa useNavigate para redireccionar
-
+import {useAuth} from '../../contexts/AuthContext'; //'
 export const LoginForm = () => {
   const { control, handleSubmit, formState: { errors } } = useForm();
   const [userType, setUserType] = useState('estudiante');
   const navigate = useNavigate();  // Usa useNavigate para redireccionar
 
+  const {login} = useAuth(); 
   const handleRedirect = (roles) => {
-    if (roles.includes('administrador')) {
+    if (roles.includes('Administrador')) {
       navigate('/admin');
-    } else if (roles.includes('docente')) {
+    } else if (roles.includes('Docente')) {
       navigate('/docentes');
-    } else if (roles.includes('coordinador')) {
+    } else if (roles.includes('Coordinador')) {
       navigate('/coordinadores');
-    } else if (roles.includes('jefedepartamento')) {
+    } else if (roles.includes('JefeDepartamento')) {
       navigate('/jefedepartamento');
-    } else {
+    } else if (roles.includes('Estudiante')){
       navigate('/estudiantes');
+    } else {
+      navigate('/');
     }
   };
 
@@ -46,6 +49,7 @@ export const LoginForm = () => {
       console.log('Resultado del login:', result);
 
       // Guardar el token en localStorage
+      login({token: result.token, roles: result.user.roles})
       localStorage.setItem('token', result.token);
 
       // Redirigir basado en los roles

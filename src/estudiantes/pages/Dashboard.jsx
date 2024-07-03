@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import { Sidebar } from '../components/Sidebar';
 import { Profile } from '../components/Profile';
 import { EstudianteLayout } from '../layout/EstudianteLayout';
 

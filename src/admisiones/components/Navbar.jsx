@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { NavLink, useLocation } from 'react-router-dom';
 
-import logoUNAHconLetras from '/assets/logoUNAHconLetras.png';
+import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 
 const drawerWidth = 240;
 

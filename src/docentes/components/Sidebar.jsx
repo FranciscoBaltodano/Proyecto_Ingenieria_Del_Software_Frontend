@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Menu as MenuIcon, Home as HomeIcon, Chat as ChatIcon, Class as ClassIcon, Grade as GradeIcon, Person as PersonIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
-import logoUNAHconLetras from '/assets/logoUNAHconLetras.png';
+import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 
 const menuItems = [
   { text: 'Mi Perfil', icon: <HomeIcon />, disabled: false },
