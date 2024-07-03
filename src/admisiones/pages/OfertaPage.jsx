@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AdmisionesLayout } from '../layout/AdmisionesLayout';
 import { Button, Card, CardContent, Grid, Typography, TextField, InputAdornment } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { carreras } from '../data/carreras';
