@@ -8,7 +8,7 @@ export const Profile = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} display="flex" alignItems="center">
           <Avatar alt="User Photo" src="user-photo.jpg" sx={{ width: 80, height: 80 }} />
-          <Typography variant="h5" sx={{ marginLeft: 2 }}>Administrador Enrique Alfonzo Lopez Gonzales</Typography>
+          <Typography variant="h5" sx={{ marginLeft: 2 }}>DOCENTE Enrique Alfonzo Lopez Gonzales</Typography>
           <IconButton>
             <Edit />
           </IconButton>

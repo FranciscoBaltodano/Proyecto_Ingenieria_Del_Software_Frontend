@@ -32,7 +32,7 @@ export const Profile = () => {
               <Edit />
             </IconButton>
           </div>
-          <Typography variant="h5" sx={{ marginLeft: 2 }}>Enrique Alfonzo Lopez Gonzales</Typography>
+          <Typography variant="h5" sx={{ marginLeft: 2 }}>ESTUDIANTE Enrique Alfonzo Lopez Gonzales</Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
           <Typography variant="subtitle1"><strong>Carrera:</strong> Ingeniería en Sistemas</Typography>

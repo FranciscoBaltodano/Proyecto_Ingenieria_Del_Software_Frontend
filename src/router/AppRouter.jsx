@@ -10,6 +10,7 @@ import { CoordinadoresRoutes } from "../docentes/coordinadores/routes/Coordinado
 import {JefeDepartamentoRoutes} from "../docentes/jefeDepartamento/routes/JefeDepartamentoRoutes";
 // import {DocenteRoutes} from "../docentes/docente/routes/DocenteRoutes";
  // Asegúrate de importar correctamente tu componente Formulario
+import { DocentesRoutes } from "../docentes/routes/DocentesRoutes";
 export const AppRouter = () => {
   return (
     <Routes>
@@ -19,14 +20,15 @@ export const AppRouter = () => {
 
        
         <Route path="admisiones/*"       element={<AdmisionesRoutes/>} />
-        <Route path="estudiantes/*"      element={<EstudiantesRoutes/>} />
         <Route path="notas/*"            element={<IngresoNotasRoutes/>} />
         <Route path="matricula/*"        element={<ProcesoMatriculaRoutes/>} />
+        <Route path="estudiantes/*"      element={<EstudiantesRoutes/>} />
 
         
-        {/* <Route path="docentes/*"         element={<DocenteRoutes/>} /> */}
+        <Route path="docentes/*"         element={<DocentesRoutes/>} />
         <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} /> 
         <Route path="coordinadores/*"    element={<CoordinadoresRoutes/>} /> 
+        <Route path="administrador/*"    element={<AdministradorRoutes/>} />
         
     </Routes>
   );

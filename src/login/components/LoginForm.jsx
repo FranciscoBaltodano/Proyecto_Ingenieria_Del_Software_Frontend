@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, FormControl, Grid, TextField, Select, MenuItem } from "@mui/material";
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';  // Importa useNavigate para redireccionar

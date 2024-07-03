@@ -4,12 +4,14 @@ import { Menu as MenuIcon, Home as HomeIcon, Chat as ChatIcon, Class as ClassIco
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.png';
 
 const menuItems = [
-  { text: 'Mi Perfil', icon: <HomeIcon /> },
-  { text: 'Chats', icon: <ChatIcon /> },
-  { text: 'Mis clases', icon: <ClassIcon /> },
-  { text: 'Notas', icon: <GradeIcon /> },
-  { text: 'Solicitudes', icon: <PersonIcon /> },
-  { text: 'Cerrar Sesión', icon: <ExitToAppIcon /> },
+  { text: 'Mi Perfil', icon: <HomeIcon />, disabled: false },
+  { text: 'Chats', icon: <ChatIcon />, disabled: false },
+  { text: 'Mis clases', icon: <ClassIcon />, disabled: false },
+  { text: 'Notas', icon: <GradeIcon />, disabled: false },
+  { text: 'Solicitudes', icon: <PersonIcon />, disabled: false },
+  { text: 'Jefe de carrera', icon: <PersonIcon />, disabled: true },
+  { text: 'Coordinador', icon: <PersonIcon />, disabled: true },
+  { text: 'Cerrar Sesión', icon: <ExitToAppIcon />, disabled: false },
 ];
 
 export const Sidebar = () => {
@@ -23,7 +25,7 @@ export const Sidebar = () => {
     <Box sx={{ width: 250, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }} role="presentation" onClick={toggleDrawer}>
       <List>
         {menuItems.slice(0, -1).map((item) => (
-          <ListItemButton key={item.text}>
+          <ListItemButton key={item.text} disabled={item.disabled}>
             <ListItemIcon>
               {item.icon}
             </ListItemIcon>

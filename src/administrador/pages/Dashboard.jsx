@@ -2,12 +2,12 @@
 import { Box } from '@mui/material';
 import { Sidebar } from '../components/Sidebar';
 import { Profile } from '../components/Profile';
+import { AdministradorLayout } from '../layout/AdministradorLayout';
 
 export const Dashboard = () => {
   return (
-    <Box sx={{ display: 'flex' }}>
-      <Sidebar />
+    <AdministradorLayout>
       <Profile />
-    </Box>
+    </AdministradorLayout>
   );
 }
