@@ -19,13 +19,17 @@ export const LoginForm = () => {
   const handleRedirect = (roles) => {
     if (roles.includes('Administrador')) {
       navigate('/admin');
+    } else if (roles.includes('Docente') && roles.includes('Coordinador')) {
+      navigate('/coordinadores');
+    } else if (roles.includes('Docente') && roles.includes('JefeDepartamento')) {
+      navigate('/jefedepartamento');
     } else if (roles.includes('Docente')) {
       navigate('/docentes');
     } else if (roles.includes('Coordinador')) {
       navigate('/coordinadores');
     } else if (roles.includes('JefeDepartamento')) {
       navigate('/jefedepartamento');
-    } else if (roles.includes('Estudiante')) {
+    } else if (roles.includes('Estudiante')){
       navigate('/estudiantes');
     } else {
       navigate('/');
