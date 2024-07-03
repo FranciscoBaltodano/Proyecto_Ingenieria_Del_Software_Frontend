@@ -20,8 +20,8 @@ export const InscripcionesPage = () => {
       </section>
 
       <section className='flex flex-col justify-center items-center'>
-      <div className='flex justify-center items-center w-6/12'>
-          <strong><p>Estimado aspirante:
+      <div className='flex flex-col justify-center items-start w-8/12'>
+      <p>Estimado aspirante:
 A continuación, te presentamos un instructivo con todos los pasos
  que deberás seguir para poder realizar tu proceso de inscripción
  exitosamente.  <br /> 
@@ -29,6 +29,8 @@ A continuación, te presentamos un instructivo con todos los pasos
 leer este y los demás instructivos que te estamos presentando 
 a fin de que no cometas errores durante la inscripción.</p>
         <br />
+          
+          <strong>
         
         <p>Da clic en el botón de inscripción</p>
 
@@ -46,9 +48,48 @@ a fin de que no cometas errores durante la inscripción.</p>
           <li>- Fotografía de tu titulo de bachillerato</li>
       
         </ul>
+     
         </strong>
+        <br />
+        <p>Recuerda que la información que ingreses debe ser verídica y 
+          completa, ya que de lo contrario no podrás continuar con el proceso 
+          de inscripción. Una vez realizado presiona el botón ENVIAR DATOS.</p>
+        <br />
+        <p>Una vez que hayas ingresado toda la información solicitada, 
+          te aparecerá un mensaje de confirmación en la pantalla, 
+          lo que significa que tu inscripción ha sido exitosa. Se te enviará una notificación
+          por correo con tu credencial una vez se hayan validado tus datos.
+          De igual manera se te notificará si tu imagen no cumple con el formato requerido.</p>
+          <br />
+
+          <p> <strong className='text-red-700'>IMPORTANTE: </strong> La notificación del correo con tu credencial DIGITAL
+            será enviada a la dirección de correo que ingresaste en el formulario de inscripción.Debes permanecer pendiente
+            ya que con ella te identificaremos durante las pruebas de admisión en los centros regionales.
+            <br />
+            Los siguientes documentos te resultarán utiles para tu proceso de inscripción:
+          </p>
+
+          <br />
+
+          <p>En este enlace encontraras la guía de estudio para la PAA <a className='text-blue-700' href="https://admisiones.unah.edu.hn/assets/Guia-estudio-nueva-2022/Guia-de-estudios-PAA.pdf"> Guía de estudio </a></p>
+          <br />
+          <p>En este enlace encontraras el temario para la PCCNS <a className='text-blue-700' href="https://admisiones.unah.edu.hn/dmsdocument/8661-prueba-de-conocimiento-de-ciencias-naturales-y-de-la-salud-pdf"> Temario PCCNS </a></p>
+
+          <br />
+
+          <p>Algunas recomendaciones que le brindamos al estudiante son las siguientes:</p>
+          <ul className='list-none pl-12'>
+          <li>- Leer detenidamente la guía de estudio de la PAA</li>
+          <li>- Familiarizarse con el orden de cada parte y conocer los distintos tipos de ejercicio </li>
+          <li>- Estudiar los ejemplos de cada parte y sus explicaciones.</li>
+          <li>- Prestar atención y practicar cómo completar los ejercicios de suplir la respuesta en la prueba de matemáticas..</li>
+          <li>- Seguir las instrucciones específicas que brinda la guía para contestar los ejercicios</li>
+      
+        </ul>
         </div>
 
+        <br />
+        <p><strong> ¡Te deseamos éxito en tu proceso! </strong>  </p>
         <div>
           <br  />
           <br />  
