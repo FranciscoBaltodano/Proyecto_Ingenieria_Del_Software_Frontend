@@ -1,6 +1,6 @@
-import React from 'react'
 import { Sidebar } from '../components/Sidebar'
 import { Grid } from '@mui/material'
+import PropTypes from 'prop-types'
 
 export const EstudianteLayout = ({children}) => {
     return (
@@ -15,3 +15,6 @@ export const EstudianteLayout = ({children}) => {
     );
 };
 
+EstudianteLayout.propTypes = {
+    children: PropTypes.node.isRequired
+}

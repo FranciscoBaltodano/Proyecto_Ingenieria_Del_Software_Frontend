@@ -31,9 +31,10 @@ export const LoginLayout = ( { children } ) => {
                     boxShadow:'1px 1px 5px 1px #00000030'
                 }}        
             >
-                <img src="/assets/logoUNAHconLetras.webp"  alt="" width='180px' />
-                
-                { children }
+                <img src="/assets/logoUNAHconLetras.webp"  alt="Logo UNAH" width='180px' />
+                <Grid mt='20px'>
+                   { children }
+                </Grid>
             </Grid>
         </Grid>
     )

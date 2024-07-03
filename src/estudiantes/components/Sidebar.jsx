@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Menu as MenuIcon, Home as HomeIcon, Chat as ChatIcon, Class as ClassIcon, Grade as GradeIcon, Person as PersonIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
+<<<<<<< HEAD
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
+=======
+import { useLocation, useNavigate } from 'react-router-dom';
+import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
+import { useAuth } from '../../contexts/AuthContext';
+>>>>>>> ac521ca523baeddb272eb1d86a819cf26592331d
 
 const menuItems = [
   { text: 'Mi Perfil', icon: <HomeIcon /> },
@@ -14,9 +20,16 @@ const menuItems = [
 
 export const Sidebar = () => {
   const [open, setOpen] = React.useState(false);
-
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
   };
 
   const DrawerList = (
@@ -32,7 +45,7 @@ export const Sidebar = () => {
         ))}
       </List>
       <List>
-        <ListItemButton>
+        <ListItemButton onClick={handleLogout}>
           <ListItemIcon>
             {menuItems.slice(-1)[0].icon}
           </ListItemIcon>
