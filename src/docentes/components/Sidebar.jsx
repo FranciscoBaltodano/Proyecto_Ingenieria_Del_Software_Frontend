@@ -1,9 +1,7 @@
-// src/components/Sidebar.jsx
 import * as React from 'react';
 import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Menu as MenuIcon, Home as HomeIcon, Chat as ChatIcon, Class as ClassIcon, Grade as GradeIcon, Person as PersonIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 
 const initialMenuItems = [
@@ -19,7 +17,6 @@ const initialMenuItems = [
 
 export const Sidebar = () => {
   const [open, setOpen] = React.useState(false);
-  const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [menuItemsState, setMenuItemsState] = React.useState(initialMenuItems);
@@ -42,8 +39,9 @@ export const Sidebar = () => {
   };
 
   const handleLogout = () => {
-    logout();
-    navigate('/login', { replace: true });
+    // Eliminar el token de sesión del almacenamiento local
+    localStorage.removeItem('token'); // O sessionStorage.removeItem('token') si usas sessionStorage
+    navigate('/login');
   };
 
   const DrawerList = (
