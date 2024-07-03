@@ -18,29 +18,29 @@ export const Form = () => {
               <h2 className="text-lg font-semibold">Datos Generales</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1  lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-4">
                 <div>
-                  <label htmlFor="numero-identidad" className="block font-medium">Numero De Identidad</label>
-                  <input required id="numero-identidad" type="number" placeholder="Ingrese su numero de identidad" pattern="\d{13}" className="w-full p-2 border border-input rounded" {...register("Identidad", {required: true, minLength: 13, maxLength: 13})}/>
+                  <label htmlFor="numero_identidad" className="block font-medium">Numero De Identidad</label>
+                  <input required id="numero_identidad" type="number" placeholder="Ingrese su numero de identidad" pattern="\d{13}" className="w-full p-2 border border-input rounded" {...register("Identidad", {required: true, minLength: 13, maxLength: 13})}/>
                 </div>
                 <div>
                   <label htmlFor="primer-nombre" className="block font-medium">Primer Nombre</label>
                   <input type="text" placeholder="Primer nombre" {...register("Primer nombre", {required: true, min: 3, maxLength: 12})}  className="w-full p-2 border border-input rounded" />
                 </div>
                 <div>
-                  <label htmlFor="primer-nombre" className="block font-medium">Segundo Nombre</label>
-                  <input type="text" placeholder="Primer nombre" {...register("Segundo nombre", {required: true, min: 3, maxLength: 12})}  className="w-full p-2 border border-input rounded" />
+                  <label htmlFor="segundo_nombre" className="block font-medium">Segundo Nombre</label>
+                  <input id="segundo_nombre" type="text" placeholder="Primer nombre" {...register("Segundo nombre", {required: true, min: 3, maxLength: 12})}  className="w-full p-2 border border-input rounded" />
                 </div>
                   
                 <div>
-                  <label required htmlFor="primer-apellido" className="block font-medium">Primer Apellido</label>
-                  <input id="primer-apellido" type="text" placeholder="Ingrese su primer apellido"  {...register("Primer apellido",{required: true, min: 3, maxLength: 12})} className="w-full p-2 border border-input rounded"/>
+                  <label required htmlFor="primer_apellido" className="block font-medium">Primer Apellido</label>
+                  <input id="primer_apellido" type="text" placeholder="Ingrese su primer apellido"  {...register("Primer apellido",{required: true, min: 3, maxLength: 12})} className="w-full p-2 border border-input rounded"/>
                 </div>
                 <div>
-                  <label htmlFor="segundo-apellido" className="block font-medium">Segundo Apellido</label>
-                  <input id="segundo-apellido" type="text" placeholder="Ingrese su segundo apellido"  {...register("Segundo apellido",{required: false, min: 3, maxLength: 12})} className="w-full p-2 border border-input rounded"/>
+                  <label htmlFor="segundo_apellido" className="block font-medium">Segundo Apellido</label>
+                  <input id="segundo_apellido" type="text" placeholder="Ingrese su segundo apellido"  {...register("Segundo apellido",{required: false, min: 3, maxLength: 12})} className="w-full p-2 border border-input rounded"/>
                 </div>
                 <div>
-                  <label htmlFor="correo-electronico" className="block font-medium">Correo Electronico</label>
-                  <input id="correo-electronico" type="email" placeholder="Ingrese su correo electronico" className="w-full p-2 border border-input rounded"  {...register("Email", {required: true, pattern: /^\S+@\S+$/i})}/>
+                  <label htmlFor="correo_electronico" className="block font-medium">Correo Electronico</label>
+                  <input id="correo_electronico" type="email" placeholder="Ingrese su correo electronico" className="w-full p-2 border border-input rounded"  {...register("Email", {required: true, pattern: /^\S+@\S+$/i})}/>
                 </div>
                 {/* <div>
                   <label htmlFor="confirma-correo" className="block font-medium">Confirma Tu Correo Electronico</label>
@@ -51,8 +51,8 @@ export const Form = () => {
               <h2 className="text-lg font-semibold">Datos De Carrera Y Centro Regional</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 <div>
-                  <label htmlFor="centro-regional" className="block font-medium" id='centro-regional'>Centro Regional</label>
-                  <select id='centro-regional' {...register("centros", { required: true })} className="w-full p-2 border border-input rounded placeholder:slecciona" >
+                  <label htmlFor="centro_regional" className="block font-medium" id='centro-regional'>Centro Regional</label>
+                  <select id="centro_regional" {...register("centros", { required: true })} className="w-full p-2 border border-input rounded placeholder:slecciona" >
                     <option value="" disabled selected>{'Elegir'}</option>
                     { centros.map((centros) => (
                     <option key={centros.id} value={centros.id}>{centros.siglas}</option>
@@ -60,8 +60,8 @@ export const Form = () => {
                     </select>
                 </div>
                 <div>
-                  <label htmlFor="carrera-principal" className="block font-medium">Carrera Principal</label>
-                  <select id="carrera-principal" {...register("carrera principal", { required: true })} className="w-full p-2 border border-input rounded">
+                  <label htmlFor="carrera_principal" className="block font-medium">Carrera Principal</label>
+                  <select id="carrera_principal" {...register("carrera principal", { required: true })} className="w-full p-2 border border-input rounded">
                   <option value="" disabled selected>{'Elegir'}</option>
                   { carreras.map(( carreras ) => (
                     <option key={carreras.nombre} value={carreras.nombre}>{carreras.nombre}</option>
@@ -69,8 +69,8 @@ export const Form = () => {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="carrera-secundundefined" className="block font-medium">Carrera Secundaria</label>
-                  <select id="carrera-secundundefined" {...register("carrera secundaria", { required: true })} className="w-full p-2 border border-input rounded">
+                  <label htmlFor="carrera_secundundefined" className="block font-medium">Carrera Secundaria</label>
+                  <select id="carrera_secundundefined" {...register("carrera secundaria", { required: true })} className="w-full p-2 border border-input rounded">
                   <option value="" disabled selected>{'Elegir'}</option>
                   { carreras.map(( carreras ) => (
                     <option key={carreras.nombre} value={carreras.nombre}>{carreras.nombre}</option>
@@ -81,9 +81,9 @@ export const Form = () => {
               <div className="my-4 border-t border-border"></div>
               <h2 className="text-lg font-semibold">Subida De Certificado De Estudio</h2>
               <div className="mt-4">
-                <label htmlFor="certificado-secundundaria" className="block font-medium">Suba Una Foto De Su Certificado De Estudio De Secundaria</label>
+                <label htmlFor="certificado_secundundaria" className="block font-medium">Suba Una Foto De Su Certificado De Estudio De Secundaria</label>
                 <div className="flex items-center mt-2">
-                  <input id="certificado-secundundefined" type="file" accept="image/*" className="flex-grow p-2 border border-input rounded"/>
+                  <input id="certificado_secundundefined" type="file" accept="image/*" className="flex-grow p-2 border border-input rounded"/>
                 </div>
               </div>
               <div className="mt-6 flex justify-center">

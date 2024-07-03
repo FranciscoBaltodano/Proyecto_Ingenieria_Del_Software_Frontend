@@ -3,11 +3,11 @@ import { AdmisionesLayout } from '../layout/AdmisionesLayout';
 import { Container, Typography, Grid } from '@mui/material';
 import {Carrusel} from '../components/Carrusel'; // Asumiendo que Carrusel está exportado correctamente desde Carrusel.jsx
 
-import logoUNAHconLetras from '/assets/logoUNAHconLetras.png';
-import calendario from '/assets/admisiones/calendario.png';
-import creacionExpediente from '/assets/admisiones/creacionExpediente.png';
-import solvenciaMatricula from '/assets/admisiones/solvenciaMatricula.png';
-import recomendaciones from '/assets/admisiones/recomendaciones.png';
+import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
+import calendario from '/assets/admisiones/calendario.webp';
+import creacionExpediente from '/assets/admisiones/creacionExpediente.webp';
+import solvenciaMatricula from '/assets/admisiones/solvenciaMatricula.webp';
+import recomendaciones from '/assets/admisiones/recomendaciones.webp';
 
 export const InicioPage = () => {
   return (
