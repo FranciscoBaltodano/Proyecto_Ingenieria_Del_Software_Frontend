@@ -5,6 +5,9 @@ import { NavLink } from 'react-router-dom';
 import { carreras } from '../data/carreras';
 import SearchIcon from '@mui/icons-material/Search';
 
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer'
+
 export const OfertaPage = () => {
   const [busquedaValue, setBusquedaValue] = useState('');
   const [carrerasFiltradas, setCarrerasFiltradas] = useState(carreras);
@@ -23,12 +26,14 @@ export const OfertaPage = () => {
   };
 
   return (
-    <Grid sx={{marginTop:'100px', marginLeft:'10px'}}>
+    <Grid sx={{ marginLeft:'10px'}}>
 
+    <Navbar />
       <Typography variant="h4" >
         Oferta Académica
       </Typography>
       
+
       {/* Campo de búsqueda */}
       <TextField
         placeholder="Buscar por nombre de carrera"
@@ -45,9 +50,6 @@ export const OfertaPage = () => {
           ),
         }}
       />
-
-    <AdmisionesLayout>
-
       <Grid container spacing={3}>
         {/* Si no hay carreras mostrara el mensaje */}
         {carrerasFiltradas.length === 0 ? (
@@ -117,9 +119,8 @@ export const OfertaPage = () => {
             </Grid>
           ))
         )}
-
       </Grid>
-    </AdmisionesLayout>
+      <Footer/ >
     </Grid>
   );
 };
