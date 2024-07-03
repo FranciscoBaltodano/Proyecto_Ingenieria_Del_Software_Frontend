@@ -5,7 +5,7 @@ import { Home, Chat, Class, Grade, Person } from '@mui/icons-material';
 export const Sidebar = () => {
   return (
     <div style={{ width: '250px', backgroundColor: '#f8f9fa', height: '100vh', paddingTop: '20px' }}>
-      <img src="assets/logoUNAH.png" alt="UNAH Logo" style={{ width: '80%', margin: '0 auto', display: 'block' }} />
+      <img src="assets/logoUNAH.webp" alt="UNAH Logo" style={{ width: '80%', margin: '0 auto', display: 'block' }} />
       <List>
         <ListItem button>
           <ListItemIcon><Home /></ListItemIcon>

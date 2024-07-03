@@ -30,6 +30,8 @@ export const Navbar = (props) => {
         return 2;
       case '/admisiones/solicitud':
         return 2;
+      case '/admisiones/resultado_inscripciones':
+        return 2;
       default:
         return 0;
     }

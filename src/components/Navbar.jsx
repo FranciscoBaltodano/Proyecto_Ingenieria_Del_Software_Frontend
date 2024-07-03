@@ -12,7 +12,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import logoUNAH from '/assets/logoUNAH.png';
+import logoUNAH from '/assets/logoUNAH.webp';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
