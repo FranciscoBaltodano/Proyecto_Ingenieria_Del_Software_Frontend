@@ -1,9 +1,12 @@
+// src/components/Sidebar.jsx
 import * as React from 'react';
 import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Menu as MenuIcon, Home as HomeIcon, Chat as ChatIcon, Class as ClassIcon, Grade as GradeIcon, Person as PersonIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 
-const menuItems = [
+const initialMenuItems = [
   { text: 'Mi Perfil', icon: <HomeIcon />, disabled: false },
   { text: 'Chats', icon: <ChatIcon />, disabled: false },
   { text: 'Mis clases', icon: <ClassIcon />, disabled: false },
@@ -16,15 +19,37 @@ const menuItems = [
 
 export const Sidebar = () => {
   const [open, setOpen] = React.useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [menuItemsState, setMenuItemsState] = React.useState(initialMenuItems);
+
+  React.useEffect(() => {
+    const updatedMenuItems = initialMenuItems.map(item => {
+      if (item.text === 'Jefe de carrera') {
+        return { ...item, disabled: location.pathname !== '/jefedepartamento' };
+      } else if (item.text === 'Coordinador') {
+        return { ...item, disabled: location.pathname !== '/coordinadores' };
+      } else {
+        return item;
+      }
+    });
+    setMenuItemsState(updatedMenuItems);
+  }, [location.pathname]);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
+
   const DrawerList = (
     <Box sx={{ width: 250, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }} role="presentation" onClick={toggleDrawer}>
       <List>
-        {menuItems.slice(0, -1).map((item) => (
+        {menuItemsState.slice(0, -1).map((item) => (
           <ListItemButton key={item.text} disabled={item.disabled}>
             <ListItemIcon>
               {item.icon}
@@ -34,11 +59,11 @@ export const Sidebar = () => {
         ))}
       </List>
       <List>
-        <ListItemButton>
+        <ListItemButton onClick={handleLogout}>
           <ListItemIcon>
-            {menuItems.slice(-1)[0].icon}
+            {menuItemsState.slice(-1)[0].icon}
           </ListItemIcon>
-          <ListItemText primary={menuItems.slice(-1)[0].text} />
+          <ListItemText primary={menuItemsState.slice(-1)[0].text} />
         </ListItemButton>
       </List>
     </Box>
@@ -67,4 +92,4 @@ export const Sidebar = () => {
       </Drawer>
     </Box>
   );
-}
+};
