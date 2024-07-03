@@ -2,12 +2,10 @@
 import * as React from 'react';
 import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Menu as MenuIcon, Home as HomeIcon, Chat as ChatIcon, Class as ClassIcon, Grade as GradeIcon, Person as PersonIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
-<<<<<<< HEAD
-=======
+
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
->>>>>>> ac521ca523baeddb272eb1d86a819cf26592331d
-import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
+import logoUNAHconLetras from '../../../public/assets/admisiones/logoUNAHconLetras.webp';
 
 const initialMenuItems = [
   { text: 'Mi Perfil', icon: <HomeIcon />, disabled: false },
