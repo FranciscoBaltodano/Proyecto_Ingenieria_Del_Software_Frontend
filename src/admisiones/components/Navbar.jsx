@@ -1,21 +1,12 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import MenuIcon from '@mui/icons-material/Menu';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import { useState, useEffect } from 'react';
+import { AppBar, Box, CssBaseline, Drawer, IconButton, Toolbar, Tabs, Tab, Button } from '@mui/material';
+import { Menu as MenuIcon } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
-import { Button } from '@mui/material';
+
 import { NavLink, useLocation } from 'react-router-dom';
-import logoUNAH from '/assets/logoUNAH.png';
-import logoUNAHconLetras from '/assets/logoUNAHconLetras.png'
-// tamaño de la barra lateral
+
+import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
+
 const drawerWidth = 240;
 
 const navItems = [
@@ -37,34 +28,34 @@ export const Navbar = (props) => {
         return 1;
       case '/admisiones/inscripciones':
         return 2;
+      case '/admisiones/solicitud':
+        return 2;
+      case '/admisiones/resultado_inscripciones':
+        return 2;
       default:
         return 0;
     }
   };
 
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [value, setValue] = React.useState(getValueFromLocation(location.pathname));
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [value, setValue] = useState(getValueFromLocation(location.pathname));
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue(getValueFromLocation(location.pathname));
   }, [location.pathname]);
 
   const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
+    setMobileOpen(!mobileOpen);
   };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // barra lateral
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Button
-          component={NavLink}
-          to="/"
-          sx={{ marginLeft: 2, my: 2 }} >
-          <img src={logoUNAHconLetras} alt="UNAH" width="160" height="80"/>
+      <Button component={NavLink} to="/" sx={{ marginLeft: 2, my: 2 }}>
+        <img src={logoUNAHconLetras} alt="UNAH" width="160" height="80" />
       </Button>
 
       <Tabs
@@ -88,51 +79,40 @@ export const Navbar = (props) => {
           />
         ))}
       </Tabs>
-      <Button
-        variant="contained"
-        component={NavLink}
-        to="/login">Acceder
+      <Button variant="contained" component={NavLink} to="/login">
+        Acceder
       </Button>
     </Box>
   );
-  // Fin de la Barra Lateral
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
-  // NavBar
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
       <AppBar component="nav" sx={{
-       backgroundColor: '#ffffff00', 
-       backdropFilter: 'blur(10px)', 
-       boxShadow: '0 4px 4px #00000040',
-       color: theme.palette.text.primary 
+        backgroundColor: '#ffffff',
+        backdropFilter: 'blur(10px)',
+        boxShadow: '0 4px 4px #00000040',
+        color: theme.palette.text.primary,
       }}>
         <Toolbar>
-          {/* icono hamburguesa */}
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'block', md:'none'  } }}
+            sx={{ mr: 2, display: { sm: 'block', md: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
 
-          <Box
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'none', md:'flex' } }}
-          >
-            <Button
-              component={NavLink}
-              to="/"
-              sx={{ marginLeft: 2 }} >
-              <img src={logoUNAHconLetras} alt="UNAH" width="100" height="50"/>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+            <Button component={NavLink} to="/" sx={{ marginLeft: 2 }}>
+              <img src={logoUNAHconLetras} alt="UNAH" width="100" height="50" />
             </Button>
           </Box>
 
-          <Box sx={{ display: { xs: 'none', sm: 'none', md:'flex' } }}>
+          <Box sx={{ display: { xs: 'none', sm: 'none', md: 'flex' } }}>
             <Tabs value={value} onChange={handleChange} centered>
               {navItems.map((item, index) => (
                 <Tab
@@ -148,16 +128,10 @@ export const Navbar = (props) => {
                 />
               ))}
             </Tabs>
-            <Button
-              variant="contained"
-              component={NavLink}
-              to="/login"
-              sx={{ marginLeft: 2 }}  
-            >
+            <Button variant="contained" component={NavLink} to="/login" sx={{ marginLeft: 2 }}>
               Acceder
             </Button>
           </Box>
-
         </Toolbar>
       </AppBar>
 
@@ -171,7 +145,7 @@ export const Navbar = (props) => {
             keepMounted: true,
           }}
           sx={{
-            display: { xs: 'block', sm: 'block', md:'none' },
+            display: { xs: 'block', sm: 'block', md: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
@@ -182,12 +156,7 @@ export const Navbar = (props) => {
       <Box component="main" sx={{ p: 1 }}>
         <Toolbar />
       </Box>
-
     </Box>
   );
-};
-
-Navbar.propTypes = {
-  window: PropTypes.func,
 };
 

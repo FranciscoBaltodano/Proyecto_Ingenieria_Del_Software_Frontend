@@ -1,7 +1,15 @@
-import React from 'react'
+
+import { Route, Routes } from 'react-router-dom'
+import { Dashboard } from '../pages/Dashboard'
 
 export const JefeDepartamentoRoutes = () => {
   return (
-    <div>JefeDepartamentoRoutes</div>
+    <Routes>
+      <Route path="/" element={<Dashboard /> }/>
+    </Routes>
   )
 }
+
+
+
+
