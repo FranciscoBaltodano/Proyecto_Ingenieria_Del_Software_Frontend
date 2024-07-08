@@ -10,6 +10,8 @@ export const Form = () => {
   const [submitMessage, setSubmitMessage] = useState('');
   const [image, setImage] = useState(null);
 
+  
+
   const onImageChange = (event) => {
     console.error(errors)
    
@@ -41,8 +43,17 @@ export const Form = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     setSubmitMessage('');
+ 
+
     try {
       let imagen_url = '';
+      let input1 = document.getElementById("id_Carrera").value;
+      let input2 = document.getElementById("id_Sd_Carrera").value;
+
+      if (input1 === input2) {
+        setSubmitMessage('Elige carreras diferentes.');
+        return false;
+      }
       if (data.certificado[0]) {
         const formData = new FormData();
         formData.append('file', data.certificado[0]);
@@ -56,6 +67,8 @@ export const Form = () => {
         imagen_url = cloudinaryRes.data.secure_url;
       }
 
+
+
       const admisionData = { ...data, certificado: imagen_url };
       const response = await axios.post('http://localhost:3000/api/admisiones', admisionData);
       setSubmitMessage('Solicitud de admisión enviada con éxito.');
@@ -66,6 +79,7 @@ export const Form = () => {
     } finally {
       setIsLoading(false);
     }
+   
   };
 
   return (
@@ -151,7 +165,7 @@ export const Form = () => {
               {...register("id_Centro", { required: "Centro regional es requerido" })}
               className="w-full p-2 border border-input rounded"
             >
-              <option value="" disabled>Elegir</option>
+              <option value="" disabled selected>Elegir</option>
               {centros.map(centro => (
                 <option key={centro.id_Centro} value={centro.id_Centro}>{centro.nombre}</option>
               ))}
@@ -165,7 +179,7 @@ export const Form = () => {
               {...register("id_Carrera", { required: "Carrera principal es requerida" })}
               className="w-full p-2 border border-input rounded"
             >
-              <option value="" disabled>Elegir</option>
+              <option value="" disabled selected>Elegir</option>
               {carreras.map(carrera => (
                 <option key={carrera.id_Carrera} value={carrera.id_Carrera}>{carrera.nombre}</option>
               ))}
@@ -179,7 +193,7 @@ export const Form = () => {
               {...register("id_Sd_Carrera", { required: "Carrera secundaria es requerida" })}
               className="w-full p-2 border border-input rounded"
             >
-              <option value="" disabled>Elegir</option>
+              <option value="" disabled selected>Elegir</option>
               {carreras.map(carrera => (
                 <option key={carrera.id_Carrera} value={carrera.id_Carrera}>{carrera.nombre}</option>
               ))}
@@ -191,7 +205,7 @@ export const Form = () => {
         <h2 className="text-lg font-semibold">Subida De Certificado De Estudio</h2>
         <div className="mt-4">
           <label htmlFor="certificado" className="block font-medium">Suba Una Foto De Su Certificado De Estudio De Secundaria</label>
-          <div className="flex items-center mt-2">
+          <div className="flex items-center mt-2 flex-col">
             <input
               
               id="certificado"
@@ -210,6 +224,7 @@ export const Form = () => {
             type="submit"
             disabled={isLoading}
             className="bg-primary text-primary-foreground p-2 rounded disabled:bg-gray-400"
+         
           >
             {isLoading ? 'Enviando...' : 'Enviar Formulario'}
           </button>
