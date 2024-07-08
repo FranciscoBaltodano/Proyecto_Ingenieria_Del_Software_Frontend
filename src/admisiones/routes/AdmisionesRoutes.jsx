@@ -13,9 +13,10 @@ export const AdmisionesRoutes = () => {
       <Route path="/" element={<InicioPage />} />
       <Route path="oferta" element={<OfertaPage />} />
       <Route path="inscripciones" element={<InscripcionesPage />} />
-      <Route path="/*" element={ <Navigate to='/admisiones/' /> }/>
       <Route path="solicitud" element={<SolicitudPage />} />
       <Route path= "resultado_inscripciones" element={<ResultadoInscripcionesPage/>}/>
+      
+      <Route path="/*" element={ <Navigate to='/admisiones/' /> }/>
     </Routes>
   );
 };

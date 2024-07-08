@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export const LoginLayout = ({ children }) => {
@@ -12,12 +12,17 @@ export const LoginLayout = ({ children }) => {
       justifyContent='center'
       sx={{   
         minHeight: '100vh',
-        backgroundImage:'url(./assets/login_bg.svg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center', 
         padding: 2
       }}
     >
+      <Button
+        variant="outlined"
+        color="primary"
+        sx={{ position: 'absolute', top: '10px', left: '10px', zIndex: 2 }}
+        onClick={() => navigate('/')}
+      >
+        Regresar a Inicio
+      </Button>
       <Grid 
         item
         className="box-shadow"
@@ -38,7 +43,7 @@ export const LoginLayout = ({ children }) => {
           src="/assets/logoUNAHconLetras.webp" 
           alt="Logo UNAH" 
           width='180px' 
-          onClick={() => navigate('/admisiones/')} 
+          onClick={() => navigate('/')} 
           style={{ cursor: 'pointer' }}
         />
         <Grid mt='20px'>
