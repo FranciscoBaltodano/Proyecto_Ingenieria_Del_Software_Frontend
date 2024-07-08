@@ -8,6 +8,21 @@ export const Form = () => {
   const [carreras, setCarreras] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [image, setImage] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
+
+
+
+  const onImageChange = (event) => {
+    console.error(errors)
+   
+    if (event.target.files && event.target.files[0]) {
+      setImage(URL.createObjectURL(event.target.files[0]));
+    }
+    if (setImage) {
+      setImage(setImage);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,8 +31,7 @@ export const Form = () => {
           axios.get('http://localhost:3000/api/admisiones/centros'),
           axios.get('http://localhost:3000/api/admisiones/carreras')
         ]);
-        console.log('Centros: ', centrosRes.data);
-        console.log('Carreras: ', carrerasRes.data)
+       
         setCentros(centrosRes.data);
         setCarreras(carrerasRes.data);
       } catch (error) {
@@ -30,31 +44,45 @@ export const Form = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     setSubmitMessage('');
+    setSubmitError(null);
+
     try {
       let imagen_url = '';
+      let input1 = document.getElementById("id_Carrera").value;
+      let input2 = document.getElementById("id_Sd_Carrera").value;
+
+      if (input1 === input2) {
+        setSubmitMessage('Elige carreras diferentes.');
+        return false;
+      }
       if (data.certificado[0]) {
         const formData = new FormData();
         formData.append('file', data.certificado[0]);
         formData.append('upload_preset', 'ml_proyecto'); // Reemplaza 'your_upload_preset' con tu preset de Cloudinary
 
         const cloudinaryRes = await axios.post(
-        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`, 
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`, 
              formData
         );
 
         imagen_url = cloudinaryRes.data.secure_url;
       }
 
-      const admisionData = { ...data, imagen_url };
-      const response = await axios.post('/api/admisiones', admisionData);
+      const admisionData = { ...data, certificado: imagen_url };
+      const response = await axios.post('http://localhost:3000/api/admisiones', admisionData);
       setSubmitMessage('Solicitud de admisión enviada con éxito.');
       console.log(response.data);
     } catch (error) {
-      setSubmitMessage('Error al enviar la solicitud. Por favor, intente de nuevo.');
+      if (error.response && error.response.status === 400 && error.response.data.message) {
+        setSubmitMessage(error.response.data.message);
+      } else {
+        setSubmitMessage('Error al enviar la solicitud. Por favor, intente de nuevo.');
+      }
       console.error('Error:', error);
     } finally {
       setIsLoading(false);
     }
+   
   };
 
   return (
@@ -140,7 +168,7 @@ export const Form = () => {
               {...register("id_Centro", { required: "Centro regional es requerido" })}
               className="w-full p-2 border border-input rounded"
             >
-              <option value="" disabled>Elegir</option>
+              <option value="" disabled selected>Elegir</option>
               {centros.map(centro => (
                 <option key={centro.id_Centro} value={centro.id_Centro}>{centro.nombre}</option>
               ))}
@@ -154,7 +182,7 @@ export const Form = () => {
               {...register("id_Carrera", { required: "Carrera principal es requerida" })}
               className="w-full p-2 border border-input rounded"
             >
-              <option value="" disabled>Elegir</option>
+              <option value="" disabled selected>Elegir</option>
               {carreras.map(carrera => (
                 <option key={carrera.id_Carrera} value={carrera.id_Carrera}>{carrera.nombre}</option>
               ))}
@@ -168,7 +196,7 @@ export const Form = () => {
               {...register("id_Sd_Carrera", { required: "Carrera secundaria es requerida" })}
               className="w-full p-2 border border-input rounded"
             >
-              <option value="" disabled>Elegir</option>
+              <option value="" disabled selected>Elegir</option>
               {carreras.map(carrera => (
                 <option key={carrera.id_Carrera} value={carrera.id_Carrera}>{carrera.nombre}</option>
               ))}
@@ -180,14 +208,17 @@ export const Form = () => {
         <h2 className="text-lg font-semibold">Subida De Certificado De Estudio</h2>
         <div className="mt-4">
           <label htmlFor="certificado" className="block font-medium">Suba Una Foto De Su Certificado De Estudio De Secundaria</label>
-          <div className="flex items-center mt-2">
+          <div className="flex items-center mt-2 flex-col">
             <input
+              
               id="certificado"
               type="file"
-              accept="image/*,.pdf"
+              accept="image/*,image/png,image/jpeg,image/jpg,.pdf"
               {...register("certificado", { required: "Certificado es requerido" })}
               className="flex-grow p-2 border border-input rounded"
+              onChange={onImageChange}
             />
+            {image && <img alt="preview image" src={image} />}
           </div>
           {errors.certificado && <span className="text-red-500">{errors.certificado.message}</span>}
         </div>
@@ -196,6 +227,7 @@ export const Form = () => {
             type="submit"
             disabled={isLoading}
             className="bg-primary text-primary-foreground p-2 rounded disabled:bg-gray-400"
+         
           >
             {isLoading ? 'Enviando...' : 'Enviar Formulario'}
           </button>
