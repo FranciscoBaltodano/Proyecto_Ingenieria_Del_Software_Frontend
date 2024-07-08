@@ -9,8 +9,9 @@ export const Form = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [image, setImage] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
 
-  
+
 
   const onImageChange = (event) => {
     console.error(errors)
@@ -43,7 +44,7 @@ export const Form = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     setSubmitMessage('');
- 
+    setSubmitError(null);
 
     try {
       let imagen_url = '';
@@ -67,14 +68,16 @@ export const Form = () => {
         imagen_url = cloudinaryRes.data.secure_url;
       }
 
-
-
       const admisionData = { ...data, certificado: imagen_url };
       const response = await axios.post('http://localhost:3000/api/admisiones', admisionData);
       setSubmitMessage('Solicitud de admisión enviada con éxito.');
       console.log(response.data);
     } catch (error) {
-      setSubmitMessage('Error al enviar la solicitud. Por favor, intente de nuevo.');
+      if (error.response && error.response.status === 400 && error.response.data.message) {
+        setSubmitMessage(error.response.data.message);
+      } else {
+        setSubmitMessage('Error al enviar la solicitud. Por favor, intente de nuevo.');
+      }
       console.error('Error:', error);
     } finally {
       setIsLoading(false);
