@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AdministradorLayout } from '../layout/AdministradorLayout';
 import { Box, Button, Typography, Divider } from '@mui/material';
 import { DocentesForm } from '../components/DocentesForm';
@@ -12,7 +12,6 @@ export const DocentesPage = () => {
 
   return (
     <AdministradorLayout>
-      <Box sx={{ padding: 2 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Gestión de Docentes
         </Typography>
@@ -21,7 +20,6 @@ export const DocentesPage = () => {
           {showForm ? 'Cancelar' : 'Nuevo Docente'}
         </Button>
         {showForm && <DocentesForm />}
-      </Box>
     </AdministradorLayout>
   );
 };

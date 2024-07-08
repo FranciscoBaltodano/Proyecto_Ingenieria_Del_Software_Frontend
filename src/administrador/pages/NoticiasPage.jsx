@@ -13,7 +13,6 @@ export const NoticiasPage = () => {
 
   return (
     <AdministradorLayout>
-      <Box sx={{ padding: 2 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Gestión de Noticias
         </Typography>
@@ -22,7 +21,6 @@ export const NoticiasPage = () => {
           {showForm ? 'Cancelar' : 'Nueva Noticia'}
         </Button>
         {showForm && <NoticiasForm />}
-      </Box>
     </AdministradorLayout>
   )
 }

@@ -12,7 +12,7 @@ export const AdministradorLayout = ({ children }) => {
         alignItems="center"
         sx={{ width: '100%', padding: '10px', marginTop: '30px'}}
       >
-        <Grid item sx={{ width: '100%' }}>
+        <Grid item sx={{ width: '100%', padding: 2 }}>
           {children}
         </Grid>
       </Grid>
