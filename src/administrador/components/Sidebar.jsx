@@ -55,7 +55,6 @@ export const Sidebar = () => {
             key={item.text}
             component={NavLink}
             to={item.to}
-            exact
             sx={{
               color: location.pathname === item.to ? activeItemStyle.color : 'text.primary',
               backgroundColor: location.pathname === item.to ? activeItemStyle.backgroundColor : 'transparent',
@@ -81,7 +80,9 @@ export const Sidebar = () => {
   );
 
   return (
-    <Box mt='10px' sx={{ position: 'fixed', top: 0, left: 0, zIndex: 1 }}>
+    <Box py='10px' 
+    // sx={{ position: 'fixed', top: 0, left: 0, zIndex: 1, backgroundColor: '#ffffff80', width: '100%', backdropFilter: 'blur(10px)', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'}}>
+    sx={{ position: 'fixed', top: 0, left: 0, zIndex: 1, backgroundColor:'#ffffff00', width:'100%', backdropFilter:'blur' }}>
       <IconButton
         color="inherit"
         aria-label="open drawer"
