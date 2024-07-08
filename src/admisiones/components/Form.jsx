@@ -8,6 +8,18 @@ export const Form = () => {
   const [carreras, setCarreras] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [image, setImage] = useState(null);
+
+  const onImageChange = (event) => {
+    console.error(errors)
+   
+    if (event.target.files && event.target.files[0]) {
+      setImage(URL.createObjectURL(event.target.files[0]));
+    }
+    if (setImage) {
+      setImage(setImage);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,8 +28,7 @@ export const Form = () => {
           axios.get('http://localhost:3000/api/admisiones/centros'),
           axios.get('http://localhost:3000/api/admisiones/carreras')
         ]);
-        console.log('Centros: ', centrosRes.data);
-        console.log('Carreras: ', carrerasRes.data)
+       
         setCentros(centrosRes.data);
         setCarreras(carrerasRes.data);
       } catch (error) {
@@ -38,15 +49,15 @@ export const Form = () => {
         formData.append('upload_preset', 'ml_proyecto'); // Reemplaza 'your_upload_preset' con tu preset de Cloudinary
 
         const cloudinaryRes = await axios.post(
-        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`, 
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`, 
              formData
         );
 
         imagen_url = cloudinaryRes.data.secure_url;
       }
 
-      const admisionData = { ...data, imagen_url };
-      const response = await axios.post('/api/admisiones', admisionData);
+      const admisionData = { ...data, certificado: imagen_url };
+      const response = await axios.post('http://localhost:3000/api/admisiones', admisionData);
       setSubmitMessage('Solicitud de admisión enviada con éxito.');
       console.log(response.data);
     } catch (error) {
@@ -182,12 +193,15 @@ export const Form = () => {
           <label htmlFor="certificado" className="block font-medium">Suba Una Foto De Su Certificado De Estudio De Secundaria</label>
           <div className="flex items-center mt-2">
             <input
+              
               id="certificado"
               type="file"
-              accept="image/*,.pdf"
+              accept="image/*,image/png,image/jpeg,image/jpg,.pdf"
               {...register("certificado", { required: "Certificado es requerido" })}
               className="flex-grow p-2 border border-input rounded"
+              onChange={onImageChange}
             />
+            {image && <img alt="preview image" src={image} />}
           </div>
           {errors.certificado && <span className="text-red-500">{errors.certificado.message}</span>}
         </div>
