@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm} from 'react-hook-form';
 import axios from 'axios';
 
-export const Form = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+export const Form = () => { 
+  const { register, handleSubmit, watch, formState: { errors }, setError, clearErrors } = useForm();
+ 
+
   const [centros, setCentros] = useState([]);
   const [carreras, setCarreras] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +13,12 @@ export const Form = () => {
   const [image, setImage] = useState(null);
   const [submitError, setSubmitError] = useState(null);
 
+  const [examenesCarrera1, setExamenesCarrera1] = useState([]);
+  const [examenesCarrera2, setExamenesCarrera2] = useState([]);
 
+
+  const watchCarrera1 = watch('id_Carrera');
+  const watchCarrera2 = watch('id_Sd_Carrera');
 
   const onImageChange = (event) => {
     console.error(errors)
@@ -33,6 +40,7 @@ export const Form = () => {
         ]);
        
         setCentros(centrosRes.data);
+        console.log('Carreras recibidas: ', carrerasRes.data);
         setCarreras(carrerasRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -40,6 +48,55 @@ export const Form = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchExamenes = async (carreraId, setExamenes) => {
+      if (carreraId) {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/admisiones/carreras/${carreraId}/examenes`);
+          setExamenes(response.data);
+        } catch (error) {
+          console.error('Error fetching examenes:', error);
+        }
+      }
+    };
+
+    fetchExamenes(watchCarrera1, setExamenesCarrera1);
+    fetchExamenes(watchCarrera2, setExamenesCarrera2);
+  }, [watchCarrera1, watchCarrera2]);
+
+
+
+  /// useEffect para validad que no elija carreras de la facultad de medicina y de ingenieria a la vez
+
+  useEffect(() => {
+    const validateCarreras = () => {
+      if (watchCarrera1 && watchCarrera2) {
+        const carrera1 = carreras.find(c => c.id_Carrera.toString() === watchCarrera1);
+        const carrera2 = carreras.find(c => c.id_Carrera.toString() === watchCarrera2);
+        
+        if (carrera1 && carrera2) {
+          const facultadIngenieria = carreras.find(c => c.Facultades.nombre.toLowerCase().includes('ingeniería'))?.Facultades.id_Facultad;
+          const facultadMedicina = carreras.find(c => c.Facultades.nombre.toLowerCase().includes('medicina'))?.Facultades.id_Facultad;
+
+          if (
+            (carrera1.id_Facultad === facultadIngenieria && carrera2.id_Facultad === facultadMedicina) ||
+            (carrera1.id_Facultad === facultadMedicina && carrera2.id_Facultad === facultadIngenieria)
+          ) {
+            setError('id_Sd_Carrera', {
+              type: 'manual',
+              message: 'No puedes elegir una carrera de Ingeniería y otra de Medicina al mismo tiempo'
+            });
+          } else {
+            clearErrors('id_Sd_Carrera');
+          }
+        }
+      }
+    };
+
+    validateCarreras();
+  }, [watchCarrera1, watchCarrera2, carreras, setError, clearErrors]);
+
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -69,6 +126,7 @@ export const Form = () => {
       }
 
       const admisionData = { ...data, certificado: imagen_url };
+
       const response = await axios.post('http://localhost:3000/api/admisiones', admisionData);
       setSubmitMessage('Solicitud de admisión enviada con éxito.');
       console.log(response.data);
@@ -203,6 +261,28 @@ export const Form = () => {
             </select>
             {errors.id_Sd_Carrera && <span className="text-red-500">{errors.id_Sd_Carrera.message}</span>}
           </div>
+
+          {examenesCarrera1.length > 0 && (
+          <div>
+            <h3 className="font-medium">Exámenes requeridos para la carrera principal:</h3>
+            <ul>
+              {examenesCarrera1.map(examen => (
+                <li key={examen.id}>{examen.nombre}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {examenesCarrera2.length > 0 && (
+          <div>
+            <h3 className="font-medium">Exámenes requeridos para la carrera secundaria:</h3>
+            <ul>
+              {examenesCarrera2.map(examen => (
+                <li key={examen.id}>{examen.nombre}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         </div>
         <div className="my-4 border-t border-border"></div>
         <h2 className="text-lg font-semibold">Subida De Certificado De Estudio</h2>
