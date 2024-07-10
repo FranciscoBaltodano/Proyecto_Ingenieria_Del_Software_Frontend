@@ -10,7 +10,7 @@ export const AdministradorLayout = ({ children }) => {
         container
         justifyContent="center"
         alignItems="center"
-        sx={{ width: '100%', padding: '10px', marginTop: '30px'}}
+        sx={{ width: '100%', padding: '10px', marginTop: '50px'}}
       >
         <Grid item sx={{ width: '100%', padding: 2 }}>
           {children}
