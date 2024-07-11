@@ -67,7 +67,7 @@ export const Form = () => {
 
 
 
-  /// useEffect para validad que no elija carreras de la facultad de medicina y de ingenieria a la vez
+  /// useEffect para validar que no elija carreras de la facultad de medicina y de ingenieria a la vez
 
   useEffect(() => {
     const validateCarreras = () => {
@@ -144,7 +144,8 @@ export const Form = () => {
   };
 
   return (
-    <div className="p-6 bg-card text-card-foreground flex flex-col rounded-lg shadow-md justify-between items-center">
+    <div className='flex justify-center items-center w-full'>
+          <div className="p-6 bg-card text-card-foreground flex flex-col rounded-lg shadow-md justify-between items-center w-6/12">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-xl font-bold">Llena la solicitud de inscripción</h1>
         <p className="text-muted-foreground">Completa todos los campos y se parte de nuestra comunidad</p>
@@ -156,7 +157,7 @@ export const Form = () => {
             <input
               id="dni"
               type="text"
-              placeholder="Ingrese su numero de identidad"
+              placeholder="número sin guiones"
               {...register("dni", { required: "DNI es requerido", pattern: { value: /^\d{13}$/, message: "DNI debe tener 13 dígitos" } })}
               className="w-full p-2 border border-input rounded"
             />
@@ -209,7 +210,7 @@ export const Form = () => {
             <input
               id="correo_electronico"
               type="email"
-              placeholder="Ingrese su correo electronico"
+              placeholder="ejemplo@unah.hn"
               {...register("email", { required: "Correo electrónico es requerido", pattern: { value: /^\S+@\S+$/i, message: "Correo electrónico inválido" } })}
               className="w-full p-2 border border-input rounded"
             />
@@ -247,7 +248,7 @@ export const Form = () => {
             </select>
             {errors.id_Carrera && <span className="text-red-500">{errors.id_Carrera.message}</span>}
           </div>
-          <div>
+          <div className=''>
             <label htmlFor="id_Sd_Carrera" className="block font-medium">Carrera Secundaria</label>
             <select
               id="id_Sd_Carrera"
@@ -313,11 +314,14 @@ export const Form = () => {
           </button>
         </div>
       </form>
-      {submitMessage && (
-        <div className={`mt-4 p-2 ${submitMessage.includes('éxito') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} rounded`}>
+      {submitMessage && (  
+              <div className={`mt-4 p-2 ${submitMessage.includes('éxito') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} rounded`} >
           {submitMessage}
         </div>
+      
       )}
     </div>
+    </div>
+    
   );
 };
