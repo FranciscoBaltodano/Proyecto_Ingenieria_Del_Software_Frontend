@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AdministradorLayout } from '../layout/AdministradorLayout';
 import { Box, Button, Typography, Divider } from '@mui/material';
 import { NoticiasForm } from '../components/NoticiasForm';
+import DataTable from '../../components/DataTable';
 
 export const NoticiasPage = () => {
 
@@ -21,6 +22,10 @@ export const NoticiasPage = () => {
           {showForm ? 'Cancelar' : 'Nueva Noticia'}
         </Button>
         {showForm && <NoticiasForm />}
+
+        <Box sx={{ marginTop: 2 }}>
+          <DataTable url='http://localhost:3000/api/admin/noticias' name='Noticias' />
+        </Box>
     </AdministradorLayout>
   )
 }
