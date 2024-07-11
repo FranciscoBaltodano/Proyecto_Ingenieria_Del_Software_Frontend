@@ -145,7 +145,7 @@ export const Form = () => {
 
   return (
     <div className='flex justify-center items-center w-full'>
-          <div className="p-6 bg-card text-card-foreground flex flex-col rounded-lg shadow-md justify-between items-center w-6/12">
+          <div className="p-6 bg-card text-card-foreground flex flex-col rounded-lg shadow-md justify-between items-center w-7/12 max-md:default">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-xl font-bold">Llena la solicitud de inscripción</h1>
         <p className="text-muted-foreground">Completa todos los campos y se parte de nuestra comunidad</p>
@@ -315,7 +315,9 @@ export const Form = () => {
         </div>
       </form>
       {submitMessage && (  
-              <div className={`mt-4 p-2 ${submitMessage.includes('éxito') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} rounded`} >
+              <div className='w-full'>
+              <div className={`mt-4 p-2 ${submitMessage.includes('éxito') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} rounded w-1/2`} >
+                </div>
           {submitMessage}
         </div>
       
