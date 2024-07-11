@@ -9,6 +9,8 @@ export const DocentesForm = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [errorRoles, setErrorRoles] = useState(false);
+
 
   const onSubmit = async (formData) => {
     setLoading(true);
@@ -86,16 +88,19 @@ export const DocentesForm = () => {
 
       <div>
         <FormControlLabel
-          control={<Checkbox {...register("Docente")} />}
+          control={<Checkbox {...register("Docente")} defaultChecked />}
           label="Docente"
+          sx={{ pointerEvents: 'none', opacity: 0.5 }} 
         />
         <FormControlLabel
           control={<Checkbox {...register("Coordinador")} />}
           label="Coordinador"
+          disabled={watch('JefeDepartamento')}
         />
         <FormControlLabel
           control={<Checkbox {...register("JefeDepartamento")} />}
           label="Jefe de Departamento"
+          disabled={watch('Coordinador')}
         />
       </div>
 
