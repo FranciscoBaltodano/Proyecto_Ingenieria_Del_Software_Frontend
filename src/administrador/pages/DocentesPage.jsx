@@ -26,7 +26,7 @@ export const DocentesPage = () => {
         {showForm && <DocentesForm />}
 
         <Box sx={{ marginTop: 2 }}>
-         <DataTable url='/api/admin/empleados' />
+         <DataTable url='/api/admin/empleados' name='Datos Empleados' />
         </Box>
     </AdministradorLayout>
   );

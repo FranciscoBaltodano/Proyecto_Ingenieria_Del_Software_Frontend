@@ -22,13 +22,13 @@ export const DocentesForm = () => {
         setOpenSnackbar(true);
         reset(); 
       } else {
-        setSnackbarMessage('Error al MEADOS el docente');
+        setSnackbarMessage('Error al crear el docente');
         setSnackbarSeverity('error');
         setOpenSnackbar(true);
       }
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
-      setSnackbarMessage('Error al PUTA el docente');
+      setSnackbarMessage('Error al crear el docente');
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
     } finally {
