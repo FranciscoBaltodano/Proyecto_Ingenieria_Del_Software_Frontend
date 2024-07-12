@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Grid, TextField, Typography, Radio, RadioGroup, FormControlLabel, Snackbar, Alert, Backdrop, CircularProgress } from '@mui/material';
+import { Box, Button, Grid, TextField, Typography, Radio, RadioGroup, FormControlLabel, Snackbar, Alert, Backdrop, CircularProgress, Checkbox } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
@@ -9,11 +9,35 @@ export const DocentesForm = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [errorRoles, setErrorRoles] = useState(false);
+
 
   const onSubmit = async (formData) => {
     setLoading(true);
+
+    //convertir roles a array
+    const roles =[];
+
+    if (formData.Docente) roles.push('Docente');
+    if (formData.Coordinador) roles.push('Coordinador');
+    if (formData.JefeDepartamento) roles.push('JefeDepartamento');
+
+    //agregando roles 
+
+   const dataToSend = {
+      nombre: formData.nombre,
+      apellido: formData.apellido,
+      identidad: formData.identidad,
+      telefono: formData.telefono,
+      correo: formData.correo,
+      contrasena: formData.contrasena,
+      roles: roles
+    };
+
+
+
     try {
-      const response = await axios.post('http://localhost:3000/api/admin/empleados', formData);
+      const response = await axios.post('http://localhost:3000/api/admin/empleados', dataToSend);
       console.log('Respuesta del servidor:', response.data);
 
       if (response.status === 201) {
@@ -56,20 +80,29 @@ export const DocentesForm = () => {
         boxShadow: '0 3px 10px rgba(0,0,0,0.1)',
       }}
     >
+     
+      
       <Typography variant="h5" component="h1" gutterBottom >
-        Agregar {watch('roles') === 'Coordinador' ? 'Coordinador' : watch('roles') === 'JefeDepartamento' ? 'Jefe de Departamento' : 'Docente'}
+        Agregar Docente
       </Typography>
 
-      <RadioGroup
-        row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        name="roles"
-        defaultValue="Docente"
-      >
-        <FormControlLabel value="Docente" control={<Radio />} label="Docente" {...register("roles", { required: true })}/>
-        <FormControlLabel value="Coordinador" control={<Radio />} label="Coordinador" {...register("roles", { required: true })}/>
-        <FormControlLabel value="JefeDepartamento" control={<Radio />} label="Jefe de Departamento" {...register("roles", { required: true })}/>
-      </RadioGroup>
+      <div>
+        <FormControlLabel
+          control={<Checkbox {...register("Docente")} defaultChecked />}
+          label="Docente"
+          sx={{ pointerEvents: 'none', opacity: 0.5 }} 
+        />
+        <FormControlLabel
+          control={<Checkbox {...register("Coordinador")} />}
+          label="Coordinador"
+          disabled={watch('JefeDepartamento')}
+        />
+        <FormControlLabel
+          control={<Checkbox {...register("JefeDepartamento")} />}
+          label="Jefe de Departamento"
+          disabled={watch('Coordinador')}
+        />
+      </div>
 
       <Grid container spacing={2}>
         <Grid item xs={12} >
