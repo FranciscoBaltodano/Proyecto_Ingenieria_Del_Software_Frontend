@@ -16,7 +16,7 @@ export const InicioPage = () => {
           <Typography variant="h5" paragraph>
             Encuentra toda la información que necesitas para tu proceso de admisión a la universidad.
           </Typography>
-
+          
           <NoticiasList />
 
           <Carrusel />

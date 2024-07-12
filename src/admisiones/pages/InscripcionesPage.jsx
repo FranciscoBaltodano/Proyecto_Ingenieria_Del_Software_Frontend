@@ -2,11 +2,7 @@ import { AdmisionesLayout } from '../layout/AdmisionesLayout'
 import { NavLink } from 'react-router-dom'
 import { Button } from '@mui/material'
 import Stack from '@mui/material/Stack';
-/**
- * Componente que representa la página de inscripciones.
- * 
- * @returns {JSX.Element} El elemento JSX que representa la página de inscripciones.
- */
+
 
 export const InscripcionesPage = () => {
   return (

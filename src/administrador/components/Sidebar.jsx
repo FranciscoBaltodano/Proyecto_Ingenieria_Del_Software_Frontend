@@ -5,6 +5,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 
+
 const menuItems = [
   { text: 'Noticias', icon: <NewspaperIcon />, to: '/admin' },
   { text: 'Docentes', icon: <PersonIcon />, to: '/admin/docentes' },
