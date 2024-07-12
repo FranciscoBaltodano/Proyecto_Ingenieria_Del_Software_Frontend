@@ -16,7 +16,7 @@ export const AdmisionesRoutes = () => {
       <Route path="solicitud" element={<SolicitudPage />} />
       <Route path= "resultado_inscripciones" element={<ResultadoInscripcionesPage/>}/>
       
-      <Route path="/*" element={ <Navigate to='/admisiones/' /> }/>
+      <Route path="/*" element={ <Navigate to='/' /> }/>
     </Routes>
   );
 };

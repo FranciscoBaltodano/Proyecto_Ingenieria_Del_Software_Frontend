@@ -12,9 +12,15 @@ export const NoticiasList = () => {
     setIsLoading(true);
     try {
       const { data } = await axios.get('api/admin/noticias');
-      setNoticias(data);
+      if (Array.isArray(data)) {
+        setNoticias(data);
+      } else {
+        setNoticias([]);
+        console.error('Error: La respuesta de la API no es un arreglo');
+      }
     } catch (error) {
       console.error('Error fetching noticias:', error);
+      setNoticias([]);
     } finally {
       setIsLoading(false);
     }
@@ -97,10 +103,27 @@ export const NoticiasList = () => {
                     )}
                   </Box>
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography 
+                      gutterBottom 
+                      variant="h5" 
+                      component="div" 
+                      sx={{
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
                       {noticia.titulo}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography 
+                      variant="body2" 
+                      color="text.secondary" 
+                      sx={{
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
                       {noticia.descripcion}
                     </Typography>
                   </CardContent>
@@ -117,7 +140,7 @@ export const NoticiasList = () => {
           onClose={handleCloseModal}
           sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          <Box sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, maxWidth: 600, width: '100%' }}>
+          <Box sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, maxWidth: 600, width: '95%' }}>
             <Typography variant="h4" component="h2" gutterBottom>
               {selectedNoticia.titulo}
             </Typography>

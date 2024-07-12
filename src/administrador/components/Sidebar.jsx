@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { Description as NewspaperIcon, Menu as MenuIcon, Home as HomeIcon, Person as PersonIcon, Schedule as ScheduleIcon, Assignment as AssignmentIcon, Group as GroupIcon, EventNote as EventNoteIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 
 const menuItems = [
-  { text: 'Noticias', icon: <NewspaperIcon />, to: '/admin' },
+  { text: 'Inicio', icon: <HomeIcon />, to: '/admin' },
+  { text: 'Noticias', icon: <NewspaperIcon />, to: '/admin/noticias' },
   { text: 'Docentes', icon: <PersonIcon />, to: '/admin/docentes' },
   { text: 'Planificación', icon: <ScheduleIcon />, to: '/admin/planificacion' },
   { text: 'Cancelaciones', icon: <AssignmentIcon />, to: '/admin/cancelaciones' },
@@ -82,16 +83,20 @@ export const Sidebar = () => {
   return (
     <Box py='10px' 
     sx={{ position: 'fixed', top: 0, left: 0, zIndex: 1, backgroundColor: '#ffffff80', width: '100%', backdropFilter: 'blur(10px)', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'}}>
-    {/* sx={{ position: 'fixed', top: 0, left: 0, zIndex: 1, backgroundColor:'#ffffff00', width:'100%', backdropFilter:'blur' }}> */}
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        edge="start"
-        onClick={toggleDrawer}
-        sx={{ ml: 1, backgroundColor: 'white', boxShadow: '0px 3px 10px 0px rgba(0,0,0,0.3)' }}
-      >
-        <MenuIcon />
-      </IconButton>
+      <Box display='flex' alignItems='center' justifyContent='space-between'>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={toggleDrawer}
+          sx={{ ml: 1, backgroundColor: 'white', boxShadow: '0px 3px 10px 0px rgba(0,0,0,0.3)' }}
+          >
+          <MenuIcon />
+        </IconButton>
+
+      <Typography color='primary' variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr: open ? '50px':'31px' }}>Administrador</Typography>
+      </Box>
+
       <Drawer anchor="left" open={open} onClose={toggleDrawer}>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 2 }}>
           <img src={logoUNAHconLetras} alt="logo UNAH" style={{ width: '80%', maxWidth: '150px' }} />
