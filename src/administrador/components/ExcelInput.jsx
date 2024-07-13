@@ -9,9 +9,11 @@ const Input = styled('input')({
 });
 
 export const ExcelInput = () => {
-  const [fileName, setFileName] = useState('');
+
   const [cantidadEstudiantes, setCantidadEstudiantes] = useState(0);
   const [dataJson, setDataJson] = useState([]);
+
+  const [fileName, setFileName] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -37,7 +39,6 @@ export const ExcelInput = () => {
       const workbook = XLSX.read(data, { type: 'binary' });
       const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-
       setDataJson(jsonData);
       setCantidadEstudiantes(jsonData.length);
     };
@@ -59,8 +60,9 @@ export const ExcelInput = () => {
 
   const sendDataToBackend = async () => {
     try {
-      const response = await axios.post('La url que va a llevar el json al backend', dataJson);
-      setSnackbarMessage('Datos enviados exitosamente: ' + response.data);
+      // const response = await axios.post('La url que va a llevar el json al backend', dataJson);
+      // setSnackbarMessage('Datos enviados exitosamente: ' + response.data);
+      console.log('Esta es la data',dataJson);
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
     } catch (error) {

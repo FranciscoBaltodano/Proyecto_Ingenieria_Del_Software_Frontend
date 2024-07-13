@@ -50,7 +50,7 @@ export const NoticiasList = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <Grid container spacing={2} display='flex'>
+        <Grid container spacing={2} display='flex' direction='row-reverse' justifyContent='center'>
           {noticias.map((noticia, index) => (
             <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
               <Card 
