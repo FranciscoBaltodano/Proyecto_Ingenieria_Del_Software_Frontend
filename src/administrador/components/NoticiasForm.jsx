@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Box, Button, Grid, TextField, Typography, Snackbar, Alert, Backdrop, CircularProgress } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+
 export const NoticiasForm = () => {
   const { register, reset, handleSubmit, formState: { errors } } = useForm();
   const [selectedImage, setSelectedImage] = useState(null);
