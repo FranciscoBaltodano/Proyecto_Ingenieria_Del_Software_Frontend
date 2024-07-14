@@ -8,6 +8,7 @@ export const Form = () => {
   const [carreras, setCarreras] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  
 
   useEffect(() => {
     const fetchData = async () => {

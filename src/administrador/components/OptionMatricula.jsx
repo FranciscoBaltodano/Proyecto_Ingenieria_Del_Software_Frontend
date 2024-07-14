@@ -19,14 +19,9 @@ export const OptionMatricula=()=> {
               </Typography>
               <Stack direction="row" alignItems="center" justifyContent="space-evenly">
                 <Button variant="contained">
-                  <NavLink to='/admin/matricula_trimestral'>
-                      Matricula Trimestral
-                    </NavLink>
-                </Button>
-                <Button variant="contained">
-                  <NavLink to='/admin/matricula_semestral'>
-                      Matricula Semestral
-                    </NavLink>
+                  <NavLink to='/admin/configuracion_matricula'>
+                    Configurar Matricula
+                  </NavLink>
                 </Button>
                 </Stack>
             </CardContent>
