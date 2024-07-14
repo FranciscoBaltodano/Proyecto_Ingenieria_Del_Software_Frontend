@@ -34,7 +34,6 @@ export const NoticiasPage = () => {
   const [loading, setLoading] = useState(false);
 
   const columns = [
-    { field: "id_noticia", headerName: "ID", width: 90 },
     { field: "titulo", headerName: "Título", width: 150 },
     { field: "descripcion", headerName: "Descripción", width: 300 },
     {
@@ -413,7 +412,7 @@ export const NoticiasPage = () => {
           getRowId={(row) => row.id_noticia}
           columns={columns}
           pageSize={5}
-          rowsPerPageOptions={[5]}
+          rowsPerPageOptions={[10]}
           checkboxSelection={false}
         />
       </div>
