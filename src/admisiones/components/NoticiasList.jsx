@@ -8,6 +8,11 @@ export const NoticiasList = () => {
   const [selectedNoticia, setSelectedNoticia] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const fetchNoticias = async () => {
     setIsLoading(true);
     try {
@@ -140,25 +145,75 @@ export const NoticiasList = () => {
           onClose={handleCloseModal}
           sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          <Box sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, maxWidth: 600, width: '95%' }}>
-            <Typography variant="h4" component="h2" gutterBottom>
-              {selectedNoticia.titulo}
-            </Typography>
-            {selectedNoticia.imagen && (
+         <Box sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, maxWidth: 600, width: '95%' }}>
+      <Typography variant="h4" component="h2" gutterBottom>
+        {selectedNoticia.titulo}
+      </Typography>
+      {selectedNoticia.imagen && (
+        <>
+          <Box 
+            sx={{ 
+              position: 'relative', 
+              width: '100%', 
+              paddingTop: '56.25%', // Aspecto 16:9
+              marginBottom: 2,
+              cursor: 'pointer'
+            }}
+            onClick={handleOpen}
+          >
+            <CardMedia
+              component="img"
+              image={selectedNoticia.imagen}
+              alt={selectedNoticia.titulo}
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain'
+              }}
+            />
+          </Box>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '90%',
+              height: '90%',
+              bgcolor: 'background.paper',
+              border: '2px solid #000',
+              boxShadow: 24,
+              p: 4,
+            }}>
               <CardMedia
                 component="img"
                 image={selectedNoticia.imagen}
                 alt={selectedNoticia.titulo}
-                sx={{ maxHeight: 300, marginBottom: 2, objectFit: 'cover' }}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain'
+                }}
               />
-            )}
-            <Typography variant="body1" color="text.secondary">
-              {selectedNoticia.descripcion}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ marginTop: 2 }}>
-              Fecha de creación: {formatDate(selectedNoticia.fecha_creacion)}
-            </Typography>
-          </Box>
+            </Box>
+          </Modal>
+        </>
+      )}
+      <Typography variant="body1" color="text.secondary">
+        {selectedNoticia.descripcion}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ marginTop: 2 }}>
+        Fecha de creación: {formatDate(selectedNoticia.fecha_creacion)}
+      </Typography>
+    </Box>
         </Modal>
       )}
     </>

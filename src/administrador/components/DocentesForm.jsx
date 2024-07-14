@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Grid, TextField, Typography, Radio, RadioGroup, FormControlLabel, Snackbar, Alert, Backdrop, CircularProgress, Checkbox } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
 export const DocentesForm = () => {
-  const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
+  const { register, handleSubmit, watch, formState: { errors }, reset, 
+   } = useForm();
   const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [errorRoles, setErrorRoles] = useState(false);
+  const [centros, setCentros] = useState([]);
 
+  useEffect(() => {
+    const fetchCentros = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/admin/centros');
+        setCentros(response.data);
+      } catch (error) {
+        console.error('Error al obtener los centros:', error);
+      }
+    };
+    fetchCentros(); 
+  }, []);
 
   const onSubmit = async (formData) => {
     setLoading(true);
@@ -31,7 +44,8 @@ export const DocentesForm = () => {
       telefono: formData.telefono,
       correo: formData.correo,
       contrasena: formData.contrasena,
-      roles: roles
+      roles: roles,
+      id_Centros: formData.id_Centros,
     };
 
 
@@ -190,6 +204,24 @@ export const DocentesForm = () => {
             error={!!errors.confirmarContrasena}
             helperText={errors.confirmarContrasena?.message}
           />
+        </Grid>
+
+        <Grid item xs={12}>
+          
+          <div>
+            <label htmlFor="id_Centro" className="block font-medium">Centro Regional</label>
+            <select
+              id="id_Centro"
+              {...register("id_Centros", { required: "El Cento es obligatorio" })}
+              className="w-full p-2 border border-input rounded"
+            >
+              <option value="" disabled selected>Elige el centro</option>
+              {centros.map(centro => (
+                <option key={centro.id_Centros} value={centro.id_Centros}>{centro.Nombre}</option>
+              ))}
+            </select>
+            {errors.id_Centro && <span className="text-red-500">{errors.id_Centro.message}</span>}
+          </div>
         </Grid>
 
         <Grid item xs={12}>

@@ -95,7 +95,9 @@ export const Sidebar = () => {
           <MenuIcon />
         </IconButton>
 
+        <NavLink to='/admin' style={{ textDecoration: 'none' }}>
       <Typography color='primary' variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr: open ? '50px':'31px' }}>Administrador</Typography>
+      </NavLink>
       </Box>
 
       <Drawer anchor="left" open={open} onClose={toggleDrawer}>
