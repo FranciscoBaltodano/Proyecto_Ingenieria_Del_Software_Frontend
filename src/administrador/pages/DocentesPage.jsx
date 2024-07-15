@@ -3,6 +3,7 @@ import { AdministradorLayout } from '../layout/AdministradorLayout';
 import { Box, Button, Typography, Divider } from '@mui/material';
 import { DocentesForm } from '../components/DocentesForm';
 import DataTable from '../../components/DataTable';
+import { DocentesForm2 } from '../components/DocentesForm2';
 
 export const DocentesPage = () => {
   const [showForm, setShowForm] = useState(false);
@@ -23,11 +24,24 @@ export const DocentesPage = () => {
           {showForm ? 'Cancelar' : 'Nuevo Docente'}
         </Button>
         
-        {showForm && <DocentesForm />}
+        <Typography variant="h4" component="h1" gutterBottom>
+          FORM2
+        </Typography>
 
+        <DocentesForm2 />
+
+
+
+
+        <Typography variant="h4" component="h1" gutterBottom>
+          FORM1
+        </Typography>
+        {/* {showForm && <DocentesForm />} */}
+        {/* <DocentesForm /> */}
+{/* 
         <Box sx={{ marginTop: 2 }}>
          <DataTable url='/api/admin/empleados' name='Datos Empleados' />
-        </Box>
+        </Box> */}
     </AdministradorLayout>
   );
 };
