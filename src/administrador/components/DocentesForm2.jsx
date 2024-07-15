@@ -217,6 +217,7 @@ export const DocentesForm2 = () => {
           onChange={(event) =>
             handleChangeEstado(params.row.numeroEmpleado, event.target.checked)
           }
+          disabled={params.row.roles.includes("Administrador")}
         />
       ),
     },
