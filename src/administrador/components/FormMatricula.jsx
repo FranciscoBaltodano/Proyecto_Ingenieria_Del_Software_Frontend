@@ -22,8 +22,7 @@ export const FormMatricula =()=>{
               axios.get('http://localhost:3000/api/admin/pac'),
               axios.get('http://localhost:3000/api/admin/matricula')
             ]);
-            console.log('Centros: ', matriculaRes.data);
-            console.log('Carreras: ', pacRes.data)
+            
             setMatricula(matriculaRes.data);
             setPac(pacRes.data);
           } catch (error) {
@@ -69,7 +68,7 @@ export const FormMatricula =()=>{
                         {...register("selectMatri", {required:"Necesita seleccionar el tipo de matricula" })}
                         
                     >
-                    <option value=""  disabled>Elegir</option>
+                    <option value=""  disabled selected>Elegir</option>
                             {matricula.map(matri => (
                         <option key={matri.selectMatri} value={matri.selectMatri}>{matri.tipoMatricula}</option>
                     ))}
@@ -90,7 +89,7 @@ export const FormMatricula =()=>{
                     {...register("selectPAC", {required:"Necesita seleccionar un PAC" })}
 
                 >
-                <option  value="" disabled>Elegir</option>
+                <option  value="" disabled selected>Elegir</option>
                 {pac.map(pacAno => (
                         <option key={pacAno.selectPAC} value={pacAno.selectPAC}>{pacAno.pac}</option>
                     ))}
