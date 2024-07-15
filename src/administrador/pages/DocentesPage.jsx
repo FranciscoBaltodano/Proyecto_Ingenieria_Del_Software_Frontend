@@ -312,9 +312,8 @@ export const DocentesPage = () => {
           }}
         >
           <Typography variant="h5" component="h1" gutterBottom>
-            Agregar Docente
+            {docenteSeleccionado ? "Actualizar Docente" : "Agregar Docente"} 
           </Typography>
-
           <div>
             <FormControlLabel
               control={<Checkbox {...register("Docente")} defaultChecked />}

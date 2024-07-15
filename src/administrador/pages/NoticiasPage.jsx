@@ -23,7 +23,7 @@ export const NoticiasPage = () => {
   const {
     register,
     reset,
-    
+    handleSubmit,
     formState: { errors },
   } = useForm();
   const [noticias, setNoticias] = useState([]);
@@ -235,11 +235,10 @@ export const NoticiasPage = () => {
     }
   };
   
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onHandleSubmit = (data) => {
     const noticiaData = {
-      titulo: e.target.titulo.value,
-      descripcion: e.target.descripcion.value,
+      titulo: data.titulo,
+      descripcion: data.descripcion,
     };
     if (noticiaSeleccionada) {
       onUpdateSubmit(noticiaData);
@@ -247,22 +246,7 @@ export const NoticiasPage = () => {
       onCreateSubmit(noticiaData);
     }
   };
-  
 
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -318,7 +302,7 @@ export const NoticiasPage = () => {
     {showForm && (
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit( onHandleSubmit)}
         sx={{
           maxWidth: "800px",
           margin: "auto",
@@ -347,6 +331,8 @@ export const NoticiasPage = () => {
           <Grid item xs={12}>
             <TextField
               label="Descripción"
+              multiline
+              rows={4}
               InputLabelProps={{ shrink: true }}
               variant="outlined"
               fullWidth
@@ -430,10 +416,7 @@ export const NoticiasPage = () => {
           rows={noticias}
           getRowId={(row) => row.id_noticia}
           columns={columns}
-          pageSize={30}
-          rowHeight={200}
           autoHeight
-          rowsPerPageOptions={[30]}
           checkboxSelection={false}
         />
       </Box>
