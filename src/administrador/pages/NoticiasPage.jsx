@@ -9,6 +9,7 @@ import {
   Alert,
   Backdrop,
   CircularProgress,
+  Divider,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useForm } from "react-hook-form";
@@ -32,7 +33,10 @@ export const NoticiasPage = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [loading, setLoading] = useState(false);
-
+  const [showForm, setShowForm] = useState(false);
+  const handleToggleForm = () => {
+    setShowForm(prevShowForm => !prevShowForm);
+  };
   const columns = [
     { field: "titulo", headerName: "Título", width: 150 },
     { field: "descripcion", headerName: "Descripción", width: 300 },
@@ -65,7 +69,10 @@ export const NoticiasPage = () => {
         <>
           <IconButton
             color="primary"
-            onClick={() => setNoticiaSeleccionada(params.row)}
+            onClick={() => {
+              setNoticiaSeleccionada(params.row);
+              setShowForm(true);
+            }}
             disabled={
               noticiaSeleccionada &&
               noticiaSeleccionada.id_noticia === params.row.id_noticia
@@ -302,6 +309,13 @@ export const NoticiasPage = () => {
         Gestión de Noticias
       </Typography>
 
+      <Divider sx={{ marginBottom: 2 }} />
+
+      <Button variant="contained" color="primary" onClick={handleToggleForm}>
+            {showForm ? 'Cancelar' : 'Nueva Noticia'}
+      </Button>
+
+    {showForm && (
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -383,6 +397,9 @@ export const NoticiasPage = () => {
             )}
           </Grid>
         </Grid>
+        </Box>
+
+  )}
         <Snackbar
           open={open}
           autoHideDuration={2000}
@@ -404,18 +421,22 @@ export const NoticiasPage = () => {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-      </Box>
 
-      <div style={{ height: 400, width: "100%" }}>
+      <Box mt={4} sx={{ marginTop: 4 }}>
+        <Typography variant="h6" component="h2" gutterBottom>
+          Lista de Docentes
+        </Typography>
         <DataGrid
           rows={noticias}
           getRowId={(row) => row.id_noticia}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[10]}
+          pageSize={30}
+          rowHeight={200}
+          autoHeight
+          rowsPerPageOptions={[30]}
           checkboxSelection={false}
         />
-      </div>
+      </Box>
     </Box>
     </AdministradorLayout>
   );
