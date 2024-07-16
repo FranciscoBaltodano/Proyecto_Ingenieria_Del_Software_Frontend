@@ -45,7 +45,6 @@ export const NoticiasPage = () => {
       headerName: "Imagen",
       width: 150,
       renderCell: (params) => {
-        console.log("URL de la imagen:", params.value);
         return (
           <img
             src={params.value}
@@ -108,19 +107,6 @@ export const NoticiasPage = () => {
     };
     getNoticias();
   }, []);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const onCreateSubmit = async (noticiaData) => {
     setLoading(true);
@@ -384,8 +370,7 @@ export const NoticiasPage = () => {
           </Grid>
         </Grid>
         </Box>
-
-  )}
+      )}
         <Snackbar
           open={open}
           autoHideDuration={2000}

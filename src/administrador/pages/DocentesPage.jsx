@@ -1,40 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-  Snackbar,
-  Alert,
-  Backdrop,
-  CircularProgress,
-  Switch,
-  FormControlLabel,
-  FormHelperText,
-  Checkbox,
-  Divider,
-} from "@mui/material";
+import { Box, Button, Grid, TextField, Typography, Snackbar, Alert, Backdrop, CircularProgress, Switch, FormControlLabel, FormHelperText, Checkbox, Divider, InputLabel, MenuItem, FormControl, Select, IconButton } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import { DataGrid } from "@mui/x-data-grid";
-import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import { AdministradorLayout } from "../layout/AdministradorLayout";
 
 export const DocentesPage = () => {
-  const {
-    register,
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    reset,
-  } = useForm();
+  const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
   const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -44,181 +17,6 @@ export const DocentesPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [centros, setCentros] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const handleToggleForm = () => {
-    setShowForm((prevShowForm) => !prevShowForm);
-  };
-
-  useEffect(() => {
-    const fetchCentros = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/admin/centros"
-        );
-        setCentros(response.data);
-      } catch (error) {
-        console.error("Error al obtener los centros:", error);
-      }
-    };
-    fetchCentros();
-  }, []);
-
-  useEffect(() => {
-    const fetchDocentes = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/admin/empleados"
-        );
-        setDocentes(response.data);
-        handleLimpiar();
-      } catch (error) {
-        console.error("Error al obtener los docentes:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDocentes();
-  }, []);
-
-  
-  const onSubmit = async (formData) => {
-    setLoading(true);
-  
-    // Construye el array de roles
-    const roles = [];
-    if (formData.Docente) roles.push("Docente");
-    if (formData.Coordinador) roles.push("Coordinador");
-    if (formData.JefeDepartamento) roles.push("JefeDepartamento");
-  
-    // Construye el objeto de datos a enviar
-    const dataToSend = {
-      nombre: formData.nombre,
-      apellido: formData.apellido,
-      identidad: formData.identidad,
-      telefono: formData.telefono,
-      correo: formData.correo,
-      contrasena: formData.contrasena,
-      roles: JSON.stringify(roles), // Convierte el array de roles a una cadena JSON
-      id_Centros: formData.id_Centros,
-    };
-  
-    // Crea un FormData
-    const formDataToSend = new FormData();
-  
-    // Agrega campos al FormData
-    Object.keys(dataToSend).forEach((key) => {
-      formDataToSend.append(key, dataToSend[key]);
-    });
-  
-    // Agrega imagen al FormData si existe
-    if (selectedImage) {
-      formDataToSend.append("imagen", selectedImage);
-    }
-  
-  
-    try {
-      // Realiza la solicitud POST
-      const response = await axios.post(
-        "http://localhost:3000/api/admin/empleados",
-        formDataToSend,
-        {
-          headers: { "Content-Type": "multipart/form-data" } // Asegúrate de que el encabezado esté configurado
-        }
-      );
-  
-      if (response.status === 201) {
-        setSnackbarMessage("Docente creado exitosamente");
-        setSnackbarSeverity("success");
-        // Refresca la lista de docentes
-        const docentesResponse = await axios.get("http://localhost:3000/api/admin/empleados");
-        setDocentes(docentesResponse.data);
-        reset();
-      } else {
-        setSnackbarMessage("Error al crear el docente");
-        setSnackbarSeverity("error");
-      }
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || "Error al crear el docente";
-      setSnackbarMessage(errorMessage);
-      setSnackbarSeverity("error");
-    } finally {
-      setLoading(false);
-      setOpenSnackbar(true);
-    }
-  };
-  
-  const handleChangeEstado = async (numeroEmpleado, nuevoEstado) => {
-    setLoading(true);
-    try {
-      const docente = docentes.find(
-        (docente) => docente.numeroEmpleado === numeroEmpleado
-      );
-      console.log("Docente encontrado:", docente);
-      if (!docente) {
-        throw new Error(`Docente con número ${numeroEmpleado} no encontrado`);
-      }
-
-      // Validar que todos los datos necesarios están definidos
-
-      const updatedDocente = {
-        estado: nuevoEstado,
-        nombre: docente.Nombre,
-      };
-
-      console.log("Datos enviados:", updatedDocente);
-      console.log("Enviando Actualizacion");
-      const response = await axios.put(
-        `http://localhost:3000/api/admin/empleados/${numeroEmpleado}`,
-        updatedDocente
-      );
-      console.log("Response:", response);
-      if (response.status === 200) {
-        setDocentes((prevDocentes) =>
-          prevDocentes.map((d) =>
-            d.numeroEmpleado === numeroEmpleado
-              ? { ...d, estado: nuevoEstado }
-              : d
-          )
-        );
-        setSnackbarMessage("Empleado actualizado exitosamente");
-        setSnackbarSeverity("success");
-      } else {
-        setSnackbarMessage("Error al actualizar el empleado");
-        setSnackbarSeverity("error");
-      }
-    } catch (error) {
-      console.error(
-        "Error al actualizar el empleado:",
-        error.response ? error.response.data : error.message
-      );
-      setSnackbarMessage("Error al actualizar el empleado");
-      setSnackbarSeverity("error");
-    } finally {
-      setLoading(false);
-      setOpenSnackbar(true);
-    }
-  };
-
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      console.log("Imagen seleccionada:", file);
-      setSelectedImage(file);
-    } else {
-      console.log("No se ha seleccionado ninguna imagen.");
-      setSelectedImage(null);
-    }
-  };
-
-  const handleLimpiar = () => {
-    reset();
-    setSelectedImage(null);
-    setDocenteSeleccionado(null);
-    document.getElementById("upload-image").value = "";
-  };
-
   const columns = [
     { field: "numeroEmpleado", headerName: "Numero Empleado", width: 150 },
     { field: "Nombre", headerName: "Nombre", width: 150 },
@@ -278,6 +76,233 @@ export const DocentesPage = () => {
     },
   ];
 
+  const handleToggleForm = () => {
+    setShowForm((prevShowForm) => !prevShowForm);
+  };
+
+  useEffect(() => {
+    const fetchCentros = async () => {
+      try {
+        const response = await axios.get("/api/admin/centros");
+        setCentros(response.data);
+      } catch (error) {
+        console.error("Error al obtener los centros:", error);
+      }
+    };
+    const fetchDocentes = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get("/api/admin/empleados");
+        setDocentes(response.data);
+        handleLimpiar();
+      } catch (error) {
+        console.error("Error al obtener los docentes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDocentes();
+    fetchCentros();
+  }, []);
+
+  const onPostSubmit = async (formData) => {
+    setLoading(true);
+
+    // Construye el array de roles
+    const roles = [];
+    if (formData.Docente) roles.push("Docente");
+    if (formData.Coordinador) roles.push("Coordinador");
+    if (formData.JefeDepartamento) roles.push("JefeDepartamento");
+
+    // Construye el objeto de datos a enviar
+    const dataToSend = {
+      nombre: formData.nombre,
+      apellido: formData.apellido,
+      identidad: formData.identidad,
+      telefono: formData.telefono,
+      correo: formData.correo,
+      contrasena: formData.contrasena,
+      roles: JSON.stringify(roles), // Convierte el array de roles a una cadena JSON
+      id_Centros: formData.id_Centros,
+    };
+
+    // Crea un FormData
+    const formDataToSend = new FormData();
+
+    // Agrega campos al FormData
+    Object.keys(dataToSend).forEach((key) => {
+      formDataToSend.append(key, dataToSend[key]);
+    });
+
+    // Agrega imagen al FormData si existe
+    if (selectedImage) {
+      formDataToSend.append("imagen", selectedImage);
+    }
+
+    try {
+      // Realiza la solicitud POST
+      const response = await axios.post(
+        "/api/admin/empleados",
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" }, // Asegúrate de que el encabezado esté configurado
+        }
+      );
+
+      if (response.status === 201) {
+        setSnackbarMessage("Docente creado exitosamente");
+        setSnackbarSeverity("success");
+        // Refresca la lista de docentes
+        const docentesResponse = await axios.get("/api/admin/empleados");
+        setDocentes(docentesResponse.data);
+        reset();
+      } else {
+        setSnackbarMessage("Error al crear el docente");
+        setSnackbarSeverity("error");
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || "Error al crear el docente";
+      setSnackbarMessage(errorMessage);
+      setSnackbarSeverity("error");
+    } finally {
+      setLoading(false);
+      setOpenSnackbar(true);
+    }
+  };
+
+  const onUpdateSubmit = async (formData) => {
+    setLoading(true);
+
+    // Construye el array de roles
+    const roles = [];
+    if (formData.Docente) roles.push("Docente");
+    if (formData.Coordinador) roles.push("Coordinador");
+    if (formData.JefeDepartamento) roles.push("JefeDepartamento");
+
+    // Construye el objeto de datos a enviar
+    const dataToSend = {
+      nombre: formData.nombre,
+      apellido: formData.apellido,
+      identidad: formData.identidad,
+      telefono: formData.telefono,
+      correo: formData.correo,
+      roles: JSON.stringify(roles), // Convierte el array de roles a una cadena JSON
+      id_Centros: formData.id_Centros,
+    };
+
+    // Crea un FormData
+    const formDataToSend = new FormData();
+
+    // Agrega campos al FormData
+    Object.keys(dataToSend).forEach((key) => {
+      formDataToSend.append(key, dataToSend[key]);
+    });
+
+    // Agrega imagen al FormData si existe
+    if (selectedImage) {
+      formDataToSend.append("imagen", selectedImage);
+    }
+
+    try {
+      // Realiza la solicitud PUT
+      const response = await axios.put(
+        `/api/admin/empleados/${docenteSeleccionado.numeroEmpleado}`,
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" }, // Asegúrate de que el encabezado esté configurado
+        }
+      );
+
+      if (response.status === 200) {
+        setSnackbarMessage("Docente actualizado exitosamente");
+        setSnackbarSeverity("success");
+        // Refresca la lista de docentes
+        const docentesResponse = await axios.get("/api/admin/empleados");
+        setDocentes(docentesResponse.data);
+        handleLimpiar();
+      } else {
+        setSnackbarMessage("Error al actualizar el docente");
+        setSnackbarSeverity("error");
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || "Error al actualizar el docente";
+      setSnackbarMessage(errorMessage);
+      setSnackbarSeverity("error");
+    } finally {
+      setLoading(false);
+      setOpenSnackbar(true);
+    }
+  };
+
+  const handleChangeEstado = async (numeroEmpleado, nuevoEstado) => {
+    setLoading(true);
+    try {
+      const docente = docentes.find(
+        (docente) => docente.numeroEmpleado === numeroEmpleado
+      );
+      console.log("Docente encontrado:", docente);
+      if (!docente) {
+        throw new Error(`Docente con número ${numeroEmpleado} no encontrado`);
+      }
+
+      // Validar que todos los datos necesarios están definidos
+      const updatedDocente = {
+        estado: nuevoEstado,
+        nombre: docente.Nombre,
+      };
+
+      console.log("Datos enviados:", updatedDocente);
+      const response = await axios.put(
+        `/api/admin/empleados/${numeroEmpleado}`,
+        updatedDocente
+      );
+      console.log("Response:", response);
+      if (response.status === 200) {
+        setDocentes((prevDocentes) =>
+          prevDocentes.map((d) =>
+            d.numeroEmpleado === numeroEmpleado
+              ? { ...d, estado: nuevoEstado }
+              : d
+          )
+        );
+        setSnackbarMessage("Empleado actualizado exitosamente");
+        setSnackbarSeverity("success");
+      } else {
+        setSnackbarMessage("Error al actualizar el empleado");
+        setSnackbarSeverity("error");
+      }
+    } catch (error) {
+      console.error(
+        "Error al actualizar el empleado:",
+        error.response ? error.response.data : error.message
+      );
+      setSnackbarMessage("Error al actualizar el empleado");
+      setSnackbarSeverity("error");
+    } finally {
+      setLoading(false);
+      setOpenSnackbar(true);
+    }
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+    } else {
+      console.log("No se ha seleccionado ninguna imagen.");
+      setSelectedImage(null);
+    }
+  };
+
+  const handleLimpiar = () => {
+    reset();
+    setSelectedImage(null);
+    setDocenteSeleccionado(null);
+    document.getElementById("upload-image").value = "";
+    document.getElementById("id_Centro").value = "";
+  };
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -285,6 +310,8 @@ export const DocentesPage = () => {
     }
     setOpenSnackbar(false);
   };
+
+  const onHandleSubmit = docenteSeleccionado ? onUpdateSubmit : onPostSubmit;
 
   return (
     <AdministradorLayout>
@@ -301,7 +328,7 @@ export const DocentesPage = () => {
       {showForm && (
         <Box
           component="form"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onHandleSubmit)}
           sx={{
             maxWidth: "800px",
             margin: "auto",
@@ -312,7 +339,7 @@ export const DocentesPage = () => {
           }}
         >
           <Typography variant="h5" component="h1" gutterBottom>
-            {docenteSeleccionado ? "Actualizar Docente" : "Agregar Docente"} 
+            {docenteSeleccionado ? "Actualizar Docente" : "Agregar Docente"}
           </Typography>
           <div>
             <FormControlLabel
@@ -339,6 +366,10 @@ export const DocentesPage = () => {
                 label="Nombre"
                 {...register("nombre", {
                   required: "El nombre es obligatorio",
+                  pattern: {
+                    value: /^[A-Za-z\s]+$/,
+                    message: "El nombre solo puede contener letras",
+                  },
                 })}
                 error={!!errors.nombre}
                 helperText={errors.nombre?.message}
@@ -350,6 +381,10 @@ export const DocentesPage = () => {
                 label="Apellido"
                 {...register("apellido", {
                   required: "El apellido es obligatorio",
+                  pattern: {
+                    value: /^[A-Za-z\s]+$/,
+                    message: "El Apellido solo puede contener letras",
+                  },
                 })}
                 error={!!errors.apellido}
                 helperText={errors.apellido?.message}
@@ -359,8 +394,15 @@ export const DocentesPage = () => {
               <TextField
                 fullWidth
                 label="Identidad"
+                placeholder="Sin guiones ni espacios (ej. 0801199901234)"
                 {...register("identidad", {
                   required: "La identidad es obligatoria",
+                  maxLength: { value: 13, message: "Máximo 13 caracteres" },
+                  pattern: {
+                    value: /^[0-9]{13}$/,
+                    message:
+                      "La identidad debe contener solo 13 dígitos, sin guiones ni espacios",
+                  },
                 })}
                 error={!!errors.identidad}
                 helperText={errors.identidad?.message}
@@ -372,6 +414,10 @@ export const DocentesPage = () => {
                 label="Teléfono"
                 {...register("telefono", {
                   required: "El teléfono es obligatorio",
+                  pattern: {
+                    value: /^[0-9]+$/, // Permite solo dígitos
+                    message: "El campo solo puede contener números",
+                  },
                 })}
                 error={!!errors.telefono}
                 helperText={errors.telefono?.message}
@@ -392,36 +438,50 @@ export const DocentesPage = () => {
                 helperText={errors.correo?.message}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                type="password"
-                label="Contraseña"
-                {...register("contrasena", {
-                  required: "La contraseña es obligatoria",
-                })}
-                error={!!errors.contrasena}
-                helperText={errors.contrasena?.message}
-              />
-            </Grid>
+            {!docenteSeleccionado && (
+              <>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    type="password"
+                    label="Contraseña"
+                    {...register("contrasena", {
+                      required: "La contraseña es obligatoria",
+                      minLength: {
+                        value: 8,
+                        message:
+                          "La contraseña debe tener al menos 8 caracteres",
+                      },
+                      pattern: {
+                        value:
+                          /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/,
+                        message:
+                          "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial",
+                      },
+                    })}
+                    error={!!errors.contrasena}
+                    helperText={errors.contrasena?.message}
+                  />
+                </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Confirmar contraseña"
-                type="password"
-                variant="outlined"
-                fullWidth
-                {...register("confirmarContrasena", {
-                  required: "La confirmación de contraseña es obligatoria",
-                  validate: (value) =>
-                    value === watch("contrasena") ||
-                    "Las contraseñas no coinciden",
-                })}
-                error={!!errors.confirmarContrasena}
-                helperText={errors.confirmarContrasena?.message}
-              />
-            </Grid>
-
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Confirmar contraseña"
+                    type="password"
+                    variant="outlined"
+                    fullWidth
+                    {...register("confirmarContrasena", {
+                      required: "La confirmación de contraseña es obligatoria",
+                      validate: (value) =>
+                        value === watch("contrasena") ||
+                        "Las contraseñas no coinciden",
+                    })}
+                    error={!!errors.confirmarContrasena}
+                    helperText={errors.confirmarContrasena?.message}
+                  />
+                </Grid>
+              </>
+            )}
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth error={!!errors.id_Centros}>
                 <InputLabel id="id_Centro-label">Elige el centro</InputLabel>
@@ -434,9 +494,7 @@ export const DocentesPage = () => {
                   defaultValue=""
                   label="Elige el centro"
                 >
-                  <MenuItem value="" >
-                    Elige el centro
-                  </MenuItem>
+                  <MenuItem value="">Elige el centro</MenuItem>
                   {centros.map((centro) => (
                     <MenuItem key={centro.id_Centros} value={centro.id_Centros}>
                       {centro.Nombre}
@@ -448,7 +506,7 @@ export const DocentesPage = () => {
                 )}
               </FormControl>
             </Grid>
-          
+
             <Grid item xs={12}>
               <input
                 type="file"
@@ -507,7 +565,11 @@ export const DocentesPage = () => {
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             onClose={handleCloseSnackbar}
           >
-            <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} variant="filled">
+            <Alert
+              onClose={handleCloseSnackbar}
+              severity={snackbarSeverity}
+              variant="filled"
+            >
               {snackbarMessage}
             </Alert>
           </Snackbar>
@@ -525,11 +587,14 @@ export const DocentesPage = () => {
             autoHeight
             rowsPerPageOptions={[5]}
             checkboxSelection={false}
+            initialState={{
+              sorting: {
+                sortModel: [{ field: "Nombre", sort: "asc" }],
+              },
+            }}
           />
         </div>
       </Box>
     </AdministradorLayout>
   );
 };
-
-
