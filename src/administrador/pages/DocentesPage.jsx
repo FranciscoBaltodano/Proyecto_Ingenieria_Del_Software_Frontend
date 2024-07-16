@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Grid, TextField, Typography, Snackbar, Alert, Backdrop, CircularProgress, Switch, FormControlLabel, FormHelperText, Checkbox, Divider, InputLabel, MenuItem, FormControl, Select, IconButton } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { AdministradorLayout } from "../layout/AdministradorLayout";
+import { esESLocaleText } from "../../components/esESLocaleText";
 
 export const DocentesPage = () => {
   const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
@@ -17,6 +18,11 @@ export const DocentesPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [centros, setCentros] = useState([]);
   const [showForm, setShowForm] = useState(false);
+
+  const imageInputRef = useRef(null);
+  const centroSelectRef = useRef(null);
+
+
   const columns = [
     { field: "numeroEmpleado", headerName: "Numero Empleado", width: 150 },
     { field: "Nombre", headerName: "Nombre", width: 150 },
@@ -300,10 +306,15 @@ export const DocentesPage = () => {
     reset();
     setSelectedImage(null);
     setDocenteSeleccionado(null);
-    document.getElementById("upload-image").value = "";
-    document.getElementById("id_Centro").value = "";
-  };
+    
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
 
+    if (centroSelectRef.current) {
+      centroSelectRef.current.value = "";
+    }
+  };
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -488,6 +499,7 @@ export const DocentesPage = () => {
                 <Select
                   id="id_Centro"
                   labelId="id_Centro-label"
+                  inputRef={centroSelectRef}
                   {...register("id_Centros", {
                     required: "El Centro es obligatorio",
                   })}
@@ -510,6 +522,7 @@ export const DocentesPage = () => {
             <Grid item xs={12}>
               <input
                 type="file"
+                ref={imageInputRef}
                 accept="image/*"
                 style={{ display: "none" }}
                 id="upload-image"
@@ -587,6 +600,8 @@ export const DocentesPage = () => {
             autoHeight
             rowsPerPageOptions={[5]}
             checkboxSelection={false}
+            rowHeight={40}
+            localeText={esESLocaleText}
             initialState={{
               sorting: {
                 sortModel: [{ field: "Nombre", sort: "asc" }],

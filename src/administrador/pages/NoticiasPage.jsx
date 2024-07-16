@@ -18,6 +18,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import { AdministradorLayout } from "../layout/AdministradorLayout";
+import { esESLocaleText } from "../../components/esESLocaleText";
 
 export const NoticiasPage = () => {
   const {
@@ -402,6 +403,7 @@ export const NoticiasPage = () => {
           getRowId={(row) => row.id_noticia}
           columns={columns}
           autoHeight
+          localeText={esESLocaleText}
           checkboxSelection={false}
         />
       </Box>

@@ -205,7 +205,6 @@ export default function DataTable({ url, name = 'archivo' }) {
   };
 
   return (
-    <ThemeProvider theme={theme}>
       <div style={{ height: '100%', width: '100%' }}>
         <DataGrid
           rows={data.rows}
@@ -217,6 +216,5 @@ export default function DataTable({ url, name = 'archivo' }) {
           }}
         />
       </div>
-    </ThemeProvider>
   );
 }
