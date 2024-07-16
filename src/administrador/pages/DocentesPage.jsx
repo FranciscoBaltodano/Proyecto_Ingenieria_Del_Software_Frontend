@@ -602,11 +602,6 @@ export const DocentesPage = () => {
             checkboxSelection={false}
             rowHeight={40}
             localeText={esESLocaleText}
-            initialState={{
-              sorting: {
-                sortModel: [{ field: "Nombre", sort: "asc" }],
-              },
-            }}
           />
         </div>
       </Box>
