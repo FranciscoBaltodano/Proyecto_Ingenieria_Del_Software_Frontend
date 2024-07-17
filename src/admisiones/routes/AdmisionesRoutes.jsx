@@ -6,6 +6,7 @@ import { OfertaPage } from '../pages/OfertaPage';
 import { InscripcionesPage } from '../pages/InscripcionesPage';
 import {ResultadoInscripcionesPage} from '../pages/ResutadosInscripcionesPage';
 import { SolicitudPage } from '../pages/SolicitudPage';
+import SavecsvPage from '../pages/SavecsvPage';
 
 export const AdmisionesRoutes = () => {
   return (
@@ -16,6 +17,7 @@ export const AdmisionesRoutes = () => {
       <Route path="solicitud" element={<SolicitudPage />} />
       <Route path= "resultado_inscripciones" element={<ResultadoInscripcionesPage/>}/>
       
+      <Route path="savecsv" element={<SavecsvPage/>} />
       <Route path="/*" element={ <Navigate to='/' /> }/>
     </Routes>
   );

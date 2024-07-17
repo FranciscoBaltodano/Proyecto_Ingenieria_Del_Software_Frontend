@@ -52,7 +52,12 @@ export const LoginForm = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Error en la autenticación');
+        if (response.status === 403 && errorData.message === 'Su número de empleado está desactivado') {
+          setLoginError('Su número de empleado está desactivado. Por favor, contacte al administrador.');
+        } else {
+          throw new Error(errorData.message || 'Error en la autenticación');
+        }
+        return;  // Salir de la función si hay un error
       }
 
       const result = await response.json();
