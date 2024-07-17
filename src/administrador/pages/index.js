@@ -6,6 +6,7 @@ export * from './PlanificacionAcademicaPage';
 export * from './MatriculaPage';
 export * from './InicioPage';
 
-export * from './GenerarCalendarioPage';
+
 export * from './ConfiguracionMatriculaPage';
+export * from './ConfiguracionMatriculaModificarPage';
 export * from './ConfiguracionCancelacionPage';

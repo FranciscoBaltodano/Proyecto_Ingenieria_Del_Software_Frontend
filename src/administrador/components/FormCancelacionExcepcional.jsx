@@ -10,17 +10,33 @@ import axios from 'axios';
 
 export const FormCancelacionExcepcional =()=>{
 
-    const { register, handleSubmit, watch,formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue,watch,reset,formState: { errors } } = useForm();
     const navigate = useNavigate();
     const [matricula, setMatricula] = useState([]);
     const [pac, setPac] = useState([]);
 
     const fechaInicioCancel = watch('fecha_inicioCancel');
     const fechaFincCancel = watch('fecha_finCancel');
-
+    const [minDate,setMinDate]=useState('');
     const horaInicio = watch('hora_inicioCancel');
   
-    
+    useEffect (()=>{
+        const fechaActual = new Date().toISOString().split('T')[0]
+        setMinDate(fechaActual);
+    },[setValue]);
+
+
+    const onSubmit = async (data) => {
+        try {
+            const response = await axios.post('http://localhost:3000/api/admin/cancelaciones', data);
+            console.log(response.data);
+            // Handle successful response
+            reset();
+          } catch (error) {
+            console.error('Error submitting form:', error);
+            // Handle error
+          }
+      };
     
     
 
@@ -31,8 +47,8 @@ export const FormCancelacionExcepcional =()=>{
               axios.get('http://localhost:3000/api/admin/pac'),
               axios.get('http://localhost:3000/api/admin/matricula')
             ]);
-            console.log('Centros: ', matriculaRes.data);
-            console.log('Carreras: ', pacRes.data)
+            console.log('Matricula: ', matriculaRes.data);
+            console.log('Pac: ', pacRes.data)
             setMatricula(matriculaRes.data);
             setPac(pacRes.data);
           } catch (error) {
@@ -45,40 +61,40 @@ export const FormCancelacionExcepcional =()=>{
 
     return (
         
-        <form onSubmit={handleSubmit()}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3 mt-3 " style={{ justifyContent: 'center',   }}>
 
                     <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12" > 
                         <Typography variant="h7" component="h1" gutterBottom>
                         Selecciona el tipo de cancelacion
                         </Typography>
-                        <select id="selectMatri" className="w-full p-2 border border-black rounded"
-                            {...register("selectMatri", {required:"Necesita seleccionar el tipo de matricula" })}
+                        <select id="id_TipoMatricula" className="w-full p-2 border border-black rounded"
+                            {...register("id_TipoMatricula", {required:"Necesita seleccionar el tipo de matricula" })}
 
                         >
                         <option  disabled>Elegir</option>
                             {matricula.map(matri => (
-                            <option key={matri.selectMatri} value={matri.selectMatri}>{matri.tipoMatricula}</option>
+                            <option key={matri.id_TipoMatricula} value={matri.id_TipoMatricula}>{matri.tipoMatricula}</option>
                         ))}
                         
                         </select>
-                        {errors.selectMatri && <span className="text-red-500">{errors.selectMatri.message}</span>}
+                        {errors.id_TipoMatricula && <span className="text-red-500">{errors.id_TipoMatricula.message}</span>}
 
                     </div>
                     <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12" > 
                         <Typography variant="h7" component="h1" gutterBottom>
                         Seleccione  el PAC
                         </Typography>
-                        <select id="selectPAC" className="w-full p-2 border border-black rounded"
-                            {...register("selectPAC", {required:"Necesita seleccionar un PAC" })}
+                        <select id="id_Pac" className="w-full p-2 border border-black rounded"
+                            {...register("id_Pac", {required:"Necesita seleccionar un PAC" })}
 
                         >
                         <option  disabled>Elegir</option>
                             {pac.map(pacAno => (
-                            <option key={pacAno.selectPAC} value={pacAno.selectPAC}>{pacAno.pac}</option>
+                            <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
                         ))}
                         </select>
-                        {errors.selectPAC && <span className="text-red-500">{errors.selectPAC.message}</span>}
+                        {errors.id_Pac && <span className="text-red-500">{errors.id_Pac.message}</span>}
 
                     </div>
                 </div>    
@@ -93,7 +109,7 @@ export const FormCancelacionExcepcional =()=>{
                 </Typography>
                 <input id="fecha_inicioCancel" type="date" 
                     {...register("fecha_inicioCancel", {required:"Fecha de incio de cancelaciones requerida"  })}
-                    min={fechaInicioCancel} max={fechaFincCancel}
+                    min={minDate} 
                     className="w-full p-2 border border-black rounded"/>
                     {errors.fecha_inicioCancel && <span className="text-red-500">{errors.fecha_inicioCancel.message}</span>}
 

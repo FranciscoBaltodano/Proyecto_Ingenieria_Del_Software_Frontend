@@ -1,6 +1,7 @@
 import React from 'react'
 import { AdministradorLayout } from '../layout/AdministradorLayout'
 import { Divider, Typography } from '@mui/material'
+import { Calendario } from '../components/FormCalendario'
 
 export const PlanificacionAcademicaPage = () => {
   return (
@@ -11,7 +12,7 @@ export const PlanificacionAcademicaPage = () => {
 
       <Divider sx={{ marginBottom: 2 }} />
 
-
+      <Calendario/>
     </AdministradorLayout>
   )
 }

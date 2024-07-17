@@ -1,24 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import { Divider, Typography } from '@mui/material'
-import { Button ,Snackbar,Alert} from '@mui/material'
+import { Button } from '@mui/material'
 import Stack from '@mui/material/Stack';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-export const FormMatricula =()=>{
+export const FormMatriculaModificar =()=>{
 
-    const { register, handleSubmit, watch, setValue,formState: { errors } ,reset} = useForm();
+    const { register, handleSubmit, watch, setValue,formState: { errors } } = useForm();
     const [minDate,setMinDate]=useState('');
     const [matricula, setMatricula] = useState([]);
     const [pac, setPac] = useState([]);
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    
+    const [matriculaSeleccionada, setMatriculaSeleccionada] = useState(null);
+    const { id } = useParams(); // Obtener el ID de la matrícula desde React Router
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,9 +38,10 @@ export const FormMatricula =()=>{
         const fechaActual = new Date().toISOString().split('T')[0]
         setMinDate(fechaActual);
     },[setValue]);
+      
     
     
-
+      
     const fechaInicioPAC = watch('fecha_inicioPAC');
     const fechaFincPAC = watch('fecha_finPAC');
     const fechaInicioPACMatri = watch('fecha_inicioMatri');
@@ -55,88 +54,57 @@ export const FormMatricula =()=>{
     const fechaMatri5 = watch('fecha_matri5');
     
     
+    useEffect(() => {    
+        fetch(`http://localhost:3000/api/admin/matricula_filtro/${id}`)
+          .then(response => response.json())
+          .then(data => {
+            setMatriculaSeleccionada(data); // Actualizar el estado con los datos obtenidos
+          })
+          .catch(error => console.error('Error fetching matricula data:', error));
+      }, [id]);
     
-    const onSubmit = async (formData) => {
-        setLoading(true);
-
-        const dataToSend = {
-            id_TipoMatricula: formData.id_TipoMatricula,
-            fecha_inicioPAC: formData.fecha_inicioPAC,
-            fecha_finPAC: formData.fecha_finPAC,
-            fecha_inicioMatri: formData.fecha_inicioMatri,
-            fecha_finMatri: formData.fecha_finMatri,
-            hora_inicioMatri: formData.hora_inicioMatri,
-            hora_finMatri: formData.hora_finMatri,
-            fecha_matri1: formData.fecha_matri1,
-            indice_desdeMatri1: formData.indice_desdeMatri1,
-            indice_hastaMatri1: formData.indice_hastaMatri1,
-            pIngreso_desdeMatri1: formData.pIngreso_desdeMatri1,
-            pIngreso_hastaMatri1: formData.pIngreso_hastaMatri1,
-            fecha_matri2: formData.fecha_matri2,
-            indice_desdeMatri2: formData.indice_desdeMatri2,
-            indice_hastaMatri2: formData.indice_hastaMatri2,
-            pIngreso_desdeMatri2: formData.pIngreso_desdeMatri2,
-            pIngreso_hastaMatri2: formData.pIngreso_hastaMatri2,
-            fecha_matri3: formData.fecha_matri3,
-            indice_desdeMatri3: formData.indice_desdeMatri3,
-            indice_hastaMatri3: formData.indice_hastaMatri3,
-            fecha_matri4: formData.fecha_matri4,
-            indice_desdeMatri4: formData.indice_desdeMatri4,
-            indice_hastaMatri4: formData.indice_hastaMatri4,
-            fecha_matri5: formData.fecha_matri5,
-            indice_desdeMatri5: formData.indice_desdeMatri5,
-            indice_hastaMatri5: formData.indice_hastaMatri5,
-            id_Pac: formData.id_Pac
-          };
-
-        try {
-          const response = await axios.post('http://localhost:3000/api/admin/configuraciones',dataToSend);
-          console.log('Respuesta del servidor:', response.data);
+      if (!matriculaSeleccionada) {
+        return <div>Cargando... </div>
+        ;
+      }
+      /*
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const [datosMatricula] = await Promise.all(
+              axios.get(`http://localhost:3000/api/admin/matricula_filtro/${id}`),
+            );
+            setMatriculaSeleccionada(datosMatricula.data)
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+        fetchData();
+      }, [id]);
+      */
     
-          if (response.status === 201) {
-            setSnackbarMessage('Matricula creado exitosamente');
-            setSnackbarSeverity('success');
-            setOpenSnackbar(true);
-            reset(); 
-            
-          } 
-        } catch (error) {
-          console.error('Error al enviar el formulario:', error);
-          setSnackbarMessage('Error al crear el matricula');
-          setSnackbarSeverity('error');
-          setOpenSnackbar(true);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      const handleCloseSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-          return;
-        }
-        setOpenSnackbar(false);
-      };
+        
     
 
     return (
         
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3 mt-3 " style={{ justifyContent: 'center',   }}>
-
+        <form onSubmit={handleSubmit()}>
+            <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3 mt-3 " style={{ justifyContent: 'center'}}>
+                
                 <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12" > 
                     <Typography variant="h7" component="h1" gutterBottom>
                     Selecciona el tipo de matricula
                     </Typography>
-                    <select id="id_TipoMatricula" className="w-full p-2 border border-black rounded" defaultValue={""}
-                        {...register("id_TipoMatricula", {required:"Necesita seleccionar el tipo de matricula" })}
+                    <select id="id_ConfMatri" defaultValue={matriculaSeleccionada.id_ConfMatri} className="w-full p-2 border border-black rounded"
+                        {...register("selectMatri", {required:"Necesita seleccionar el tipo de matricula"})} 
                         
                     >
-                    <option  value=""  disabled>Elegir</option>
+                    <option  disabled>Elegir</option>
                             {matricula.map(matri => (
-                        <option key={matri.id_TipoMatricula} value={matri.id_TipoMatricula}>{matri.tipoMatricula}</option>
+                        <option key={matri.selectMatri} value={matri.selectMatri}>{matri.tipoMatricula}</option>
                     ))}
                     </select>
-                    {errors.id_TipoMatricula && <span className="text-red-500">{errors.id_TipoMatricula.message}</span>}
+                    {errors.selectMatri && <span className="text-red-500">{errors.selectMatri.message}</span>}
 
                     </div>
                 </div>    
@@ -148,23 +116,23 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Seleccione  el PAC
                 </Typography>
-                <select id="id_Pac" className="w-full p-2 border border-black rounded" defaultValue={""}
-                    {...register("id_Pac", {required:"Necesita seleccionar un PAC" })}
+                <select id="id_Pac" defaultValue={matriculaSeleccionada.id_Pac}  className="w-full p-2 border border-black rounded"
+                    {...register("selectPAC", {required:"Necesita seleccionar un PAC" })}
 
                 >
-                <option  value="" disabled>Elegir</option>
+                <option   disabled>Elegir</option>
                 {pac.map(pacAno => (
-                        <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
+                        <option key={pacAno.selectPAC} value={pacAno.selectPAC}>{pacAno.pac}</option>
                     ))}
                 </select>
-                {errors.id_Pac && <span className="text-red-500">{errors.id_Pac.message}</span>}
+                {errors.selectPAC && <span className="text-red-500">{errors.selectPAC.message}</span>}
 
                 </div>
                 <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha de inicio PAC 
                 </Typography>
-                <input id="fecha_inicioPAC" type="date" 
+                <input id="fecha_inicioPAC" type='date' defaultValue={matriculaSeleccionada.fecha_inicioPAC}
                     {...register("fecha_inicioPAC", {required:"Fecha de inicio PAC requerida" })}
                     min={minDate}
                     className="w-full p-2 border border-black rounded" />
@@ -174,7 +142,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha de fin PAC
                 </Typography>
-                <input id="fecha_finPAC" type="date" 
+                <input id="fecha_finPAC" type="date" defaultValue={matriculaSeleccionada.fecha_finPAC}
                     {...register("fecha_finPAC", {required:"Fecha de fin PAC requerida" , 
                         validate: value=>{
                             if (value<fechaInicioPAC){
@@ -197,7 +165,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha de inicio matricula 
                 </Typography>
-                <input id="fecha_inicioMatri" type="date" 
+                <input id="fecha_inicioMatri" type="date" defaultValue={matriculaSeleccionada.fecha_inicioMatri}
                     {...register("fecha_inicioMatri", {required:"Fecha de incio matricula requerida"  })}
                     min={fechaInicioPAC} max={fechaFincPAC}
                     className="w-full p-2 border border-black rounded"/>
@@ -208,7 +176,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha de fin matricula
                 </Typography>
-                <input id="fecha_finMatri" type="date" 
+                <input id="fecha_finMatri" type="date" defaultValue={matriculaSeleccionada.fecha_finMatri}
                     {...register("fecha_finMatri", {required:"Fecha de fin matricula requerida"} )}
                     min={fechaInicioPAC} max={fechaFincPAC }
                     className="w-full p-2 border border-black rounded"/>
@@ -221,7 +189,7 @@ export const FormMatricula =()=>{
                         <Typography variant="h7" component="h1" gutterBottom>
                         Hora inicio matricula
                         </Typography>
-                        <input id="hora_inicioMatri" type="time" 
+                        <input id="hora_inicioMatri" type="time" defaultValue={matriculaSeleccionada.hora_inicioMatri}
                             {...register("hora_inicioMatri", {required:"Hora de inicio matricula requerida" })}
 
                             className=" w-full xl:w-8/12 lg:w-8/12 md:w-8/12 p-2 border border-black rounded"/>
@@ -233,7 +201,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Hora fin matricula
                     </Typography>
-                    <input id="hora_finMatri" type="time" 
+                    <input id="hora_finMatri" type="time" defaultValue={matriculaSeleccionada.hora_finMatri}
                         {...register("hora_finMatri", {required:"Hora de fin matricula requerida", validate: value=>{
                             if (value<horaInicio){
                                 return 'La hora de finalizacion no puede ser anterior a la hora de inicio'
@@ -263,7 +231,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha matricula 
                 </Typography>
-                <input id="fecha_matri1" type="date" 
+                <input id="fecha_matri1" type="date" defaultValue={matriculaSeleccionada.fecha_matri1}
                     {...register("fecha_matri1", {required:"Fecha de matricula requerida" , 
                         validate: value=>{
                             if (value==fechaMatri2 || value==fechaMatri3 || value==fechaMatri4 || value==fechaMatri5){
@@ -283,7 +251,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_desdeMatri1" type="text" placeholder=" Desde"
+                    <input id="indice_desdeMatri1" type="text"  defaultValue={matriculaSeleccionada.indice_desdeMatri1}
                         {...register("indice_desdeMatri1", {required:"Requiere un indice inicial", min:{
                             value:0, message:"No puede ser menor que 0"
                         },pattern:{
@@ -303,7 +271,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_hastaMatri1"  type="text" placeholder="Hasta"
+                    <input id="indice_hastaMatri1"  type="text" defaultValue={matriculaSeleccionada.indice_hastaMatri1}
                         {...register("indice_hastaMatri1", {required:"Requiere un indice final", min:{
                             value:0, message:"No puede ser menor que 0"
                         },validate: { 
@@ -326,16 +294,16 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Primer Ingreso PAA
                     </Typography>
-                    <input id="pIngreso_desdeMatri1" type="text" placeholder="Desde"
+                    <input id="pIngreso_desdeMatri1" type="text" defaultValue={matriculaSeleccionada.pIngreso_desdeMatri1}
                         {...register("pIngreso_desdeMatri1", {required:"Requiere un puntaje inicial", min:{
                             value:0, message:"No puede ser menor que 0"
                         }, pattern:{
                             value:/^[0-9]*$/, message: "Solo se permiten numeros"
                         } ,
                         maxLength:{
-                            value:4, message:"El numero no puede tener mas de 4 digitos"
+                            value:3, message:"El numero no puede tener mas de 3 digitos"
                         } })}
-                        maxLength="4"
+                        maxLength="3"
 
                         className="w-full xl:w-8/12 lg:w-8/12 md:w-8/12 p-2 border border-black rounded"/>
                         <br />
@@ -345,7 +313,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Primer Ingreso PAA
                     </Typography>
-                    <input id="pIngreso_hastaMatri1" type="text" placeholder="Hasta"
+                    <input id="pIngreso_hastaMatri1" type="text" defaultValue={matriculaSeleccionada.pIngreso_hastaMatri1}
                         {...register("pIngreso_hastaMatri1", {required:"Requiere un puntaje final" ,  min:{
                             value:0, message:"No puede ser menor que 0"
                         },
@@ -375,7 +343,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha matricula 
                 </Typography>
-                <input id="fecha_matri2" type="date" 
+                <input id="fecha_matri2" type="date" defaultValue={matriculaSeleccionada.fecha_matri2}
                     {...register("fecha_matri2", {required:"Fecha de matricula requerida",
                         validate: value=>{
                         if (value==fechaMatri1 || value==fechaMatri3 || value==fechaMatri4 || value==fechaMatri5){
@@ -395,7 +363,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input  id="indice_desdeMatri2" type="text" placeholder=" Desde"
+                    <input  id="indice_desdeMatri2" type="text" defaultValue={matriculaSeleccionada.indice_desdeMatri2}
                         {...register("indice_desdeMatri2", {required:"Requiere un indice inicial", min:{
                             value:0, message:"No puede ser menor que 0"
                         }, pattern:{
@@ -413,7 +381,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_hastaMatri2" type="text" placeholder="Hasta"
+                    <input id="indice_hastaMatri2" type="text" defaultValue={matriculaSeleccionada.indice_hastaMatri2}
                         {...register("indice_hastaMatri2", {required:"Requiere un indice final", min:{
                             value:0, message:"No puede ser menor que 0"
                         },validate: { 
@@ -435,7 +403,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Primer Ingreso PAA
                     </Typography>
-                    <input id="pIngreso_desdeMatri2" type="text" placeholder="Desde"
+                    <input id="pIngreso_desdeMatri2" type="text" defaultValue={matriculaSeleccionada.pIngreso_desdeMatri2}
                         {...register("pIngreso_desdeMatri2", {required:"Requiere un puntaje inicial" , min:{
                             value:0, message:"No puede ser menor que 0"
                         }, pattern:{
@@ -453,7 +421,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Primer Ingreso PAA
                     </Typography>
-                    <input id="pIngreso_hastaMatri2" type="text" placeholder="Hasta"
+                    <input id="pIngreso_hastaMatri2" type="text" defaultValue={matriculaSeleccionada.pIngreso_hastaMatri2}
                         {...register("pIngreso_hastaMatri2", {required:"Requiere un puntaje final" , min:{
                             value:0, message:"No puede ser menor que 0"
                         }, 
@@ -477,7 +445,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha matricula 
                 </Typography>
-                <input id="fecha_matri3" type="date" 
+                <input id="fecha_matri3" type="date"  defaultValue={matriculaSeleccionada.fecha_matri3}
                     {...register("fecha_matri3", {required:"Fecha de matricula requerida", 
                         validate: value=>{
                             if (value==fechaMatri1 || value==fechaMatri2 || value==fechaMatri4 || value==fechaMatri5){
@@ -496,7 +464,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_desdeMatri3" type="text" placeholder=" Desde"
+                    <input id="indice_desdeMatri3" type="text"  defaultValue={matriculaSeleccionada.indice_desdeMatri3}
                         {...register("indice_desdeMatri3", {required:"Requiere un indice inicial" ,  min:{
                             value:0, message:"No puede ser menor que 0"
                         },pattern:{
@@ -514,7 +482,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_hastaMatri3" type="text" placeholder="Hasta"
+                    <input id="indice_hastaMatri3" type="text"  defaultValue={matriculaSeleccionada.indice_hastaMatri3}
                         {...register("indice_hastaMatri3", {required:"Requiere un indice final" , min:{
                             value:0, message:"No puede ser menor que 0"
                         },validate: { 
@@ -537,7 +505,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha matricula 
                 </Typography>
-                <input  id="fecha_matri4" type="date" 
+                <input  id="fecha_matri4" type="date"  defaultValue={matriculaSeleccionada.fecha_matri4}
                     {...register("fecha_matri4", {required:"Fecha de matricula requerida" ,
                         validate: value=>{
                             if (value==fechaMatri2 || value==fechaMatri3 || value==fechaMatri1 || value==fechaMatri5){
@@ -556,7 +524,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_desdeMatri4" type="text" placeholder=" Desde"
+                    <input id="indice_desdeMatri4" type="text" defaultValue={matriculaSeleccionada.indice_desdeMatri4}
                         {...register("indice_desdeMatri4", {required:"Requiere un indice inicial" ,  min:{
                             value:0, message:"No puede ser menor que 0"
                         },pattern:{
@@ -574,7 +542,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_hastaMatri4" type="text" placeholder="Hasta"
+                    <input id="indice_hastaMatri4" type="text" defaultValue={matriculaSeleccionada.indice_hastaMatri4}
                         {...register("indice_hastaMatri4", {required:"Requiere un indice final" , min:{
                             value:0, message:"No puede ser menor que 0"
                         },validate: { 
@@ -597,7 +565,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha matricula 
                 </Typography>
-                <input id="fecha_matri5" type="date" 
+                <input id="fecha_matri5" type="date" placeholder="Ingrese su numero de identidad" defaultValue={matriculaSeleccionada.fecha_matri5}
                     {...register("fecha_matri5", {required:"Fecha de matricula requerida" ,
                         validate: value=>{
                             if (value==fechaMatri2 || value==fechaMatri3 || value==fechaMatri4 || value==fechaMatri1){
@@ -617,7 +585,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_desdeMatri5" type="text" placeholder=" Desde"
+                    <input id="indice_desdeMatri5" type="text" defaultValue={matriculaSeleccionada.indice_desdeMatri5}
                         {...register("indice_desdeMatri5", {required:"Requiere un indice inicial", min:{
                             value:0, message:"No puede ser menor que 0"
                         }, pattern:{
@@ -635,7 +603,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_hastaMatri5" type="text" placeholder="Hasta"
+                    <input id="indice_hastaMatri5" type="text" defaultValue={matriculaSeleccionada.indice_hastaMatri5}
                         {...register("indice_hastaMatri5", {required:"Requiere un indice final" , min:{
                             value:0, message:"No puede ser menor que 0"
                         },validate: { 
@@ -658,28 +626,17 @@ export const FormMatricula =()=>{
 
             <div style={{display: 'flex',flexWrap: 'nowrap',justifyContent: 'center', alignItems: 'flex-end'}}>
                 <Stack direction="row" spacing={6}>
-                <Button variant="contained" type="summit" >
-                Activar
+                <Button variant="contained" type="summit">
+                Guardar
                 </Button>
                 <Button variant="contained" style={{backgroundColor:'gray'}} onClick={() => navigate('/admin/matricula')}>
-                Regresar
+                Cancelar
                 </Button>
                 </Stack>
             </div>
             <br />
-            <Snackbar 
-                open={openSnackbar} 
-                autoHideDuration={6000} 
-                onClose={handleCloseSnackbar}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                >
-                <Alert onClose={handleCloseSnackbar} variant='filled' severity={snackbarSeverity} sx={{ width: '100%' }}>
-                {snackbarMessage}
-                </Alert>
-            </Snackbar>
+    
         </form>
-
-
-
     )
+
 }

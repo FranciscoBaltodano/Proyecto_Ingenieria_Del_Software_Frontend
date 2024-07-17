@@ -104,17 +104,6 @@ export const NoticiasPage = () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
   const onCreateSubmit = async (noticiaData) => {
     setLoading(true);
     const formData = new FormData();
@@ -241,18 +230,6 @@ export const NoticiasPage = () => {
     }
   };
   
-
-
-
-
-
-
-
-
-
-
-
-
 
   
   
