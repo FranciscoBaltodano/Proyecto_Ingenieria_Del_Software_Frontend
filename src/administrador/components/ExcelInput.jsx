@@ -55,14 +55,19 @@ export const ExcelInput = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    axios.post('http://localhost:3000/api/admisiones/usuario', {archivo:fileName});
     sendDataToBackend();
   };
+
+  const handleClose = () => {
+    setOpenModal(false);
+  }; 
 
   const sendDataToBackend = async () => {
     try {
       // const response = await axios.post('La url que va a llevar el json al backend', dataJson);
       // setSnackbarMessage('Datos enviados exitosamente: ' + response.data);
-      console.log('Esta es la data',dataJson);
+      setSnackbarMessage('Datos enviados exitosamente: ' + fileName);
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
     } catch (error) {
@@ -127,7 +132,7 @@ export const ExcelInput = () => {
             ¿Está seguro de registrar {cantidadEstudiantes} estudiantes?
           </Typography>
           
-          <Button onClick={handleCloseModal} variant="contained" color="inherit" sx={{ mt: 2 }}>
+          <Button onClick={handleClose} variant="contained" color="inherit" sx={{ mt: 2 }}>
             No
           </Button>
           
