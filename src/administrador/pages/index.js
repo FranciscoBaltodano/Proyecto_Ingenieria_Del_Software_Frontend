@@ -9,4 +9,5 @@ export * from './InicioPage';
 
 export * from './ConfiguracionMatriculaPage';
 export * from './ConfiguracionMatriculaModificarPage';
-export * from './ConfiguracionCancelacionPage';
+export * from './ConfiguracionCancelacionesPage';
+export * from './ConfiguracionCancelacionModificarPage';

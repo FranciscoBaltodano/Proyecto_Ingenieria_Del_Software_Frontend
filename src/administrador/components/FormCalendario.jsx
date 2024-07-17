@@ -12,10 +12,10 @@ export const Calendario = () => {
         Calendario
       </Typography>
       <div style={{ justifyContent: 'center',  display: 'flex',flexDirection: 'row', flexWrap: 'nowrap', alignItems: 'center' }} >
-        <Card className=" w-4/6 p-2 border border-black rounded">
+        <Card  style={{width:1000}} className=" p-2 border border-black rounded">
         <CardActionArea >
           <CardContent >
-            <div >
+            <div style={{flexDirection:'column' ,justifyContent:'space-evenly' ,alignItems:'center'}}>
               <div>
               <Typography gutterBottom variant="h6" component="div">
               Calendario Matricula I PAC 2024 

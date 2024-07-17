@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import { Divider, Typography } from '@mui/material'
-import { Button ,Snackbar,Alert} from '@mui/material'
+import { Button } from '@mui/material'
 import Stack from '@mui/material/Stack';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 
 
-export const FormCancelacionExcepcional =()=>{
+export const FormCancelacionExcepcionalModificar =()=>{
 
     const { register, handleSubmit, setValue,watch,reset,formState: { errors } } = useForm();
     const navigate = useNavigate();
@@ -16,14 +17,11 @@ export const FormCancelacionExcepcional =()=>{
     const [pac, setPac] = useState([]);
 
     const fechaInicioCancel = watch('fecha_inicioCancel');
+
     const [minDate,setMinDate]=useState('');
     const horaInicio = watch('hora_inicioCancel');
-    const [loading, setLoading] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [redirectToHome, setRedirectToHome] = useState(false); // Estado para redirección
-
+    const [cancelacionSeleccionada, setCancelacionSeleccionada] = useState(null);
+    const { id } = useParams(); // Obtener el ID de la matrícula desde React Router
 
     useEffect (()=>{
         const fechaActual = new Date().toISOString().split('T')[0]
@@ -49,61 +47,33 @@ export const FormCancelacionExcepcional =()=>{
         fetchData();
       }, []);
 
-      const onSubmit = async (formData) => {
-        setLoading(true);
+      
 
-        const dataToSend = {
-            id_Pac:formData.id_Pac, 
-            id_TipoMatricula: formData.id_TipoMatricula, 
-            fecha_inicioCancel:formData.fecha_inicioCancel, 
-            fecha_finCancel:formData.fecha_finCancel, 
-            hora_inicioCancel:formData.hora_inicioCancel, 
-            hora_finCancel: formData.hora_finCancel
-          };
-
-        try {
-          const response = await axios.post('http://localhost:3000/api/admin/cancelaciones',dataToSend);
-          console.log('Respuesta del servidor:', response.data);
+      useEffect(() => {    
+        fetch(`http://localhost:3000/api/admin/cancelaciones/${id}`)
+          .then(response => response.json())
+          .then(data => {
+            setCancelacionSeleccionada(data); // Actualizar el estado con los datos obtenidos
+          })
+          .catch(error => console.error('Error fetching matricula data:', error));
+      }, [id]);
     
-          if (response.status === 201) {
-            setSnackbarMessage('Cancelacion excepcional creado exitosamente');
-            setSnackbarSeverity('success');
-            setOpenSnackbar(true);
-            reset(); 
-            
-            setRedirectToHome(true);
-
-          } 
-        } catch (error) {
-          console.error('Error al enviar el formulario:', error);
-          setSnackbarMessage('Error al crear el cancelacion excepcional');
-          setSnackbarSeverity('error');
-          setOpenSnackbar(true);
-        } finally {
-          setLoading(false);
-        }
-      };
-      const handleCloseSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-          return;
-        }
-        setOpenSnackbar(false);
-      };
-    
-      if (redirectToHome) {
-        return navigate('/admin/cancelaciones') ; // Ajusta esta ruta según la URL de tu página de inicio
+      if (!cancelacionSeleccionada) {
+        return <div>Cargando... </div>
+        ;
       }
+
 
     return (
         
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit()}>
             <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3 mt-3 " style={{ justifyContent: 'center',   }}>
 
                     <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12" > 
                         <Typography variant="h7" component="h1" gutterBottom>
                         Selecciona el tipo de cancelacion
                         </Typography>
-                        <select id="id_TipoMatricula" className="w-full p-2 border border-black rounded" defaultValue={""}
+                        <select id="id_TipoMatricula" className="w-full p-2 border border-black rounded" defaultValue={cancelacionSeleccionada.id_TipoMatricula}
                         {...register("id_TipoMatricula", {required:"Necesita seleccionar el tipo de matricula" })}
                         
                     >
@@ -120,7 +90,7 @@ export const FormCancelacionExcepcional =()=>{
                         <Typography variant="h7" component="h1" gutterBottom>
                         Seleccione  el PAC
                         </Typography>
-                        <select id="id_Pac" className="w-full p-2 border border-black rounded" defaultValue={""}
+                        <select id="id_Pac" className="w-full p-2 border border-black rounded" defaultValue={cancelacionSeleccionada.id_Pac}
                             {...register("id_Pac", {required:"Necesita seleccionar un PAC" })}
 
                         >
@@ -140,9 +110,9 @@ export const FormCancelacionExcepcional =()=>{
             <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-3 mt-3 " style={{ justifyContent: 'space-evenly'  }}>
                 <div className=" xl:w-10/12 lg:w-10/12 w-full md:w-10/12 " style={{ justifyContent: 'space-evenly'  }}>
                 <Typography variant="h7" component="h1" gutterBottom>
-                Fecha de inicio matricula 
+                Fecha de inicio cancelaciones 
                 </Typography>
-                <input id="fecha_inicioCancel" type="date" 
+                <input id="fecha_inicioCancel" type="date" defaultValue={cancelacionSeleccionada.fecha_inicioCancel}
                     {...register("fecha_inicioCancel", {required:"Fecha de incio de cancelaciones requerida"  })}
                     min={minDate} 
                     className="w-full p-2 border border-black rounded"/>
@@ -151,11 +121,11 @@ export const FormCancelacionExcepcional =()=>{
                 </div>
                 <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
                 <Typography variant="h7" component="h1" gutterBottom>
-                Fecha de fin matricula
+                Fecha de fin cancelaciones
                 </Typography>
-                <input id="fecha_finCancel" type="date" 
+                <input id="fecha_finCancel" type="date" defaultValue={cancelacionSeleccionada.fecha_finCancel}
                     {...register("fecha_finCancel", {required:"Fecha de fin de cancelaciones requerida"} )}
-                    min={fechaInicioCancel} 
+                    min={fechaInicioCancel}
                     className="w-full p-2 border border-black rounded"/>
                     
                     {errors.fecha_finCancel && <span className="text-red-500">{errors.fecha_finCancel.message}</span>}
@@ -166,7 +136,7 @@ export const FormCancelacionExcepcional =()=>{
                         <Typography variant="h7" component="h1" gutterBottom>
                         Hora inicio matricula
                         </Typography>
-                        <input id="hora_inicioCancel" type="time" 
+                        <input id="hora_inicioCancel" type="time" defaultValue={cancelacionSeleccionada.hora_inicioCancel}
                             {...register("hora_inicioCancel", {required:"Hora de inicio de cancelaciones requerida" })}
 
                             className=" w-full xl:w-8/12 lg:w-8/12 md:w-8/12 p-2 border border-black rounded"/>
@@ -178,7 +148,7 @@ export const FormCancelacionExcepcional =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Hora fin matricula
                     </Typography>
-                    <input id="hora_finCancel" type="time" 
+                    <input id="hora_finCancel" type="time" defaultValue={cancelacionSeleccionada.hora_finCancel}
                         {...register("hora_finCancel", {required:"Hora de fin de cancelaciones requerida", validate: value=>{
                             if (value<horaInicio){
                                 return 'La hora de finalizacion no puede ser anterior a la hora de inicio'
@@ -209,16 +179,7 @@ export const FormCancelacionExcepcional =()=>{
                 </Stack>
             </div>
             <br />
-            <Snackbar 
-                open={openSnackbar} 
-                autoHideDuration={6000} 
-                onClose={handleCloseSnackbar}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                >
-                <Alert onClose={handleCloseSnackbar} variant='filled' severity={snackbarSeverity} sx={{ width: '100%' }}>
-                {snackbarMessage}
-                </Alert>
-            </Snackbar>
+            
     
         </form>
     )

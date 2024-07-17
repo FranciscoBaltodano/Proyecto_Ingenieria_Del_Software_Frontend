@@ -18,6 +18,8 @@ export const FormMatricula =()=>{
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [redirectToHome, setRedirectToHome] = useState(false); // Estado para redirección
+
     
 
     useEffect(() => {
@@ -98,7 +100,7 @@ export const FormMatricula =()=>{
             setSnackbarSeverity('success');
             setOpenSnackbar(true);
             reset(); 
-            
+            setRedirectToHome(true);
           } 
         } catch (error) {
           console.error('Error al enviar el formulario:', error);
@@ -116,7 +118,9 @@ export const FormMatricula =()=>{
         }
         setOpenSnackbar(false);
       };
-    
+      if (redirectToHome) {
+        return navigate('/admin/matricula') ; // Ajusta esta ruta según la URL de tu página de inicio
+      }
 
     return (
         

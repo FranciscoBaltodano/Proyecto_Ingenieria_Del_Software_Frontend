@@ -5,12 +5,11 @@ import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
-import { AdministradorLayout } from "../layout/AdministradorLayout";
 import { Link } from 'react-router-dom';
 
 
 
-export const TablaRegistrosMatricula = () => {
+export const TablaRegistrosCancelaciones = () => {
 
   const [matricula, setMatricula] = useState([]);
   const [tipoMatricula, setTipoMatricula] = useState([]);
@@ -23,12 +22,12 @@ export const TablaRegistrosMatricula = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [matriculaRes,pacRes,tipoMatriculaRes] = await Promise.all([
-          axios.get('http://localhost:3000/api/admin/matricula'),
+        const [cancelacionesRes,pacRes,tipoMatriculaRes] = await Promise.all([
+          axios.get('http://localhost:3000/api/admin/cancelaciones'),
           axios.get('http://localhost:3000/api/admin/pac'),
           axios.get('http://localhost:3000/api/admin/tipo_matricula')
         ]);
-        setMatricula(matriculaRes.data);
+        setMatricula(cancelacionesRes.data);
         setPac(pacRes.data);
         setTipoMatricula(tipoMatriculaRes.data);
       } catch (error) {
@@ -75,14 +74,14 @@ export const TablaRegistrosMatricula = () => {
           <IconButton
             color="primary"
             component={Link}
-            to={`/admin/configuracion_matricula_modificar/${params.row.id_ConfMatri}`}
+            to={`/admin/configuracion_cancelacion_modificar/${params.row.id_canExcep}`}
             
           >
             <EditIcon />
           </IconButton>
           <IconButton
             color="error"
-            onClick={() => handleDelete(params.row.id_ConfMatri)}
+            onClick={() => handleDelete(params.row.id_canExcep)}
            
           >
             <DeleteIcon />
@@ -93,22 +92,22 @@ export const TablaRegistrosMatricula = () => {
   ];
 
 
-  const handleDelete = async (id_ConfMatri) => {
+  const handleDelete = async (id_canExcep) => {
     try {
       await axios.delete(
-        `http://localhost:3000/api/admin//configuraciones/${id_ConfMatri}`
+        `http://localhost:3000/api/admin//cancelaciones/${id_canExcep}`
       );
-      const matriculaRes = await axios.get('http://localhost:3000/api/admin/matricula');
+      const matriculaRes = await axios.get('http://localhost:3000/api/admin/cancelaciones');
       setMatricula(matriculaRes.data);
       if (matriculaRes.status === 200) {
-        setSnackbarMessage('Matricula eliminada exitosamente');
+        setSnackbarMessage('Cancelacion eliminada exitosamente');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
         
       } 
     } catch (error) {
-      console.error('Error al eliminar el matricula:', error);
-      setSnackbarMessage('Error al eliminar la matricula');
+      console.error('Error al eliminar el cancelacion:', error);
+      setSnackbarMessage('Error al eliminar la cancelacion');
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
     } finally {
@@ -130,7 +129,7 @@ export const TablaRegistrosMatricula = () => {
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={matricula}
-          getRowId={(row) => row.id_ConfMatri}
+          getRowId={(row) => row.id_canExcep}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[10]}

@@ -16,7 +16,7 @@ export const OptionMatricula=()=> {
           <Card >
                   <CardContent >
                     <Typography gutterBottom variant="h6" component="div" textAlign={'center'} >
-                    Puedes habilitar o modificar el proceso de matricula, para un periodo determinado.
+                    Puedes habilitar el proceso de matricula, para un periodo determinado.
                     </Typography>
                     <Stack direction="row" alignItems="center" justifyContent="space-evenly">
                       <Button variant="contained">
@@ -28,7 +28,7 @@ export const OptionMatricula=()=> {
                       
                   </CardContent>
           </Card>
-
+            <br />
           <card>
           <TablaRegistrosMatricula/>
           </card>
