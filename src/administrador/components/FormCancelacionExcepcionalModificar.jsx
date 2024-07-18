@@ -9,64 +9,73 @@ import axios from 'axios';
 
 
 
-export const FormCancelacionExcepcionalModificar =()=>{
-
-    const { register, handleSubmit, setValue,watch,reset,formState: { errors } } = useForm();
+export const FormCancelacionExcepcionalModificar = () => {
+    const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm();
     const navigate = useNavigate();
     const [matricula, setMatricula] = useState([]);
     const [pac, setPac] = useState([]);
-
-    const fechaInicioCancel = watch('fecha_inicioCancel');
-
-    const [minDate,setMinDate]=useState('');
-    const horaInicio = watch('hora_inicioCancel');
+    const [minDate, setMinDate] = useState('');
     const [cancelacionSeleccionada, setCancelacionSeleccionada] = useState(null);
-    const { id } = useParams(); // Obtener el ID de la matrícula desde React Router
-
-    useEffect (()=>{
-        const fechaActual = new Date().toISOString().split('T')[0]
-        setMinDate(fechaActual);
-    },[setValue]);
-    
-
+    const { id } = useParams();
+  
+    const fechaInicioCancel = watch('fecha_inicioCancel');
+    const horaInicio = watch('hora_inicioCancel');
+  
     useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const [pacRes, matriculaRes] = await Promise.all([
-              axios.get('http://localhost:3000/api/admin/pac'),
-              axios.get('http://localhost:3000/api/admin/tipo_matricula')
-            ]);
-            console.log('Matricula: ', matriculaRes.data);
-            console.log('Pac: ', pacRes.data)
-            setMatricula(matriculaRes.data);
-            setPac(pacRes.data);
-          } catch (error) {
-            console.error('Error fetching data:', error);
+      const fechaActual = new Date().toISOString().split('T')[0];
+      setMinDate(fechaActual);
+    }, [setValue]);
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const [pacRes, matriculaRes] = await Promise.all([
+            axios.get('http://localhost:3000/api/admin/pac'),
+            axios.get('http://localhost:3000/api/admin/tipo_matricula')
+          ]);
+          setMatricula(matriculaRes.data);
+          setPac(pacRes.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
+    }, []);
+  
+    useEffect(() => {    
+      fetch(`http://localhost:3000/api/admin/cancelaciones/${id}`)
+        .then(response => response.json())
+        .then(data => {
+          setCancelacionSeleccionada(data);
+          // Establecer los valores iniciales del formulario
+          Object.keys(data).forEach(key => {
+            setValue(key, data[key]);
+          });
+        })
+        .catch(error => console.error('Error fetching cancelacion data:', error));
+    }, [id, setValue]);
+  
+    const onSubmit = async (data) => {
+        console.log('Sending data:', data);
+        console.log('URL:', `http://localhost:3000/api/admin/cancelaciones/${id}`);
+        try {
+          const response = await axios.put(`http://localhost:3000/api/admin/cancelaciones/${id}`, data);
+          console.log('Response:', response);
+          if (response.status === 200) {
+            navigate('/admin/cancelaciones');
           }
-        };
-        fetchData();
-      }, []);
-
-      
-
-      useEffect(() => {    
-        fetch(`http://localhost:3000/api/admin/cancelaciones/${id}`)
-          .then(response => response.json())
-          .then(data => {
-            setCancelacionSeleccionada(data); // Actualizar el estado con los datos obtenidos
-          })
-          .catch(error => console.error('Error fetching matricula data:', error));
-      }, [id]);
-    
-      if (!cancelacionSeleccionada) {
-        return <div>Cargando... </div>
-        ;
-      }
-
+        } catch (error) {
+          console.error('Error updating cancelacion:', error.response || error);
+        }
+      };
+  
+    if (!cancelacionSeleccionada) {
+      return <div>Cargando...</div>;
+    }
 
     return (
         
-        <form onSubmit={handleSubmit()}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3 mt-3 " style={{ justifyContent: 'center',   }}>
 
                     <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12" > 
@@ -168,19 +177,16 @@ export const FormCancelacionExcepcionalModificar =()=>{
 
             <br />
 
-            <div style={{display: 'flex',flexWrap: 'nowrap',justifyContent: 'center', alignItems: 'flex-end'}}>
-                <Stack direction="row" spacing={6}>
-                <Button variant="contained" type="summit">
-                Activar
-                </Button>
-                <Button variant="contained" style={{backgroundColor:'gray'}} onClick={() => navigate('/admin/cancelaciones')}>
-                Regresar
-                </Button>
-                </Stack>
-            </div>
-            <br />
-            
-    
-        </form>
+            <div style={{display: 'flex', flexWrap: 'nowrap', justifyContent: 'center', alignItems: 'flex-end'}}>
+        <Stack direction="row" spacing={6}>
+          <Button variant="contained" type="submit">
+            Actualizar
+          </Button>
+          <Button variant="contained" style={{backgroundColor:'gray'}} onClick={() => navigate('/admin/cancelaciones')}>
+            Regresar
+          </Button>
+        </Stack>
+      </div>
+    </form>
     )
 }
