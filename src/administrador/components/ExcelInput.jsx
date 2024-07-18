@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, styled, Modal, Grid, Snackbar, Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Box, Button, Typography, styled, Modal, Grid, Snackbar, Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, LinearProgress } from '@mui/material';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 import SendIcon from '@mui/icons-material/Send';
@@ -18,6 +18,7 @@ export const ExcelInput = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [showErrors, setShowErrors] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -62,6 +63,7 @@ export const ExcelInput = () => {
   };
 
   const sendDataToBackend = async () => {
+    setLoading(true);
     try {
       const response = await axios.post('http://localhost:3000/api/admisiones/usuarios/json', { dataJson });
       setSnackbarSeverity('success');
@@ -78,6 +80,8 @@ export const ExcelInput = () => {
       setSnackbarSeverity('error');
       setSnackbarMessage('Error al enviar los datos: ' + error.message);
       setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -121,6 +125,8 @@ export const ExcelInput = () => {
         )}
       </Box>
 
+      {loading && <LinearProgress sx={{ width: '100%', mt: 2 }} />}
+
       {showErrors && (
         <Box mt={4}>
           <Typography variant="h6">Filas No Aptas</Typography>
@@ -157,31 +163,31 @@ export const ExcelInput = () => {
         <Box sx={{ bgcolor: 'background.paper', padding: 4, borderRadius: 2 }}>
           
           <Typography variant="h6" component="h2" gutterBottom>
-            Confirmación de Registro
+            Confirmación de matrícula
           </Typography>
 
-          <Typography >
-            ¿Está seguro de registrar {cantidadEstudiantes} estudiantes?
+          <Typography variant="body1" gutterBottom>
+            ¿Está seguro de que desea matricular a {cantidadEstudiantes} estudiantes?
           </Typography>
-          
-          <Button onClick={handleCloseModal} variant="contained" color="inherit" sx={{ mt: 2 }}>
-            No
-          </Button>
-          
-          <Button onClick={handleCloseModal} variant="contained" color="primary" sx={{ mt: 2, ml: 2 }}>
-            Sí
-          </Button>
+
+          <Grid container spacing={2}>
+            <Grid item>
+              <Button variant="contained" color='inherit' onClick={() => setOpenModal(false)}>
+                Cancelar
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" color='primary' onClick={handleCloseModal}>
+                Confirmar
+              </Button>
+            </Grid>
+          </Grid>
+
         </Box>
-
       </Modal>
 
-      <Snackbar 
-        open={openSnackbar} 
-        autoHideDuration={2000} 
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert onClose={handleCloseSnackbar} variant='filled' severity={snackbarSeverity} sx={{ width: '100%' }}>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>

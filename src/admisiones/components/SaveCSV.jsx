@@ -47,7 +47,7 @@ const CSVDownloader = () => {
       {isLoading ? <CircularProgress size={24} /> : 'Descargar CSV'}
     </Button>
     
-    <DataTable url="http://localhost:3000/api/admisiones/json" name="Admisiones" />
+    {/* <DataTable url="http://localhost:3000/api/admisiones/json" name="Admisiones" /> */}
     </>
   );
 };
