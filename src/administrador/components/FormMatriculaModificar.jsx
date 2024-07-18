@@ -9,38 +9,19 @@ import { useParams } from 'react-router-dom';
 
 export const FormMatriculaModificar =()=>{
 
-    const { register, handleSubmit, watch, setValue,formState: { errors } } = useForm();
-    const [minDate,setMinDate]=useState('');
+    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
+    const [minDate, setMinDate] = useState('');
     const [matricula, setMatricula] = useState([]);
     const [pac, setPac] = useState([]);
     const navigate = useNavigate();
     const [matriculaSeleccionada, setMatriculaSeleccionada] = useState(null);
-    const { id } = useParams(); // Obtener el ID de la matrícula desde React Router
+    const { id } = useParams();
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const [pacRes, matriculaRes] = await Promise.all([
-              axios.get('http://localhost:3000/api/admin/pac'),
-              axios.get('http://localhost:3000/api/admin/tipo_matricula')
-            ]);
-            setMatricula(matriculaRes.data);
-            setPac(pacRes.data);
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-        };
-        fetchData();
-      }, []);
 
     useEffect (()=>{
         const fechaActual = new Date().toISOString().split('T')[0]
         setMinDate(fechaActual);
     },[setValue]);
-      
-    
-    
     
       
     const fechaInicioPAC = watch('fecha_inicioPAC');
@@ -54,42 +35,83 @@ export const FormMatriculaModificar =()=>{
     const fechaMatri4 = watch('fecha_matri4');
     const fechaMatri5 = watch('fecha_matri5');
     
-    
-    useEffect(() => {    
-        fetch(`http://localhost:3000/api/admin/matricula_filtro/${id}`)
-          .then(response => response.json())
-          .then(data => {
-            setMatriculaSeleccionada(data); // Actualizar el estado con los datos obtenidos
-          })
-          .catch(error => console.error('Error fetching matricula data:', error));
-      }, [id]);
-    
-      if (!matriculaSeleccionada) {
-        return <div>Cargando... </div>
-        ;
-      }
-      /*
-      useEffect(() => {
+
+    useEffect(() => {
         const fetchData = async () => {
           try {
-            const [datosMatricula] = await Promise.all(
-              axios.get(`http://localhost:3000/api/admin/matricula_filtro/${id}`),
-            );
-            setMatriculaSeleccionada(datosMatricula.data)
+            const [pacRes, matriculaRes, matriculaSeleccionadaRes] = await Promise.all([
+              axios.get('http://localhost:3000/api/admin/pac'),
+              axios.get('http://localhost:3000/api/admin/tipo_matricula'),
+              axios.get(`http://localhost:3000/api/admin/matricula_filtro/${id}`)
+            ]);
+            setPac(pacRes.data);
+            setMatricula(matriculaRes.data);
+            setMatriculaSeleccionada(matriculaSeleccionadaRes.data);
+    
+            // Establecer los valores iniciales del formulario
+            Object.keys(matriculaSeleccionadaRes.data).forEach(key => {
+              setValue(key, matriculaSeleccionadaRes.data[key]);
+            });
           } catch (error) {
             console.error('Error fetching data:', error);
           }
         };
         fetchData();
-      }, [id]);
-      */
     
-        
+        const fechaActual = new Date().toISOString().split('T')[0];
+        setMinDate(fechaActual);
+      }, [id, setValue]);
     
+      const onSubmit = async (data) => {
+        console.log('Datos enviados:', data);
+        const dataToSend = {
+          id_TipoMatricula: data.id_TipoMatricula,
+          fecha_inicioPAC: data.fecha_inicioPAC,
+          fecha_finPAC: data.fecha_finPAC,
+          fecha_inicioMatri: data.fecha_inicioMatri,
+          fecha_finMatri: data.fecha_finMatri,
+          hora_inicioMatri: data.hora_inicioMatri,
+          hora_finMatri: data.hora_finMatri,
+          fecha_matri1: data.fecha_matri1,
+          indice_desdeMatri1: data.indice_desdeMatri1,
+          indice_hastaMatri1: data.indice_hastaMatri1,
+          pIngreso_desdeMatri1: data.pIngreso_desdeMatri1,
+          pIngreso_hastaMatri1: data.pIngreso_hastaMatri1,
+          fecha_matri2: data.fecha_matri2,
+          indice_desdeMatri2: data.indice_desdeMatri2,
+          indice_hastaMatri2: data.indice_hastaMatri2,
+          pIngreso_desdeMatri2: data.pIngreso_desdeMatri2,
+          pIngreso_hastaMatri2: data.pIngreso_hastaMatri2,
+          fecha_matri3: data.fecha_matri3,
+          indice_desdeMatri3: data.indice_desdeMatri3,
+          indice_hastaMatri3: data.indice_hastaMatri3,
+          fecha_matri4: data.fecha_matri4,
+          indice_desdeMatri4: data.indice_desdeMatri4,
+          indice_hastaMatri4: data.indice_hastaMatri4,
+          fecha_matri5: data.fecha_matri5,
+          indice_desdeMatri5: data.indice_desdeMatri5,
+          indice_hastaMatri5: data.indice_hastaMatri5,
+          id_Pac: data.id_Pac
+        };
+    
+        try {
+            const response = await axios.put(`http://localhost:3000/api/admin/configuraciones/${id}`, dataToSend);
+            if (response.status === 200) {
+                console.log('Configuración actualizada exitosamente');
+                navigate('/admin/matricula');
+            }
+        } catch (error) {
+            console.error('Error updating configuration:', error.response?.data || error);
+        }
+      };
+    
+      if (!matriculaSeleccionada) {
+        return <div>Cargando...</div>;
+      }
 
     return (
         
-        <form onSubmit={handleSubmit()}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3 mt-3 " style={{ justifyContent: 'center'}}>
                 
                 <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12" > 
@@ -625,18 +647,17 @@ export const FormMatriculaModificar =()=>{
             <br />
             <br />
 
-            <div style={{display: 'flex',flexWrap: 'nowrap',justifyContent: 'center', alignItems: 'flex-end'}}>
+            <div style={{display: 'flex', flexWrap: 'nowrap', justifyContent: 'center', alignItems: 'flex-end'}}>
                 <Stack direction="row" spacing={6}>
-                <Button variant="contained" type="summit">
-                Guardar
-                </Button>
-                <Button variant="contained" style={{backgroundColor:'gray'}} onClick={() => navigate('/admin/matricula')}>
-                Cancelar
-                </Button>
+                    <Button variant="contained" type="submit">
+                        Guardar
+                    </Button>
+                    <Button variant="contained" style={{backgroundColor:'gray'}} onClick={() => navigate('/admin/matricula')}>
+                        Cancelar
+                    </Button>
                 </Stack>
             </div>
             <br />
-    
         </form>
     )
 

@@ -52,7 +52,7 @@ export const TablaRegistrosMatricula = () => {
     { field: "id_Pac", 
       headerName: "Pac",
        width: 200,
-       renderCell: (params) => getPacNombre(params.row.id_TipoMatricula)
+       renderCell: (params) => getPacNombre(params.row.id_Pac)
     },
     { field: "id_TipoMatricula", 
       headerName: "Tipo Matricula", 
