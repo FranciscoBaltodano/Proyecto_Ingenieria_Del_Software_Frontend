@@ -190,7 +190,7 @@ export default function DataTable({ url, name = 'archivo' }) {
       .then((response) => {
         const columns = Object.keys(response.data[0]).map((key) => ({
           field: key,
-          headerName: key.charAt(0).toUpperCase() + key.slice(1),
+          headerName: key.charAt(0) + key.slice(1),
           width: 150,
         }));
         const rows = response.data.map((item, index) => ({ id: index, ...item }));

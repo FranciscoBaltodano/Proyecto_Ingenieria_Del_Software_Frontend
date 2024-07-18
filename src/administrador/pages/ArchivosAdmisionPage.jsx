@@ -20,7 +20,7 @@ export const ArchivosAdmisionPage = () => {
           Asegúrese de que el archivo Excel o CSV a enviar contenga las siguientes columnas:
         </Typography>
         <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>
-          Nombre, Apellido, Carrera, Correo, Identidad.
+          Id Admision, DNI,Primer Nombre, Segundo Nombre, Primer Apellido, Segundo Apellido, Centro, Codigo, Carrera, Segunda Carrera, Email, Intentos, Nota1, Nota2, AprobacionPAA, Aprobacion PAM PCCNS, Matricula
         </Typography>
         <Typography variant="body1" sx={{ color: 'red', fontWeight: 'bold', mb: 1 }}>
           Advertencia:

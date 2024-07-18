@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, styled, Modal, Grid, Divider, Snackbar, Alert } from '@mui/material';
+import { Box, Button, Typography, styled, Modal, Grid, Snackbar, Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 import SendIcon from '@mui/icons-material/Send';
@@ -9,15 +9,15 @@ const Input = styled('input')({
 });
 
 export const ExcelInput = () => {
-
+  const [fileName, setFileName] = useState('');
   const [cantidadEstudiantes, setCantidadEstudiantes] = useState(0);
   const [dataJson, setDataJson] = useState([]);
-
-  const [fileName, setFileName] = useState('');
+  const [filasNoAptas, setFilasNoAptas] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [showErrors, setShowErrors] = useState(false);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -39,7 +39,10 @@ export const ExcelInput = () => {
       const workbook = XLSX.read(data, { type: 'binary' });
       const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
       setDataJson(jsonData);
+      console.log('Esta es la data', jsonData);
+
       setCantidadEstudiantes(jsonData.length);
     };
     reader.readAsBinaryString(file);
@@ -55,24 +58,25 @@ export const ExcelInput = () => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    axios.post('http://localhost:3000/api/admisiones/usuario', {archivo:fileName});
     sendDataToBackend();
   };
 
-  const handleClose = () => {
-    setOpenModal(false);
-  }; 
-
   const sendDataToBackend = async () => {
     try {
-      // const response = await axios.post('La url que va a llevar el json al backend', dataJson);
-      // setSnackbarMessage('Datos enviados exitosamente: ' + response.data);
-      setSnackbarMessage('Datos enviados exitosamente: ' + fileName);
+      const response = await axios.post('http://localhost:3000/api/admisiones/usuarios/json', { dataJson });
       setSnackbarSeverity('success');
+      setSnackbarMessage('Datos enviados exitosamente.');
+      console.log('Esta es la respuesta del backend', response.data);
+
+      if (response.data.filasNoAptas && response.data.filasNoAptas.length > 0) {
+        setFilasNoAptas(response.data.filasNoAptas);
+        setShowErrors(true);
+      }
+
       setOpenSnackbar(true);
     } catch (error) {
-      setSnackbarMessage('Error al enviar los datos: ' + error.message);
       setSnackbarSeverity('error');
+      setSnackbarMessage('Error al enviar los datos: ' + error.message);
       setOpenSnackbar(true);
     }
   };
@@ -117,6 +121,34 @@ export const ExcelInput = () => {
         )}
       </Box>
 
+      {showErrors && (
+        <Box mt={4}>
+          <Typography variant="h6">Filas No Aptas</Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Fila</TableCell>
+                  <TableCell>Error</TableCell>
+                  {/* <TableCell>Datos</TableCell> */}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filasNoAptas.map((fila, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{fila.fila-1}</TableCell>
+                    <TableCell>{fila.error}</TableCell>
+                    {/* <TableCell>
+                      <pre>{JSON.stringify(fila.data, null, 2)}</pre>
+                    </TableCell> */}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
+
       <Modal 
         open={openModal} 
         onClose={handleCloseModal}
@@ -132,7 +164,7 @@ export const ExcelInput = () => {
             ¿Está seguro de registrar {cantidadEstudiantes} estudiantes?
           </Typography>
           
-          <Button onClick={handleClose} variant="contained" color="inherit" sx={{ mt: 2 }}>
+          <Button onClick={handleCloseModal} variant="contained" color="inherit" sx={{ mt: 2 }}>
             No
           </Button>
           

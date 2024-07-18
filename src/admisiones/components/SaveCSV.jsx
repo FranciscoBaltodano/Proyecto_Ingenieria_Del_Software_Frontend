@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, CircularProgress } from '@mui/material';
+import DataTable from '../../components/DataTable';
 
 const CSVDownloader = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,14 +37,18 @@ const CSVDownloader = () => {
   };
 
   return (
+    <>
     <Button 
       variant="contained" 
       color="primary" 
       onClick={handleDownload}
       disabled={isLoading}
-    >
+      >
       {isLoading ? <CircularProgress size={24} /> : 'Descargar CSV'}
     </Button>
+    
+    <DataTable url="http://localhost:3000/api/admisiones/json" name="Admisiones" />
+    </>
   );
 };
 
