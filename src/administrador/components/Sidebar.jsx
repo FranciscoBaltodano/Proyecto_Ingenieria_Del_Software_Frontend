@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import { Description as NewspaperIcon, Menu as MenuIcon, Home as HomeIcon, Person as PersonIcon, Schedule as ScheduleIcon, Assignment as AssignmentIcon, Group as GroupIcon, EventNote as EventNoteIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
+import { Description as NewspaperIcon, Menu as MenuIcon, Home as HomeIcon, Person as PersonIcon, Assignment as AssignmentIcon, Group as GroupIcon, EventNote as EventNoteIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
@@ -10,7 +10,6 @@ const menuItems = [
   { text: 'Inicio', icon: <HomeIcon />, to: '/admin' },
   { text: 'Noticias', icon: <NewspaperIcon />, to: '/admin/noticias' },
   { text: 'Docentes', icon: <PersonIcon />, to: '/admin/docentes' },
-  { text: 'Planificación', icon: <ScheduleIcon />, to: '/admin/planificacion' },
   { text: 'Cancelaciones', icon: <AssignmentIcon />, to: '/admin/cancelaciones' },
   { text: 'Admisiones', icon: <EventNoteIcon />, to: '/admin/admisiones' },
   { text: 'Matrícula', icon: <GroupIcon />, to: '/admin/matricula' },

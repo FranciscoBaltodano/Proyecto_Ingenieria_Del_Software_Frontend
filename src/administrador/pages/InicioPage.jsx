@@ -40,7 +40,6 @@ export const InicioPage = () => {
   const menuItems = [
     { text: 'Noticias', to: '/admin/noticias', description: 'Gestión de noticias', icon: noticiasIcon },
     { text: 'Docentes', to: '/admin/docentes', description: 'Administrar docentes', icon: docentesIcon },
-    { text: 'Planificación', to: '/admin/planificacion', description: 'Planificación académica', icon: planificacionIcon },
     { text: 'Cancelaciones', to: '/admin/cancelaciones', description: 'Manejo de cancelaciones', icon: cancelacionesIcon },
     { text: 'Admisiones', to: '/admin/admisiones', description: 'Administrar admisiones', icon: admisionesIcon },
     { text: 'Matrícula', to: '/admin/matricula', description: 'Gestión de matrículas', icon: gestionIcon },
@@ -53,7 +52,7 @@ export const InicioPage = () => {
       </Typography>
 
       <Divider sx={{ marginBottom: 2 }} />
-      <Grid container spacing={6}>
+      <Grid container justifyContent='center' spacing={6}>
         {menuItems.map((item) => (
           <Grid item xs={12} sm={6} md={4} key={item.text}>
             <NavLink to={item.to} style={{ textDecoration: 'none' }}>
@@ -73,7 +72,7 @@ export const InicioPage = () => {
       <style>{`
         .card {
           width: 100%;
-          height: 220px;
+          height: 280px;
           border-radius: 20px;
           position: relative;
           padding: 1.5rem;
