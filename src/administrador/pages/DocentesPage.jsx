@@ -18,6 +18,8 @@ export const DocentesPage = () => {
   const [departamentos, setDepartamentos] = useState([]);
   const [centros, setCentros] = useState([]);
   const centroSelectRef = useRef(null);
+  const [isCoordinador, setIsCoordinador] = useState(false);
+  const [isJefeDepartamento, setIsJefeDepartamento] = useState(false);
 
   // Estados para el manejo de la carga y visualización de mensajes
   const [loading, setLoading] = useState(false);
@@ -31,22 +33,41 @@ export const DocentesPage = () => {
       console.log("Docente seleccionado:", docenteSeleccionado);
       console.log(departamentos);
       console.log(centros);
+
       setValue("nombre", docenteSeleccionado.Nombre);
       setValue("apellido", docenteSeleccionado.Apellido);
       setValue("identidad", docenteSeleccionado.Identidad);
       setValue("telefono", docenteSeleccionado.Telefono);
       setValue("id_Centros", docenteSeleccionado.CentroId);
       setValue("id_Departamento", docenteSeleccionado.DepartamentoId);
-      setValue("Docente", docenteSeleccionado.roles.includes("Docente"));
-      setValue("Coordinador", docenteSeleccionado.roles.includes("Coordinador"));
-      setValue("JefeDepartamento", docenteSeleccionado.roles.includes("JefeDepartamento"));
+            setValue("Docente", true);
+      setIsCoordinador(docenteSeleccionado.roles.includes("Coordinador"));
+      setIsJefeDepartamento(docenteSeleccionado.roles.includes("JefeDepartamento"));
       setSelectedImage(null);
     } else {
       reset();
       setSelectedImage(null);
     }
   }, [docenteSeleccionado, setValue, reset]);
+  const handleCoordinadorChange = (event) => {
+    const { checked } = event.target;
+    setIsCoordinador(checked);
+    if (checked) {
+      setIsJefeDepartamento(false);
+      setValue("JefeDepartamento", false);
+    }
+    setValue("Coordinador", checked);
+  };
 
+  const handleJefeDepartamentoChange = (event) => {
+    const { checked } = event.target;
+    setIsJefeDepartamento(checked);
+    if (checked) {
+      setIsCoordinador(false);
+      setValue("Coordinador", false);
+    }
+    setValue("JefeDepartamento", checked);
+  };
   const columns = [
     { field: 'Departamento', headerName: 'Departamento', width: 150 },
     { field: "numeroEmpleado", headerName: "Numero Empleado", width: 150 },
@@ -229,7 +250,7 @@ export const DocentesPage = () => {
       apellido: formData.apellido,
       identidad: formData.identidad,
       telefono: formData.telefono,
-      correo: formData.correo,
+      // correo: formData.correo,
       roles: JSON.stringify(roles), // Convierte el array de roles a una cadena JSON
       id_Centros: formData.id_Centros,
       id_Departamento: formData.id_Departamento,
@@ -293,12 +314,6 @@ export const DocentesPage = () => {
         throw new Error(`Docente con número ${numeroEmpleado} no encontrado`);
       }
 
-      // // Validar que todos los datos necesarios están definidos
-      // const updatedDocente = {
-      //   estado: nuevoEstado,
-      //   nombre: docente.Nombre,
-      // };
-
       const updatedDocente = {
         estado: nuevoEstado,
         nombre: docente.Nombre,
@@ -357,7 +372,9 @@ export const DocentesPage = () => {
   const handleLimpiar = () => {
     reset({
       id_Centros: "",
-      id_Departamento: ""
+      id_Departamento: "",
+      Coordinador: false,
+      JefeDepartamento: false
     });
     setSelectedImage(null);
     setDocenteSeleccionado(null);
@@ -369,7 +386,11 @@ export const DocentesPage = () => {
     if (centroSelectRef.current) {
       centroSelectRef.current.value = "";
     }
+
+    setIsCoordinador(false);
+    setIsJefeDepartamento(false);
   };
+
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -408,21 +429,33 @@ export const DocentesPage = () => {
             {docenteSeleccionado ? "Actualizar Docente" : "Agregar Docente"}
           </Typography>
           <div>
-            <FormControlLabel
-              control={<Checkbox {...register("Docente")} defaultChecked />}
-              label="Docente"
-              sx={{ pointerEvents: "none", opacity: 0.5 }}
-            />
-            <FormControlLabel
-              control={<Checkbox {...register("Coordinador")} />}
-              label="Coordinador"
-              disabled={watch("JefeDepartamento")}
-            />
-            <FormControlLabel
-              control={<Checkbox {...register("JefeDepartamento")} />}
-              label="Jefe de Departamento"
-              disabled={watch("Coordinador")}
-            />
+          <FormControlLabel
+            control={<Checkbox {...register("Docente")} defaultChecked />}
+            label="Docente"
+            sx={{ pointerEvents: "none", opacity: 0.5 }}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...register("Coordinador")}
+                checked={isCoordinador}
+                onChange={handleCoordinadorChange}
+              />
+            }
+            label="Coordinador"
+            disabled={isJefeDepartamento}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...register("JefeDepartamento")}
+                checked={isJefeDepartamento}
+                onChange={handleJefeDepartamentoChange}
+              />
+            }
+            label="Jefe de Departamento"
+            disabled={isCoordinador}
+          />
           </div>
 
           <Divider sx={{ margin: "15px 30px 30px" }} />
