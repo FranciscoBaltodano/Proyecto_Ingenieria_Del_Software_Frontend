@@ -12,5 +12,10 @@ export default defineConfig({
         secure: false,
       }
     }
-  }
+  },
+  resolve: {
+    alias: {
+      'date-fns': 'date-fns/esm',
+    },
+  },
 })
