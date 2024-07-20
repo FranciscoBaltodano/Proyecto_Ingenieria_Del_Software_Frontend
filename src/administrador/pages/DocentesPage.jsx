@@ -117,6 +117,7 @@ export const DocentesPage = () => {
               setShowForm(true);
             }}
             disabled={
+              params.row.roles.includes("Administrador") ||
               docenteSeleccionado &&
               docenteSeleccionado.numeroEmpleado === params.row.numeroEmpleado
             }
