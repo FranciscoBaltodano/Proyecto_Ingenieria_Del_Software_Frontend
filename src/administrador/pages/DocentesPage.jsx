@@ -9,21 +9,26 @@ import { esESLocaleText } from "../../components/esESLocaleText";
 
 export const DocentesPage = () => {
   const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
+  
+  // Estados para el manejo de los datos de la página
+  const [docentes, setDocentes] = useState([]);
+  const [docenteSeleccionado, setDocenteSeleccionado] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const imageInputRef = useRef(null);
+  const [departamentos, setDepartamentos] = useState([]);
+  const [centros, setCentros] = useState([]);
+  const centroSelectRef = useRef(null);
+
+  // Estados para el manejo de la carga y visualización de mensajes
   const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [docentes, setDocentes] = useState([]);
-  const [docenteSeleccionado, setDocenteSeleccionado] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [centros, setCentros] = useState([]);
   const [showForm, setShowForm] = useState(false);
 
-  const imageInputRef = useRef(null);
-  const centroSelectRef = useRef(null);
-
-
+  // Columnas de la tabla de docentes 
   const columns = [
+    { field: 'Departamento', headerName: 'Departamento', width: 150 },
     { field: "numeroEmpleado", headerName: "Numero Empleado", width: 150 },
     { field: "Nombre", headerName: "Nombre", width: 150 },
     { field: "Apellido", headerName: "Apellido", width: 150 },
@@ -82,10 +87,12 @@ export const DocentesPage = () => {
     },
   ];
 
+  // Función para mostrar u ocultar el formulario
   const handleToggleForm = () => {
     setShowForm((prevShowForm) => !prevShowForm);
   };
 
+  // Función para obtener los datos de los docentes, centros y departamentos
   useEffect(() => {
     const fetchCentros = async () => {
       try {
@@ -107,10 +114,20 @@ export const DocentesPage = () => {
         setLoading(false);
       }
     };
+    const fetchDepartamentos = async () => {
+      try {
+        const response = await axios.get("/api/admin/departamentos");
+        setDepartamentos(response.data);
+      } catch (error) {
+        console.error("Error al obtener los departamentos:", error);
+      }
+    };
     fetchDocentes();
     fetchCentros();
+    fetchDepartamentos();
   }, []);
 
+  
   const onPostSubmit = async (formData) => {
     setLoading(true);
 
@@ -130,7 +147,10 @@ export const DocentesPage = () => {
       contrasena: formData.contrasena,
       roles: JSON.stringify(roles), // Convierte el array de roles a una cadena JSON
       id_Centros: formData.id_Centros,
+      id_Departamento: formData.id_Departamento,
     };
+
+    console.log("Datos a enviar:", dataToSend);
 
     // Crea un FormData
     const formDataToSend = new FormData();
@@ -192,10 +212,13 @@ export const DocentesPage = () => {
       apellido: formData.apellido,
       identidad: formData.identidad,
       telefono: formData.telefono,
-      correo: formData.correo,
+      // correo: formData.correo,
       roles: JSON.stringify(roles), // Convierte el array de roles a una cadena JSON
       id_Centros: formData.id_Centros,
+      id_Departamento: formData.id_Departamento,
     };
+
+    console.log("Datos a enviar:", dataToSend);
 
     // Crea un FormData
     const formDataToSend = new FormData();
@@ -434,23 +457,24 @@ export const DocentesPage = () => {
                 helperText={errors.telefono?.message}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Correo"
-                {...register("correo", {
-                  required: "El correo es obligatorio",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "El correo no es válido",
-                  },
-                })}
-                error={!!errors.correo}
-                helperText={errors.correo?.message}
-              />
-            </Grid>
             {!docenteSeleccionado && (
               <>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Correo"
+                    {...register("correo", {
+                      required: "El correo es obligatorio",
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "El correo no es válido",
+                      },
+                    })}
+                    error={!!errors.correo}
+                    helperText={errors.correo?.message}
+                  />
+                </Grid>
+
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
@@ -493,6 +517,7 @@ export const DocentesPage = () => {
                 </Grid>
               </>
             )}
+
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth error={!!errors.id_Centros}>
                 <InputLabel id="id_Centro-label">Elige el centro</InputLabel>
@@ -518,8 +543,32 @@ export const DocentesPage = () => {
                 )}
               </FormControl>
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth error={!!errors.id_Departamento}>
+                <InputLabel id="id_Departamento-label">Elige el Departamento</InputLabel>
+                <Select
+                  id="id_Departamento"
+                  labelId="id_Departamento-label"
+                  {...register("id_Departamento", {
+                    required: "El Departamento es obligatorio",
+                  })}
+                  defaultValue=""
+                  label="Elige el Departamento"
+                >
+                  <MenuItem value="">Elige el Departamento</MenuItem>
+                  {departamentos.map((departamento) => (
+                    <MenuItem key={departamento.id_Departamento} value={departamento.id_Departamento}>
+                      {departamento.Nombre}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.id_Departamento && (
+                  <FormHelperText>{errors.id_Departamento.message}</FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <input
                 type="file"
                 ref={imageInputRef}
