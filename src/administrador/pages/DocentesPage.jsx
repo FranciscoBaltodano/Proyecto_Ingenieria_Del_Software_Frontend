@@ -293,10 +293,22 @@ export const DocentesPage = () => {
         throw new Error(`Docente con número ${numeroEmpleado} no encontrado`);
       }
 
-      // Validar que todos los datos necesarios están definidos
+      // // Validar que todos los datos necesarios están definidos
+      // const updatedDocente = {
+      //   estado: nuevoEstado,
+      //   nombre: docente.Nombre,
+      // };
+
       const updatedDocente = {
         estado: nuevoEstado,
         nombre: docente.Nombre,
+        // nu: docente.NumeroEmpleado,
+        correo: docente.Correo,
+        roles: docente.Roles,
+        id_Centros: docente.CentroId,
+        id_Departamento: docente.DepartamentoId,
+        identidad: docente.Identidad,
+        telefono: docente.Telefono,
       };
 
       console.log("Datos enviados:", updatedDocente);
@@ -1052,7 +1064,25 @@ useEffect(() => {
       const updatedDocente = {
         estado: nuevoEstado,
         nombre: docente.Nombre,
+        // nu: docente.NumeroEmpleado,
+        correo: docente.Correo,
+        roles: docente.Roles,
+        id_Centros: docente.Centro,
+        id_Departamento: docente.Departamento,
+        identidad: docente.Identidad,
+        telefono: docente.Telefono,
       };
+
+      // const dataToSend = {
+      //   nombre: formData.nombre,
+      //   apellido: formData.apellido,
+      //   identidad: formData.identidad,
+      //   telefono: formData.telefono,
+      //   // correo: formData.correo,
+      //   roles: JSON.stringify(roles), // Convierte el array de roles a una cadena JSON
+      //   id_Centros: formData.id_Centros,
+      //   id_Departamento: formData.id_Departamento,
+      // };
 
       console.log("Datos enviados:", updatedDocente);
       const response = await axios.put(
