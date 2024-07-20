@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useCallback,useMemo} from "react";
 import {Box,Snackbar,Alert} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
@@ -12,8 +12,6 @@ import { Link } from 'react-router-dom';
 export const TablaRegistrosCancelaciones = () => {
 
   const [matricula, setMatricula] = useState([]);
-  const [tipoMatricula, setTipoMatricula] = useState([]);
-  const [pac, setPac] = useState([]);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -22,14 +20,9 @@ export const TablaRegistrosCancelaciones = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [cancelacionesRes,pacRes,tipoMatriculaRes] = await Promise.all([
-          axios.get('http://localhost:3000/api/admin/cancelaciones'),
-          axios.get('http://localhost:3000/api/admin/pac'),
-          axios.get('http://localhost:3000/api/admin/tipo_matricula')
-        ]);
+        const cancelacionesRes = await axios.get('http://localhost:3000/api/admin/cancelaciones')
         setMatricula(cancelacionesRes.data);
-        setPac(pacRes.data);
-        setTipoMatricula(tipoMatriculaRes.data);
+        console.log('Data set in state:', cancelacionesRes.data); // Imprime los datos establecidos en el estado
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -37,32 +30,23 @@ export const TablaRegistrosCancelaciones = () => {
     fetchData();
   }, []);
 
-  const getTipoMatriculaNombre = (id_TipoMatricula) => {
-    const tipo = tipoMatricula.find(t => t.id_TipoMatricula === id_TipoMatricula);
-    return tipo ? tipo.tipoMatricula : "Desconocido";
-  };
 
-  const getPacNombre = (id_Pac) => {
-    const tipo = pac.find(p => p.id_Pac === id_Pac);
-    return tipo ? tipo.pac : "Desconocido";
-  };
-  
+
   const columns = [
-    { field: "id_Pac", 
+    { field: "pac", 
       headerName: "Pac",
        width: 200,
-       renderCell: (params) => getPacNombre(params.row.id_TipoMatricula)
+      renderCell: (params) => (params.value)
     },
-    { field: "id_TipoMatricula", 
+    { field: "tipoMatricula", 
       headerName: "Tipo Matricula", 
       width: 200,
-      renderCell: (params) => getTipoMatriculaNombre(params.row.id_TipoMatricula)
+      renderCell: (params) => (params.value)
      },
     { field: "created_at", 
       headerName: "Fecha", 
       width: 200,
       renderCell: (params) => new Date(params.value).toLocaleDateString()
-
      },
     
     {
@@ -95,7 +79,7 @@ export const TablaRegistrosCancelaciones = () => {
   const handleDelete = async (id_canExcep) => {
     try {
       await axios.delete(
-        `http://localhost:3000/api/admin//cancelaciones/${id_canExcep}`
+        `http://localhost:3000/api/admin/cancelaciones/${id_canExcep}`
       );
       const matriculaRes = await axios.get('http://localhost:3000/api/admin/cancelaciones');
       setMatricula(matriculaRes.data);
@@ -124,7 +108,9 @@ export const TablaRegistrosCancelaciones = () => {
 
 
   return (
+    
     <div>
+      
       <Box>
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
@@ -134,6 +120,7 @@ export const TablaRegistrosCancelaciones = () => {
           pageSize={5}
           rowsPerPageOptions={[10]}
           checkboxSelection={false}
+        
         />
         <Snackbar 
                 open={openSnackbar} 

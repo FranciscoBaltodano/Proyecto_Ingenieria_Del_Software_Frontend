@@ -64,47 +64,17 @@ export const FormMatriculaModificar =()=>{
     
       const onSubmit = async (data) => {
         console.log('Datos enviados:', data);
-        const dataToSend = {
-          id_TipoMatricula: data.id_TipoMatricula,
-          fecha_inicioPAC: data.fecha_inicioPAC,
-          fecha_finPAC: data.fecha_finPAC,
-          fecha_inicioMatri: data.fecha_inicioMatri,
-          fecha_finMatri: data.fecha_finMatri,
-          hora_inicioMatri: data.hora_inicioMatri,
-          hora_finMatri: data.hora_finMatri,
-          fecha_matri1: data.fecha_matri1,
-          indice_desdeMatri1: data.indice_desdeMatri1,
-          indice_hastaMatri1: data.indice_hastaMatri1,
-          pIngreso_desdeMatri1: data.pIngreso_desdeMatri1,
-          pIngreso_hastaMatri1: data.pIngreso_hastaMatri1,
-          fecha_matri2: data.fecha_matri2,
-          indice_desdeMatri2: data.indice_desdeMatri2,
-          indice_hastaMatri2: data.indice_hastaMatri2,
-          pIngreso_desdeMatri2: data.pIngreso_desdeMatri2,
-          pIngreso_hastaMatri2: data.pIngreso_hastaMatri2,
-          fecha_matri3: data.fecha_matri3,
-          indice_desdeMatri3: data.indice_desdeMatri3,
-          indice_hastaMatri3: data.indice_hastaMatri3,
-          fecha_matri4: data.fecha_matri4,
-          indice_desdeMatri4: data.indice_desdeMatri4,
-          indice_hastaMatri4: data.indice_hastaMatri4,
-          fecha_matri5: data.fecha_matri5,
-          indice_desdeMatri5: data.indice_desdeMatri5,
-          indice_hastaMatri5: data.indice_hastaMatri5,
-          id_Pac: data.id_Pac
-        };
-    
         try {
-            const response = await axios.put(`http://localhost:3000/api/admin/configuraciones/${id}`, dataToSend);
-            if (response.status === 200) {
-                console.log('Configuración actualizada exitosamente');
-                navigate('/admin/matricula');
-            }
+          const response = await axios.put(`http://localhost:3000/api/admin/configuraciones/${id}`, data);
+          if (response.status === 200) {
+            console.log('Configuración actualizada exitosamente');
+            navigate('/admin/matricula');
+          }
         } catch (error) {
-            console.error('Error updating configuration:', error.response?.data || error);
+          console.error('Error updating configuration:', error.response?.data || error);
         }
       };
-    
+
       if (!matriculaSeleccionada) {
         return <div>Cargando...</div>;
       }
@@ -112,45 +82,43 @@ export const FormMatriculaModificar =()=>{
     return (
         
         <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3 mt-3 " style={{ justifyContent: 'center'}}>
+           <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3 mt-3" style={{ justifyContent: 'center' }}>
+        <div className="xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
+          <Typography variant="h7" component="h1" gutterBottom>
+            Selecciona el tipo de matricula
+          </Typography>
+          <select
+            id="id_TipoMatricula"
+            className="w-full p-2 border border-black rounded"
+            {...register("id_TipoMatricula", { required: "Necesita seleccionar el tipo de matricula" })}
+          >
+            {matricula.map(matri => (
+              <option key={matri.id_TipoMatricula} value={matri.id_TipoMatricula}>{matri.tipoMatricula}</option>
+            ))}
+          </select>
+          {errors.id_TipoMatricula && <span className="text-red-500">{errors.id_TipoMatricula.message}</span>}
+        </div>
+      </div>
+      <br />
+      <Divider sx={{ marginBottom: 2 }} />
+      <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-3 mt-3" style={{ justifyContent: 'space-evenly' }}>
+        <div className="xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
+          <Typography variant="h7" component="h1" gutterBottom>
+            Seleccione el PAC
+          </Typography>
+          <select
+            id="id_Pac"
+            className="w-full p-2 border border-black rounded"
+            {...register("id_Pac", { required: "Necesita seleccionar un PAC" })}
+          >
+            {pac.map(pacAno => (
+              <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
+            ))}
+          </select>
+          {errors.id_Pac && <span className="text-red-500">{errors.id_Pac.message}</span>}
+        </div>
+
                 
-                <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12" > 
-                    <Typography variant="h7" component="h1" gutterBottom>
-                    Selecciona el tipo de matricula
-                    </Typography>
-                    <select id="id_ConfMatri" defaultValue={matriculaSeleccionada.id_ConfMatri} className="w-full p-2 border border-black rounded"
-                        {...register("selectMatri", {required:"Necesita seleccionar el tipo de matricula"})} 
-                        
-                    >
-                    <option  disabled>Elegir</option>
-                            {matricula.map(matri => (
-                        <option key={matri.selectMatri} value={matri.selectMatri}>{matri.tipoMatricula}</option>
-                    ))}
-                    </select>
-                    {errors.selectMatri && <span className="text-red-500">{errors.selectMatri.message}</span>}
-
-                    </div>
-                </div>    
-                <br />
-                <Divider sx={{ marginBottom: 2 }} />
-                <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-3 mt-3 " style={{ justifyContent: 'space-evenly'  }}>
-                
-                <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12" > 
-                <Typography variant="h7" component="h1" gutterBottom>
-                Seleccione  el PAC
-                </Typography>
-                <select id="id_Pac" defaultValue={matriculaSeleccionada.id_Pac}  className="w-full p-2 border border-black rounded"
-                    {...register("selectPAC", {required:"Necesita seleccionar un PAC" })}
-
-                >
-                <option   disabled>Elegir</option>
-                {pac.map(pacAno => (
-                        <option key={pacAno.selectPAC} value={pacAno.selectPAC}>{pacAno.pac}</option>
-                    ))}
-                </select>
-                {errors.selectPAC && <span className="text-red-500">{errors.selectPAC.message}</span>}
-
-                </div>
                 <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha de inicio PAC 
@@ -662,3 +630,4 @@ export const FormMatriculaModificar =()=>{
     )
 
 }
+export default FormMatriculaModificar;
