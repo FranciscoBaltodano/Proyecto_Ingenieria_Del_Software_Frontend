@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Avatar,
   Box,
   Drawer,
   IconButton,
@@ -24,6 +25,7 @@ import {
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import logoUNAHconLetras from '../../../public/assets/admisiones/logoUNAHconLetras.webp';
+import { deepOrange } from '@mui/material/colors';
 
 // Define menu items with roles that are needed for visibility control
 const menuItems = [
@@ -128,9 +130,12 @@ export const Sidebar = () => {
         >
           <MenuIcon />
         </IconButton>
-
-        <NavLink to='/admin' style={{ textDecoration: 'none' }}>
-          <Typography color='primary' variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr: open ? '50px':'31px' }}>Administrador</Typography>
+        
+        <NavLink to='/docentes/perfil' style={{ textDecoration: 'none' }}>
+          <Box display='flex' alignItems='center' justifyContent='center' sx={{ display: { xs: 'none', sm: 'flex' }, mr: open ? '50px':'31px' }}>
+          <Typography color='primary' variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr: open ? '50px':'31px' }}>Docente</Typography>
+          <Avatar src="/broken-image.jpg" />
+          </Box>
         </NavLink>
       </Box>
 
