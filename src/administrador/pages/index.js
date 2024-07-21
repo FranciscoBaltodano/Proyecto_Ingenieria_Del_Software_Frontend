@@ -5,6 +5,8 @@ export * from './NoticiasPage';
 export * from './MatriculaPage';
 export * from './InicioPage';
 
-export * from './GenerarCalendarioPage';
+
 export * from './ConfiguracionMatriculaPage';
-export * from './ConfiguracionCancelacionPage';
+export * from './ConfiguracionMatriculaModificarPage';
+export * from './ConfiguracionCancelacionesPage';
+export * from './ConfiguracionCancelacionModificarPage';

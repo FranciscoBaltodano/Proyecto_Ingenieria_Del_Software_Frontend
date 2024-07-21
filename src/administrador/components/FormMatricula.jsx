@@ -1,18 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import { Divider, Typography } from '@mui/material'
-import { Button } from '@mui/material'
+import { Button ,Snackbar,Alert} from '@mui/material'
 import Stack from '@mui/material/Stack';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 export const FormMatricula =()=>{
 
-    const { register, handleSubmit, watch, setValue,formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, setValue,formState: { errors } ,reset} = useForm();
     const [minDate,setMinDate]=useState('');
     const [matricula, setMatricula] = useState([]);
     const [pac, setPac] = useState([]);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [redirectToHome, setRedirectToHome] = useState(false); // Estado para redirección
+
     
 
     useEffect(() => {
@@ -20,9 +27,8 @@ export const FormMatricula =()=>{
           try {
             const [pacRes, matriculaRes] = await Promise.all([
               axios.get('http://localhost:3000/api/admin/pac'),
-              axios.get('http://localhost:3000/api/admin/matricula')
+              axios.get('http://localhost:3000/api/admin/tipo_matricula')
             ]);
-            
             setMatricula(matriculaRes.data);
             setPac(pacRes.data);
           } catch (error) {
@@ -52,28 +58,89 @@ export const FormMatricula =()=>{
     
     
     
+    const onSubmit = async (formData) => {
+        setLoading(true);
 
+        const dataToSend = {
+            id_TipoMatricula: formData.id_TipoMatricula,
+            fecha_inicioPAC: formData.fecha_inicioPAC,
+            fecha_finPAC: formData.fecha_finPAC,
+            fecha_inicioMatri: formData.fecha_inicioMatri,
+            fecha_finMatri: formData.fecha_finMatri,
+            hora_inicioMatri: formData.hora_inicioMatri,
+            hora_finMatri: formData.hora_finMatri,
+            fecha_matri1: formData.fecha_matri1,
+            indice_desdeMatri1: formData.indice_desdeMatri1,
+            indice_hastaMatri1: formData.indice_hastaMatri1,
+            pIngreso_desdeMatri1: formData.pIngreso_desdeMatri1,
+            pIngreso_hastaMatri1: formData.pIngreso_hastaMatri1,
+            fecha_matri2: formData.fecha_matri2,
+            indice_desdeMatri2: formData.indice_desdeMatri2,
+            indice_hastaMatri2: formData.indice_hastaMatri2,
+            pIngreso_desdeMatri2: formData.pIngreso_desdeMatri2,
+            pIngreso_hastaMatri2: formData.pIngreso_hastaMatri2,
+            fecha_matri3: formData.fecha_matri3,
+            indice_desdeMatri3: formData.indice_desdeMatri3,
+            indice_hastaMatri3: formData.indice_hastaMatri3,
+            fecha_matri4: formData.fecha_matri4,
+            indice_desdeMatri4: formData.indice_desdeMatri4,
+            indice_hastaMatri4: formData.indice_hastaMatri4,
+            fecha_matri5: formData.fecha_matri5,
+            indice_desdeMatri5: formData.indice_desdeMatri5,
+            indice_hastaMatri5: formData.indice_hastaMatri5,
+            id_Pac: formData.id_Pac
+          };
+
+        try {
+          const response = await axios.post('http://localhost:3000/api/admin/configuraciones',dataToSend);
+          console.log('Respuesta del servidor:', response.data);
     
+          if (response.status === 201) {
+            setSnackbarMessage('Matricula creado exitosamente');
+            setSnackbarSeverity('success');
+            setOpenSnackbar(true);
+            reset(); 
+            setRedirectToHome(true);
+          } 
+        } catch (error) {
+          console.error('Error al enviar el formulario:', error);
+          setSnackbarMessage('Error al crear el matricula');
+          setSnackbarSeverity('error');
+          setOpenSnackbar(true);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpenSnackbar(false);
+      };
+      if (redirectToHome) {
+        return navigate('/admin/matricula') ; // Ajusta esta ruta según la URL de tu página de inicio
+      }
 
     return (
         
-        <form onSubmit={handleSubmit()}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-3 mt-3 " style={{ justifyContent: 'center',   }}>
 
                 <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12" > 
                     <Typography variant="h7" component="h1" gutterBottom>
                     Selecciona el tipo de matricula
                     </Typography>
-                    <select id="selectMatri" className="w-full p-2 border border-black rounded"
-                        {...register("selectMatri", {required:"Necesita seleccionar el tipo de matricula" })}
+                    <select id="id_TipoMatricula" className="w-full p-2 border border-black rounded" defaultValue={""}
+                        {...register("id_TipoMatricula", {required:"Necesita seleccionar el tipo de matricula" })}
                         
                     >
-                    <option value=""  disabled selected>Elegir</option>
+                    <option  value=""  disabled>Elegir</option>
                             {matricula.map(matri => (
-                        <option key={matri.selectMatri} value={matri.selectMatri}>{matri.tipoMatricula}</option>
+                        <option key={matri.id_TipoMatricula} value={matri.id_TipoMatricula}>{matri.tipoMatricula}</option>
                     ))}
                     </select>
-                    {errors.selectMatri && <span className="text-red-500">{errors.selectMatri.message}</span>}
+                    {errors.id_TipoMatricula && <span className="text-red-500">{errors.id_TipoMatricula.message}</span>}
 
                     </div>
                 </div>    
@@ -85,16 +152,16 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Seleccione  el PAC
                 </Typography>
-                <select id="selectPAC" className="w-full p-2 border border-black rounded"
-                    {...register("selectPAC", {required:"Necesita seleccionar un PAC" })}
+                <select id="id_Pac" className="w-full p-2 border border-black rounded" defaultValue={""}
+                    {...register("id_Pac", {required:"Necesita seleccionar un PAC" })}
 
                 >
                 <option  value="" disabled selected>Elegir</option>
                 {pac.map(pacAno => (
-                        <option key={pacAno.selectPAC} value={pacAno.selectPAC}>{pacAno.pac}</option>
+                        <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
                     ))}
                 </select>
-                {errors.selectPAC && <span className="text-red-500">{errors.selectPAC.message}</span>}
+                {errors.id_Pac && <span className="text-red-500">{errors.id_Pac.message}</span>}
 
                 </div>
                 <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
@@ -270,9 +337,9 @@ export const FormMatricula =()=>{
                             value:/^[0-9]*$/, message: "Solo se permiten numeros"
                         } ,
                         maxLength:{
-                            value:3, message:"El numero no puede tener mas de 3 digitos"
+                            value:4, message:"El numero no puede tener mas de 4 digitos"
                         } })}
-                        maxLength="3"
+                        maxLength="4"
 
                         className="w-full xl:w-8/12 lg:w-8/12 md:w-8/12 p-2 border border-black rounded"/>
                         <br />
@@ -414,7 +481,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha matricula 
                 </Typography>
-                <input id="fecha_matri3" type="date" placeholder="Ingrese su numero de identidad"
+                <input id="fecha_matri3" type="date" 
                     {...register("fecha_matri3", {required:"Fecha de matricula requerida", 
                         validate: value=>{
                             if (value==fechaMatri1 || value==fechaMatri2 || value==fechaMatri4 || value==fechaMatri5){
@@ -474,7 +541,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha matricula 
                 </Typography>
-                <input  id="fecha_matri4" type="date" placeholder="Ingrese su numero de identidad"
+                <input  id="fecha_matri4" type="date" 
                     {...register("fecha_matri4", {required:"Fecha de matricula requerida" ,
                         validate: value=>{
                             if (value==fechaMatri2 || value==fechaMatri3 || value==fechaMatri1 || value==fechaMatri5){
@@ -534,7 +601,7 @@ export const FormMatricula =()=>{
                 <Typography variant="h7" component="h1" gutterBottom>
                 Fecha matricula 
                 </Typography>
-                <input id="fecha_matri5" type="date" placeholder="Ingrese su numero de identidad"
+                <input id="fecha_matri5" type="date" 
                     {...register("fecha_matri5", {required:"Fecha de matricula requerida" ,
                         validate: value=>{
                             if (value==fechaMatri2 || value==fechaMatri3 || value==fechaMatri4 || value==fechaMatri1){
@@ -595,7 +662,7 @@ export const FormMatricula =()=>{
 
             <div style={{display: 'flex',flexWrap: 'nowrap',justifyContent: 'center', alignItems: 'flex-end'}}>
                 <Stack direction="row" spacing={6}>
-                <Button variant="contained" type="summit">
+                <Button variant="contained" type="summit" >
                 Activar
                 </Button>
                 <Button variant="contained" style={{backgroundColor:'gray'}} onClick={() => navigate('/admin/matricula')}>
@@ -604,7 +671,19 @@ export const FormMatricula =()=>{
                 </Stack>
             </div>
             <br />
-    
+            <Snackbar 
+                open={openSnackbar} 
+                autoHideDuration={6000} 
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                <Alert onClose={handleCloseSnackbar} variant='filled' severity={snackbarSeverity} sx={{ width: '100%' }}>
+                {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </form>
+
+
+
     )
 }

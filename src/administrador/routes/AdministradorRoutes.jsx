@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { ArchivosAdmisionPage, InicioPage, CancelacionesPage, DocentesPage, MatriculaPage, NoticiasPage, ConfiguracionMatriculaPage,GenerarCalendarioPage,ConfiguracionCancelacionPage } from '../pages'
+import { ArchivosAdmisionPage, InicioPage, CancelacionesPage, DocentesPage, MatriculaPage, NoticiasPage, PlanificacionAcademicaPage,ConfiguracionMatriculaPage,ConfiguracionCancelacionesPage ,ConfiguracionMatriculaModificarPage,ConfiguracionCancelacionModificarPage} from '../pages'
 
 export const AdministradorRoutes = () => {
   return (
@@ -10,10 +10,12 @@ export const AdministradorRoutes = () => {
       <Route path="cancelaciones"  element={ <CancelacionesPage/> }/>
       <Route path="admisiones"     element={ <ArchivosAdmisionPage/> }/>
       <Route path="matricula"      element={ <MatriculaPage/> }/>
-      <Route path="configuracion_cancelacion" element={<ConfiguracionCancelacionPage/>}/>
+      <Route path="configuracion_cancelacion" element={<ConfiguracionCancelacionesPage/>}/>
       <Route path="configuracion_matricula" element={<ConfiguracionMatriculaPage/>}/>
+      <Route path="configuracion_matricula_modificar/:id" element={<ConfiguracionMatriculaModificarPage/>}/>
+      <Route path="configuracion_cancelacion_modificar/:id" element={<ConfiguracionCancelacionModificarPage/>}/>
 
-      <Route path="generar_calendario" element={<GenerarCalendarioPage/>}/>
+
 
       <Route path="/*" element={ <Navigate to='/admisiones/' /> }/>
     </Routes>
