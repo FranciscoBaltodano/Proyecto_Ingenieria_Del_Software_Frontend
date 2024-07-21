@@ -8,7 +8,7 @@ export const LoginForm = () => {
   const { control, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
       identifier: '',
-      contrasena: ''
+      Contrasena: ''
     }
   });
   const [userType, setUserType] = useState('estudiante');
@@ -46,13 +46,18 @@ export const LoginForm = () => {
         },
         body: JSON.stringify({
           [userType === 'empleado' ? 'numeroEmpleado' : 'numeroCuenta']: data.identifier,
-          contrasena: data.contrasena
+          Contrasena: data.Contrasena
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Error en la autenticación');
+        if (response.status === 403 && errorData.message === 'Su número de empleado está desactivado') {
+          setLoginError('Su número de empleado está desactivado. Por favor, contacte al administrador.');
+        } else {
+          throw new Error(errorData.message || 'Error en la autenticación');
+        }
+        return;  // Salir de la función si hay un error
       }
 
       const result = await response.json();
@@ -71,7 +76,7 @@ export const LoginForm = () => {
 
   const handleUserTypeChange = (newValue) => {
     setUserType(newValue);
-    reset({ identifier: '', contrasena: '' });  // Limpiar los valores de identifier y contrasena
+    reset({ identifier: '', Contrasena: '' });  // Limpiar los valores de identifier y Contrasena
     setLoginError('');  // Limpiar también el mensaje de error
   };
 
@@ -111,7 +116,7 @@ export const LoginForm = () => {
           </Grid>
           <Grid item xs={12}>
             <Controller
-              name="contrasena"
+              name="Contrasena"
               control={control}
               rules={{
                 required: 'La contraseña es requerida',
@@ -123,8 +128,8 @@ export const LoginForm = () => {
                   fullWidth
                   type="password"
                   label="Contraseña"
-                  error={!!errors.contrasena}
-                  helperText={errors.contrasena?.message}
+                  error={!!errors.Contrasena}
+                  helperText={errors.Contrasena?.message}
                 />
               )}
             />

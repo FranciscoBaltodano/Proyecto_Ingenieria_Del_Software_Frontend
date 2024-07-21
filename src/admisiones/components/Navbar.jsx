@@ -10,7 +10,7 @@ import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 const drawerWidth = 240;
 
 const navItems = [
-  { label: 'Inicio', path: '/admisiones/' },
+  { label: 'Inicio', path: '/' },
   { label: 'Oferta', path: '/admisiones/oferta' },
   { label: 'Inscripciones', path: '/admisiones/inscripciones' },
 ];
@@ -22,7 +22,7 @@ export const Navbar = (props) => {
 
   const getValueFromLocation = (pathname) => {
     switch (pathname) {
-      case '/admisiones/':
+      case '/':
         return 0;
       case '/admisiones/oferta':
         return 1;

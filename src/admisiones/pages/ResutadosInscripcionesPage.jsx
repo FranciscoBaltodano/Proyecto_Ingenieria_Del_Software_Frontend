@@ -1,9 +1,26 @@
+import React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
 import { AdmisionesLayout } from '../layout/AdmisionesLayout'
-import { NavLink, useLocation } from 'react-router-dom';
+import { ResultSearch } from '../components/ResultSearch';
 
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '80%',
+  height: '70%',
+  bgcolor: 'background.paper',
+  border: '1px solid #000',
+  borderRadius:'10px'
+};
 export const  ResultadoInscripcionesPage = () => {
-
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
     return (
       <AdmisionesLayout>
         <section className=''>
@@ -34,7 +51,7 @@ export const  ResultadoInscripcionesPage = () => {
             <p>El paso siguiente es realizar el proceso de MATRICULA.
               <br />
               Para conocer los requisitos, fechas y pasos del proceso de matrícula debe estar pendiente de la publicación del calendario
-              en la página web de la Dirección de Ingreso Permanencia y Promoción (DIPP-Registro) <a className='text-blue-700' href="https://registro.unah.edu.hn/pregra_estu_login.aspx">www.registro.unah.edu.hn  </a>        
+              en la página web de la Dirección de Ingreso Permanencia y Promoción (DIPP-Registro)        
               La Matrícula debe realizarse directamente en la página de la Oficina de DIPP-Registro.
             </p>
             <br />
@@ -54,14 +71,28 @@ export const  ResultadoInscripcionesPage = () => {
             
           </div>
   
-  
-  
+          <br />
+          <div>
+              <Button onClick={handleOpen}>Ver Resultados</Button>
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <ResultSearch/>
+                </Box>
+              </Modal>
+            </div>
         </section>
 
-      
+        
         
       </AdmisionesLayout>
       
     );
     
 }
+
+

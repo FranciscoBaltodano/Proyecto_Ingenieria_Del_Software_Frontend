@@ -10,6 +10,7 @@ import { CoordinadoresRoutes } from "../docentes/coordinadores/routes/Coordinado
 import { JefeDepartamentoRoutes} from "../docentes/jefeDepartamento/routes/JefeDepartamentoRoutes";
 import { DocentesRoutes } from "../docentes/routes/DocentesRoutes";
 
+
 export const AppRouter = () => {
   return (
     <Routes>
