@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { ArchivosAdmisionPage, InicioPage, CancelacionesPage, DocentesPage, MatriculaPage, NoticiasPage, PlanificacionAcademicaPage,ConfiguracionMatriculaPage,ConfiguracionCancelacionesPage ,ConfiguracionMatriculaModificarPage,ConfiguracionCancelacionModificarPage} from '../pages'
+import { ArchivosAdmisionPage, InicioPage, CancelacionesPage, DocentesPage, MatriculaPage, NoticiasPage,ConfiguracionMatriculaPage,ConfiguracionCancelacionesPage ,ConfiguracionMatriculaModificarPage,ConfiguracionCancelacionModificarPage} from '../pages'
 
 export const AdministradorRoutes = () => {
   return (
