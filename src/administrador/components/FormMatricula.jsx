@@ -19,6 +19,7 @@ export const FormMatricula =()=>{
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [redirectToHome, setRedirectToHome] = useState(false); // Estado para redirección
+    const [pacFiltrado, setPacFiltrado] = useState([]);
 
     
 
@@ -31,6 +32,7 @@ export const FormMatricula =()=>{
             ]);
             setMatricula(matriculaRes.data);
             setPac(pacRes.data);
+            setPacFiltrado(pacRes.data);
           } catch (error) {
             console.error('Error fetching data:', error);
           }
@@ -43,7 +45,15 @@ export const FormMatricula =()=>{
         setMinDate(fechaActual);
     },[setValue]);
     
-    
+    const handleTipoMatriculaChange = (event) => {
+        const selectedValue = event.target.value;
+        if (selectedValue === "1") { // Asumiendo que 1 es el id para "semestral"
+          const pacSemestral = pac.filter(p => p.pac === "I PAC" || p.pac === "II PAC");
+          setPacFiltrado(pacSemestral);
+        } else {
+          setPacFiltrado(pac);
+        }
+      };
 
     const fechaInicioPAC = watch('fecha_inicioPAC');
     const fechaFincPAC = watch('fecha_finPAC');
@@ -132,7 +142,8 @@ export const FormMatricula =()=>{
                     Selecciona el tipo de matricula
                     </Typography>
                     <select id="id_TipoMatricula" className="w-full p-2 border border-black rounded" defaultValue={""}
-                        {...register("id_TipoMatricula", {required:"Necesita seleccionar el tipo de matricula" })}
+                       {...register("id_TipoMatricula", {required:"Necesita seleccionar el tipo de matricula" })}
+                       onChange={handleTipoMatriculaChange}
                         
                     >
                     <option  value=""  disabled>Elegir</option>
@@ -156,10 +167,10 @@ export const FormMatricula =()=>{
                     {...register("id_Pac", {required:"Necesita seleccionar un PAC" })}
 
                 >
-                <option  value="" disabled selected>Elegir</option>
-                {pac.map(pacAno => (
-                        <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
-                    ))}
+                <option  value="" disabled>Elegir</option>
+                {pacFiltrado.map(pacAno => (
+                          <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
+                        ))}
                 </select>
                 {errors.id_Pac && <span className="text-red-500">{errors.id_Pac.message}</span>}
 

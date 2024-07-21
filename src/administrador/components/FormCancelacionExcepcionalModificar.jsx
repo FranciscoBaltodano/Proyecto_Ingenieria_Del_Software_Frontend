@@ -21,50 +21,65 @@ export const FormCancelacionExcepcionalModificar =()=>{
         const horaInicio = watch('hora_inicioCancel');
         const [cancelacionSeleccionada, setCancelacionSeleccionada] = useState(null);
         const { id } = useParams(); // Obtener el ID de la matrícula desde React Router
-       
+        const [pacFiltrado, setPacFiltrado] = useState([]);
+
         useEffect(() => {
           const fechaActual = new Date().toISOString().split('T')[0];
           setMinDate(fechaActual);
         }, [setValue]);
-      
-        useEffect(() => {
-            const fetchData = async () => {
-              try {
-                const [pacRes, matriculaRes] = await Promise.all([
-                  axios.get('http://localhost:3000/api/admin/pac'),
-                  axios.get('http://localhost:3000/api/admin/tipo_matricula')
+
+        const filtrarPac = (tipoMatriculaId, pacs) => {
+        if (tipoMatriculaId === 1) { // Asumiendo que 1 es el id para "semestral"
+            return pacs.filter(p => p.pac === "I PAC" || p.pac === "II PAC");
+        }
+        return pacs;
+    
+      };
+    
+
+        const handleTipoMatriculaChange = (event) => {
+          const selectedValue = parseInt(event.target.value);
+          const pacsFiltrados = filtrarPac(selectedValue, pac);
+          setPacFiltrado(pacsFiltrados);
+          
+           // Si el PAC seleccionado no está en la lista filtrada, seleccionar el primero disponible
+          const currentPacId = parseInt(watch('id_Pac'));
+          if (!pacsFiltrados.some(p => p.id_Pac === currentPacId)) {
+              const defaultPacId = pacsFiltrados[0]?.id_Pac || '';
+              setValue('id_Pac', defaultPacId);
+          }
+      };
+      useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [pacRes, matriculaRes, cancelacionRes] = await Promise.all([
+                    axios.get('http://localhost:3000/api/admin/pac'),
+                    axios.get('http://localhost:3000/api/admin/tipo_matricula'),
+                    axios.get(`http://localhost:3000/api/admin/cancelaciones/${id}`)
                 ]);
-        
+                
                 setMatricula(matriculaRes.data);
                 setPac(pacRes.data);
-              } catch (error) {
-                console.error('Error fetching data:', error);
-              }
-            };
-          fetchData();
-        }, []);
+                setCancelacionSeleccionada(cancelacionRes.data);
 
-          
-          useEffect(() => {
-            const fetchData = async () => {
-              try {
-                const response = await axios.get(`http://localhost:3000/api/admin/cancelaciones/${id}`);
-                console.log('Datos obtenidos:', response.data);
-                setCancelacionSeleccionada(response.data);
-          
                 // Establecer valores iniciales en el formulario
-                setValue('id_TipoMatricula', response.data.TipoMatricula.id_TipoMatricula);
-                setValue('id_Pac', response.data.Pac.id_Pac);
-                setValue('fecha_inicioCancel', response.data.fecha_inicioCancel);
-                setValue('fecha_finCancel', response.data.fecha_finCancel);
-                setValue('hora_inicioCancel', response.data.hora_inicioCancel);
-                setValue('hora_finCancel', response.data.hora_finCancel);
-              } catch (error) {
-                console.error('Error fetching data:', error);
-              }
-            };
-            fetchData();
-          }, [id, setValue]);
+                setValue('id_TipoMatricula', cancelacionRes.data.TipoMatricula.id_TipoMatricula);
+                setValue('id_Pac', cancelacionRes.data.Pac.id_Pac);
+                setValue('fecha_inicioCancel', cancelacionRes.data.fecha_inicioCancel);
+                setValue('fecha_finCancel', cancelacionRes.data.fecha_finCancel);
+                setValue('hora_inicioCancel', cancelacionRes.data.hora_inicioCancel);
+                setValue('hora_finCancel', cancelacionRes.data.hora_finCancel);
+
+                // Filtrar PACs basado en el tipo de matrícula inicial
+                const pacsFiltrados = filtrarPac(cancelacionRes.data.TipoMatricula.id_TipoMatricula, pacRes.data);
+                setPacFiltrado(pacsFiltrados);
+
+            } catch (error) {
+                console.error('Error al obtener datos:', error);
+            }
+        };
+        fetchData();
+    }, [id, setValue]);
 
           
 
@@ -105,10 +120,16 @@ export const FormCancelacionExcepcionalModificar =()=>{
                     id="id_TipoMatricula"
                     className="w-full p-2 border border-black rounded"
                     {...register("id_TipoMatricula", { required: "Necesita seleccionar el tipo de matricula" })}
+                    onChange={(e)=>{
+                      handleTipoMatriculaChange(e);
+                      register("id_TipoMatricula").onChange(e);
+                    }
+                      }
                     >
                     {matricula.map((option) => (
                         <option key={option.id_TipoMatricula} value={option.id_TipoMatricula}>
                         {option.tipoMatricula}
+                        
                         </option>
                     ))}
                 </select>
@@ -123,11 +144,9 @@ export const FormCancelacionExcepcionalModificar =()=>{
                     className="w-full p-2 border border-black rounded"
                     {...register("id_Pac", { required: "Necesita seleccionar un PAC" })}
                     >
-                    {pac.map((option) => (
-                        <option key={option.id_Pac} value={option.id_Pac}>
-                        {option.pac}
-                        </option>
-                    ))}
+                    {pacFiltrado.map(pacAno => (
+                          <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
+                        ))}
                     </select>
                 {errors.id_Pac && <span className="text-red-500">{errors.id_Pac.message}</span>}
               </div>
@@ -199,7 +218,7 @@ export const FormCancelacionExcepcionalModificar =()=>{
             <div style={{display: 'flex',flexWrap: 'nowrap',justifyContent: 'center', alignItems: 'flex-end'}}>
                 <Stack direction="row" spacing={6}>
                 <Button variant="contained" type="summit">
-                Activar
+                Guardar
                 </Button>
                 <Button variant="contained" style={{backgroundColor:'gray'}} onClick={() => navigate('/admin/cancelaciones')}>
                 Regresar

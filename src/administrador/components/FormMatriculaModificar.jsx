@@ -15,15 +15,6 @@ export const FormMatriculaModificar =()=>{
     const [pac, setPac] = useState([]);
     const navigate = useNavigate();
     const [matriculaSeleccionada, setMatriculaSeleccionada] = useState(null);
-    const { id } = useParams();
-
-
-    useEffect (()=>{
-        const fechaActual = new Date().toISOString().split('T')[0]
-        setMinDate(fechaActual);
-    },[setValue]);
-    
-      
     const fechaInicioPAC = watch('fecha_inicioPAC');
     const fechaFincPAC = watch('fecha_finPAC');
     const fechaInicioPACMatri = watch('fecha_inicioMatri');
@@ -34,6 +25,38 @@ export const FormMatriculaModificar =()=>{
     const fechaMatri3 = watch('fecha_matri3');
     const fechaMatri4 = watch('fecha_matri4');
     const fechaMatri5 = watch('fecha_matri5');
+    const { id } = useParams();
+    const [pacFiltrado, setPacFiltrado] = useState([]);
+
+
+    useEffect (()=>{
+        const fechaActual = new Date().toISOString().split('T')[0]
+        setMinDate(fechaActual);
+    },[setValue]);
+    
+    const filtrarPac = (tipoMatriculaId, pacs) => {
+        if (tipoMatriculaId === 1) { // Asumiendo que 1 es el id para "semestral"
+            return pacs.filter(p => p.pac === "I PAC" || p.pac === "II PAC");
+        }
+        return pacs;
+    
+      };
+    
+
+        const handleTipoMatriculaChange = (event) => {
+          const selectedValue = parseInt(event.target.value);
+          const pacsFiltrados = filtrarPac(selectedValue, pac);
+          setPacFiltrado(pacsFiltrados);
+          
+           // Si el PAC seleccionado no está en la lista filtrada, seleccionar el primero disponible
+          const currentPacId = parseInt(watch('id_Pac'));
+          if (!pacsFiltrados.some(p => p.id_Pac === currentPacId)) {
+              const defaultPacId = pacsFiltrados[0]?.id_Pac || '';
+              setValue('id_Pac', defaultPacId);
+          }
+      };
+
+    
     
 
     useEffect(() => {
@@ -52,6 +75,9 @@ export const FormMatriculaModificar =()=>{
             Object.keys(matriculaSeleccionadaRes.data).forEach(key => {
               setValue(key, matriculaSeleccionadaRes.data[key]);
             });
+             // Filtrar PACs basado en el tipo de matrícula inicial
+             const pacsFiltrados = filtrarPac(matriculaSeleccionadaRes.data.id_TipoMatricula, pacRes.data);
+             setPacFiltrado(pacsFiltrados);
           } catch (error) {
             console.error('Error fetching data:', error);
           }
@@ -91,10 +117,18 @@ export const FormMatriculaModificar =()=>{
             id="id_TipoMatricula"
             className="w-full p-2 border border-black rounded"
             {...register("id_TipoMatricula", { required: "Necesita seleccionar el tipo de matricula" })}
+            onChange={(e)=>{
+                handleTipoMatriculaChange(e);
+                register("id_TipoMatricula").onChange(e);
+              }
+                }
           >
-            {matricula.map(matri => (
-              <option key={matri.id_TipoMatricula} value={matri.id_TipoMatricula}>{matri.tipoMatricula}</option>
-            ))}
+            {matricula.map((option) => (
+                        <option key={option.id_TipoMatricula} value={option.id_TipoMatricula}>
+                        {option.tipoMatricula}
+                        
+                        </option>
+                    ))}
           </select>
           {errors.id_TipoMatricula && <span className="text-red-500">{errors.id_TipoMatricula.message}</span>}
         </div>
@@ -111,9 +145,9 @@ export const FormMatriculaModificar =()=>{
             className="w-full p-2 border border-black rounded"
             {...register("id_Pac", { required: "Necesita seleccionar un PAC" })}
           >
-            {pac.map(pacAno => (
-              <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
-            ))}
+            {pacFiltrado.map(pacAno => (
+                          <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
+                        ))}
           </select>
           {errors.id_Pac && <span className="text-red-500">{errors.id_Pac.message}</span>}
         </div>
@@ -292,9 +326,9 @@ export const FormMatriculaModificar =()=>{
                             value:/^[0-9]*$/, message: "Solo se permiten numeros"
                         } ,
                         maxLength:{
-                            value:3, message:"El numero no puede tener mas de 3 digitos"
+                            value:4, message:"El numero no puede tener mas de 4 digitos"
                         } })}
-                        maxLength="3"
+                        maxLength="4"
 
                         className="w-full xl:w-8/12 lg:w-8/12 md:w-8/12 p-2 border border-black rounded"/>
                         <br />

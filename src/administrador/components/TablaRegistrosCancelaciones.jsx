@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import { Link } from 'react-router-dom';
+import { esESLocaleText } from "../../components/esESLocaleText";
 
 
 
@@ -120,7 +121,7 @@ export const TablaRegistrosCancelaciones = () => {
           pageSize={5}
           rowsPerPageOptions={[10]}
           checkboxSelection={false}
-        
+          localeText={esESLocaleText}
         />
         <Snackbar 
                 open={openSnackbar} 

@@ -23,7 +23,7 @@ export const FormCancelacionExcepcional =()=>{
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [redirectToHome, setRedirectToHome] = useState(false); // Estado para redirección
-
+    const [pacFiltrado, setPacFiltrado] = useState([]);
 
     useEffect (()=>{
         const fechaActual = new Date().toISOString().split('T')[0]
@@ -42,13 +42,24 @@ export const FormCancelacionExcepcional =()=>{
             console.log('Pac: ', pacRes.data)
             setMatricula(matriculaRes.data);
             setPac(pacRes.data);
+            setPacFiltrado(pacRes.data);
           } catch (error) {
             console.error('Error fetching data:', error);
           }
         };
         fetchData();
-    }, []);
+      }, []);
 
+      const handleTipoMatriculaChange = (event) => {
+        const selectedValue = event.target.value;
+        if (selectedValue === "1") { // Asumiendo que 1 es el id para "semestral"
+          const pacSemestral = pac.filter(p => p.pac === "I PAC" || p.pac === "II PAC");
+          setPacFiltrado(pacSemestral);
+        } else {
+          setPacFiltrado(pac);
+        }
+      };
+      
       const onSubmit = async (formData) => {
         setLoading(true);
 
@@ -105,7 +116,7 @@ export const FormCancelacionExcepcional =()=>{
                         </Typography>
                         <select id="id_TipoMatricula" className="w-full p-2 border border-black rounded" defaultValue={""}
                         {...register("id_TipoMatricula", {required:"Necesita seleccionar el tipo de matricula" })}
-                        
+                        onChange={handleTipoMatriculaChange}
                     >
                         <option  value="" disabled>Elegir</option>
                             {matricula.map(matri => (
@@ -125,8 +136,8 @@ export const FormCancelacionExcepcional =()=>{
 
                         >
                         <option value="" disabled>Elegir</option>
-                            {pac.map(pacAno => (
-                            <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
+                        {pacFiltrado.map(pacAno => (
+                          <option key={pacAno.id_Pac} value={pacAno.id_Pac}>{pacAno.pac}</option>
                         ))}
                         </select>
                         {errors.id_Pac && <span className="text-red-500">{errors.id_Pac.message}</span>}
@@ -147,6 +158,7 @@ export const FormCancelacionExcepcional =()=>{
                     min={minDate} 
                     className="w-full p-2 border border-black rounded"/>
                     {errors.fecha_inicioCancel && <span className="text-red-500">{errors.fecha_inicioCancel.message}</span>}
+
                 </div>
                 <div className=" xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
                 <Typography variant="h7" component="h1" gutterBottom>
@@ -158,39 +170,53 @@ export const FormCancelacionExcepcional =()=>{
                     className="w-full p-2 border border-black rounded"/>
                     
                     {errors.fecha_finCancel && <span className="text-red-500">{errors.fecha_finCancel.message}</span>}
+
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-2 mt-2">
-                    <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1  lg:grid-cols-2 xl:grid-cols-2 gap-2 mt-2 " style={{ justifyContent: 'space-evenly'  }}>
+                    <div  >
                         <Typography variant="h7" component="h1" gutterBottom>
-                            Hora de inicio de cancelación
+                        Hora inicio matricula
                         </Typography>
-                        <input id="hora_inicioCancel" type="time"
-                            {...register("hora_inicioCancel", { required: "Hora de inicio de cancelaciones requerida" })}
-                            className="w-full xl:w-8/12 lg:w-8/12 md:w-8/12 p-2 border border-black rounded" />
-                        <br />
-                        {errors.hora_inicioCancel && <span className="text-red-500">{errors.hora_inicioCancel.message}</span>}
+                        <input id="hora_inicioCancel" type="time" 
+                            {...register("hora_inicioCancel", {required:"Hora de inicio de cancelaciones requerida" })}
+
+                            className=" w-full xl:w-8/12 lg:w-8/12 md:w-8/12 p-2 border border-black rounded"/>
+                            <br />
+                            {errors.hora_inicioCancel && <span className="text-red-500">{errors.hora_inicioCancel.message}</span>}
+
                     </div>
-                    <div>
-                        <Typography variant="h7" component="h1" gutterBottom>
-                            Hora de fin de cancelación
-                        </Typography>
-                        <input id="hora_finCancel" type="time"
-                            {...register("hora_finCancel", { required: "Hora de fin de cancelaciones requerida" })}
-                            className="w-full xl:w-8/12 lg:w-8/12 md:w-8/12 p-2 border border-black rounded" />
+                    <div >
+                    <Typography variant="h7" component="h1" gutterBottom>
+                    Hora fin matricula
+                    </Typography>
+                    <input id="hora_finCancel" type="time" 
+                        {...register("hora_finCancel", {required:"Hora de fin de cancelaciones requerida", validate: value=>{
+                            if (value<horaInicio){
+                                return 'La hora de finalizacion no puede ser anterior a la hora de inicio'
+                            }
+                            return true;
+                        } })}
+
+                        className="w-full xl:w-8/12 lg:w-8/12 md:w-8/12 p-2 border border-black rounded"/>
                         <br />
                         {errors.hora_finCancel && <span className="text-red-500">{errors.hora_finCancel.message}</span>}
+
                     </div>
                 </div>
+                
             </div>
             <br />
-            <div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center', alignItems: 'flex-end' }}>
+
+            <br />
+
+            <div style={{display: 'flex',flexWrap: 'nowrap',justifyContent: 'center', alignItems: 'flex-end'}}>
                 <Stack direction="row" spacing={6}>
-                    <Button variant="contained" type="submit">
-                        Activar
-                    </Button>
-                    <Button variant="contained" style={{ backgroundColor: 'gray' }} onClick={() => navigate('/admin/cancelaciones')}>
-                        Regresar
-                    </Button>
+                <Button variant="contained" type="summit">
+                Activar
+                </Button>
+                <Button variant="contained" style={{backgroundColor:'gray'}} onClick={() => navigate('/admin/cancelaciones')}>
+                Regresar
+                </Button>
                 </Stack>
             </div>
             <br />
@@ -206,5 +232,5 @@ export const FormCancelacionExcepcional =()=>{
             </Snackbar>
     
         </form>
-    );
-};
+    )
+}

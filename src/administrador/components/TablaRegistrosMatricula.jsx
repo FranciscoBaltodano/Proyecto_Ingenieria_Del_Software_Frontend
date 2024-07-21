@@ -7,7 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import { AdministradorLayout } from "../layout/AdministradorLayout";
 import { Link } from 'react-router-dom';
-
+import { esESLocaleText } from "../../components/esESLocaleText";
 
 
 export const TablaRegistrosMatricula = () => {
@@ -135,6 +135,7 @@ export const TablaRegistrosMatricula = () => {
           pageSize={5}
           rowsPerPageOptions={[10]}
           checkboxSelection={false}
+          localeText={esESLocaleText}
         />
         <Snackbar 
                 open={openSnackbar} 
