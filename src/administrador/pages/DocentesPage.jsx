@@ -628,7 +628,7 @@ export const DocentesPage = () => {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <input
                 type="file"
                 ref={imageInputRef}
@@ -650,10 +650,13 @@ export const DocentesPage = () => {
                   {selectedImage.name}
                 </Typography>
               )}
+              { docenteSeleccionado && !selectedImage && docenteSeleccionado.Imagen && (
+                <img src={ docenteSeleccionado.Imagen} alt={ docenteSeleccionado.Imagen} style={{width:'200px', marginTop:'20px'}} />
+              )}
             </Grid>
           </Grid>
 
-          <Grid item xs={12} display="flex" justifyContent="center">
+          <Grid item xs={12} mt={2} display="flex" justifyContent="center">
             <Button
               type="submit"
               variant="contained"
