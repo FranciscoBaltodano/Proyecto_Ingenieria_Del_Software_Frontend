@@ -5,7 +5,8 @@ import { ReinicioClavesPage } from '../pages/docentes/ReinicioClavesPage';
 export const JefeDepartamentoRoutes = () => {
   return (
     <Routes>
-      <Route path="/"           element={<Navigate to='/docentes/clases' /> }/>
+      <Route path="/"           element={<DocentesPage /> }/>
+      {/* <Route path="/"           element={<Navigate to='/docentes/clases' /> }/> */}
       <Route path="docentes"    element={<DocentesPage /> }/>
       <Route path="estudiantes" element={<EstudiantesPage /> }/>
       <Route path="matricula"   element={<MatriculasPage /> }/>
