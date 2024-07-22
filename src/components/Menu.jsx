@@ -2,19 +2,13 @@ import { Typography, Divider, Grid, Box } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { Assignment, Settings, Home, Queue } from '@mui/icons-material';
 
-export const MatriculaMenu = () => {
-  const menuItems = [
-    { text: 'Registrar Sección', to: '/jefeDepartamento/registrarSeccion', description: 'Registra nuevas secciones para tu departamento', icon: <Assignment sx={{ color:'orange'}} /> },
-    { text: 'Configurar Secciones', to: '/jefeDepartamento/configurarSecciones', description: 'Configura las secciones de tu departamento', icon: <Settings sx={{ color:'blue'}} /> },
-    { text: 'Infraestructura', to: '/jefeDepartamento/infraestructura', description: 'Maneja y controla la infraestructura', icon: <Home sx={{ color:'green'}} /> },
-    { text: 'Lista de Espera', to: '/jefeDepartamento/listaDeEspera', description: 'Revisa las listas de espera de las secciones', icon: <Queue sx={{ color:'red'}} /> },
-  ];
+export const Menu = ( { menuItems=[] } ) => {
 
   return (
     <Box>
       <Grid container justifyContent="center" spacing={6}>
         {menuItems.map((item) => (
-          <Grid item xs={12} sm={6} xl={3} key={item.text}>
+          <Grid item xs={12} md={6} xl={3} key={item.text}>
             <NavLink to={item.to} style={{ textDecoration: 'none' }}>
               <div className="card">
                 <div className="card-details">

@@ -1,11 +1,14 @@
 import { AppRouter } from './router/AppRouter';
 import { Grid } from '@mui/material';
-
+import SessionManager from './components/SessionManager';
 function App() {
 
   return (
     <>
-        <AppRouter />
+    <SessionManager>
+      <AppRouter />
+    </SessionManager>
+        
     </>
   );
 }
