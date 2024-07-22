@@ -4,7 +4,7 @@ import { DocenteLayout } from '../../layout/DocenteLayout'
 export const DocentesPage = () => {
   return (
     <DocenteLayout titulo='Docentes'>
-        <div>DocentesPage</div>
+        <div>hola mundo </div>
     </DocenteLayout>
   )
 }
