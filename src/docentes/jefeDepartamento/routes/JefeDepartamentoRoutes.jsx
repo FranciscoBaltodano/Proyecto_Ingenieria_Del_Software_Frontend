@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CalificacionesPage, ConfigurarSeccionesPage, DocentesPage, EstadisticasPage, EstudiantesMatriculadosPage, EstudiantesPage, EvaluacionesPage, HistorialesPage, InfraestructuraPage, ListaDeEsperaPage, MatriculasPage, RegistrarSeccionPage } from '../pages'
 import { ReinicioClavesPage } from '../pages/docentes/ReinicioClavesPage';
+import { FormRegistrarSeccionPage } from '../pages/matriculas/FormRegistrarSeccionPage';
 
 export const JefeDepartamentoRoutes = () => {
   return (
@@ -13,6 +14,7 @@ export const JefeDepartamentoRoutes = () => {
       
       {/* Seccion de maatricula */}
       <Route path="registrarSeccion"   element={<RegistrarSeccionPage /> }/>
+      <Route path="formularioRegritrarSeccion"   element={<FormRegistrarSeccionPage /> }/>
       <Route path="configurarSecciones"   element={<ConfigurarSeccionesPage /> }/>
       <Route path="infraestructura"   element={<InfraestructuraPage /> }/>
       <Route path="listaDeEspera"   element={<ListaDeEsperaPage /> }/>
