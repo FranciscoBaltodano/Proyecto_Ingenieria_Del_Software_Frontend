@@ -4,7 +4,6 @@ import { ChatsPage, ClasesPage, NotasPage, PerfilPage, SolicitudesPage } from ".
 export const DocentesRoutes = () => {
   return (
     <Routes>
-      {/* <Route path="/"           element={<ClasesPage/>} /> */}
       <Route path="clases"      element={<ClasesPage/>} />
       <Route path="chats"       element={<ChatsPage/>} />
       <Route path="notas"       element={<NotasPage/>} />

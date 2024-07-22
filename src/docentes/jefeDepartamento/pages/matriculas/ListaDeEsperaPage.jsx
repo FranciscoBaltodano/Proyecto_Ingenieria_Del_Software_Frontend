@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { DocenteLayout } from '../../layout/DocenteLayout'
+import { DocenteLayout } from '../../../layout/DocenteLayout'
 import { Button } from '@mui/material';
 
 export const ListaDeEsperaPage = () => {
@@ -7,7 +7,7 @@ export const ListaDeEsperaPage = () => {
 
     // Navega a la pantalla anterior
     const handleBack = () => {
-        navigate(-1);
+      navigate('/jefeDepartamento/matricula');
     };
   return (
     <DocenteLayout titulo='Lista de Espera'>

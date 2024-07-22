@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { DocenteLayout } from '../../layout/DocenteLayout';
+import { DocenteLayout } from '../../../layout/DocenteLayout';
 
 export const RegistrarSeccionPage = () => {
   const navigate = useNavigate();
 
    // Navega a la pantalla anterior
   const handleBack = () => {
-    navigate(-1);
+    navigate('/jefeDepartamento/matricula');
   };
 
   return (

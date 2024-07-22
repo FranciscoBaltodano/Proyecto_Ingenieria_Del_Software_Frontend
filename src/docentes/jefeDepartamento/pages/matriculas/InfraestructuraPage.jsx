@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { DocenteLayout } from '../../layout/DocenteLayout'
+import { DocenteLayout } from '../../../layout/DocenteLayout'
 import { useNavigate } from 'react-router-dom';
 
 export const InfraestructuraPage = () => {
@@ -8,7 +8,7 @@ export const InfraestructuraPage = () => {
 
     // Navega a la pantalla anterior
     const handleBack = () => {
-        navigate(-1);
+        navigate('/jefeDepartamento/matricula');
     };
 
 
