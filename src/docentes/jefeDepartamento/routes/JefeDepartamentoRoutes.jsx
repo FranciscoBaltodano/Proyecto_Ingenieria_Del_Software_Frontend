@@ -12,13 +12,12 @@ export const JefeDepartamentoRoutes = () => {
       <Route path="estudiantes" element={<EstudiantesPage /> }/>
       <Route path="matricula"   element={<MatriculasPage /> }/>
       
-      {/* Seccion de maatricula */}
+      {/* Seccion de matricula */}
       <Route path="registrarSeccion"   element={<RegistrarSeccionPage /> }/>
       <Route path="formularioRegritrarSeccion"   element={<FormRegistrarSeccionPage /> }/>
       <Route path="configurarSecciones"   element={<ConfigurarSeccionesPage /> }/>
       <Route path="infraestructura"   element={<InfraestructuraPage /> }/>
       <Route path="listaDeEspera"   element={<ListaDeEsperaPage /> }/>
-
 
       {/* Seccion de Estudiantes */}
       <Route path="estadisticas"   element={<EstadisticasPage /> }/>
