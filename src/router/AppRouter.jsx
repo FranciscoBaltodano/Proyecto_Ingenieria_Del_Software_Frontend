@@ -14,6 +14,7 @@ import { DocentesRoutes } from "../docentes/routes/DocentesRoutes";
 export const AppRouter = () => {
   return (
     <Routes>
+        <Route path="/"                  element={<AdmisionesRoutes/>} />
         <Route path="/*"                 element={<AdmisionesRoutes/>} />
         <Route path="login/*"            element={<LoginRoutes/>} />
                
