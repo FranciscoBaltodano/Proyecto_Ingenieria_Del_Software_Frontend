@@ -1,21 +1,37 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, InputAdornment, TextField, Typography } from '@mui/material';
 import { DocenteLayout } from '../../../layout/DocenteLayout';
 import { DataGrid } from '@mui/x-data-grid';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { esESLocaleText } from '../../../../components/esESLocaleText';
 import axios from 'axios';
+import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 
 export const RegistrarSeccionPage = () => {
   const navigate = useNavigate();
   const [asignaturas, setAsignaturas] = useState([]);
+  const [busquedaValue, setBusquedaValue] = useState('');
+  const [asignaturasFiltradas, setAsignaturasFiltradas] = useState([]);
   const { user } = useAuth();
 
   // Navega a la pantalla anterior
   const handleBack = () => {
     navigate('/jefeDepartamento/matricula');
+  };
+
+  const filtrarAignaturas = (busquedaValue) => {
+    const filtro = asignaturas.filter((asignatura) => 
+      asignatura.nombre.toLowerCase().includes(busquedaValue.toLowerCase())
+    );
+    setAsignaturasFiltradas(filtro);
+  };
+
+  const handleSearchChange = (event) => {
+    const { value } = event.target;
+    setBusquedaValue(value);
+    filtrarAignaturas(value);
   };
 
   useEffect(() => {
@@ -26,6 +42,7 @@ export const RegistrarSeccionPage = () => {
         );
         const { data } = result.data;
         setAsignaturas(data);
+        setAsignaturasFiltradas(data); // Inicializar las asignaturas filtradas
       } catch (error) {
         console.error("Error al traer las asignaturas:", error);
       }
@@ -67,10 +84,24 @@ export const RegistrarSeccionPage = () => {
       </Typography>
 
       <Grid container spacing={2} display='flex' justifyContent='center' alignItems='center'>
-
         <Box mt={4}>
+          <TextField
+            placeholder="Buscar por nombre de asignatura"
+            variant="outlined"
+            margin="normal"
+            value={busquedaValue}
+            onChange={handleSearchChange}
+            sx={{ width: '100%', maxWidth: '300px', mb: 2 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
           <DataGrid
-            rows={asignaturas}
+            rows={asignaturasFiltradas} 
             getRowId={(row) => row.codigo}
             columns={columns}
             autoHeight
@@ -78,7 +109,6 @@ export const RegistrarSeccionPage = () => {
             checkboxSelection={false}
           />
         </Box>
-
       </Grid>
     </DocenteLayout>
   );
