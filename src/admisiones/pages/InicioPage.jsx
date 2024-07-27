@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Grid, Typography } from '@mui/material';
 import {Carrusel} from '../components/Carrusel';
-
+import { Footer } from '../components/Footer'; 
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 import { NoticiasList } from '../components/NoticiasList';
 import { Navbar } from '../components/Navbar';
@@ -24,7 +24,9 @@ export const InicioPage = () => {
 
           <Carrusel />
         </Container>
+        <Footer/>
     </Grid>
+
   );
 };
 
