@@ -240,14 +240,14 @@ export const DocentesPage = () => {
     setLoading(true);
 
     // Construye el array de roles
-    const roles = [];
-    if (formData.Docente) roles.push("Docente");
-    if (formData.Coordinador || isCoordinador) roles.push("Coordinador");
-    if (formData.JefeDepartamento || isJefeDepartamento) roles.push("JefeDepartamento");
     // const roles = [];
     // if (formData.Docente) roles.push("Docente");
-    // if (isCoordinador) roles.push("Coordinador");
-    // if (isJefeDepartamento) roles.push("JefeDepartamento");
+    // if (formData.Coordinador || isCoordinador) roles.push("Coordinador");
+    // if (formData.JefeDepartamento || isJefeDepartamento) roles.push("JefeDepartamento");
+    const roles = [];
+    if (formData.Docente) roles.push("Docente");
+    if (isCoordinador) roles.push("Coordinador");
+    if (isJefeDepartamento) roles.push("JefeDepartamento");
 
     // Construye el objeto de datos a enviar
     const dataToSend = {

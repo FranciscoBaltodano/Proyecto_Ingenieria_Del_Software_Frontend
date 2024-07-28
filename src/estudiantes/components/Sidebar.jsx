@@ -7,11 +7,11 @@ import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 import { Chat as ChatIcon, Class as ClassIcon, Grade as GradeIcon } from '@mui/icons-material';
 
 const menuItems = [
-  { text: 'Mi Perfil',    icon: <HomeIcon />     ,to:'/estudiantes/clases'   },
-  { text: 'Chats',        icon: <ChatIcon />     ,to:'/estudiantes/perfil'   },
-  { text: 'Mis clases',   icon: <ClassIcon />    ,to:'/estudiantes/chats'   },
-  { text: 'Notas',        icon: <GradeIcon />    ,to:'/estudiantes/notas'   },
-  { text: 'Solicitudes',  icon: <PersonIcon />   ,to:'/estudiantes/solicitudes'   },
+  { text: 'Mis clases',   icon: <HomeIcon />    ,to:'/estudiantes/clases'   },
+  { text: 'Mi Perfil',    icon: <ClassIcon />   ,to:'/estudiantes/perfil'   },
+  { text: 'Chats',        icon: <ChatIcon />    ,to:'/estudiantes/chats'   },
+  { text: 'Notas',        icon: <GradeIcon />   ,to:'/estudiantes/notas'   },
+  { text: 'Solicitudes',  icon: <PersonIcon />  ,to:'/estudiantes/solicitudes'   },
 ];
 
 export const Sidebar = () => {

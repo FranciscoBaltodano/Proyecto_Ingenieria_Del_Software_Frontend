@@ -31,6 +31,7 @@
 // };
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { CometChatUIKit } from "@cometchat/chat-uikit-react"; //import uikit package
 
 const AuthContext = createContext();
 
@@ -54,6 +55,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    CometChatUIKit.logout().then(
+      () => {
+        console.log('Saliendo de cometchat');
+      },
+      (error) => {
+        console.log('Error al salir de cometchat:', error);
+      }
+    );
     localStorage.removeItem('user');
     setUser(null);
   };
