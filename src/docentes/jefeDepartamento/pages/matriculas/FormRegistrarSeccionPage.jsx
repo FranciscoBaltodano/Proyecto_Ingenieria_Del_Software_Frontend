@@ -7,16 +7,17 @@ import { DocenteLayout } from '../../../layout/DocenteLayout';
 import axios from 'axios';
 
 export const FormRegistrarSeccionPage = () => {
-  const { register, handleSubmit,watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
   const location = useLocation();
   const asignatura = location.state?.asignatura || {};
+  
   const { user } = useAuth();
   const [dias, setDias] = useState([]);
   const [edificios, setEdificios] = useState([]);
   const [docente, setDocente] = useState([]);
   const [aulas, setAulas] = useState([]);
-  const [selectedDias, setSelectedDias] = useState([]); // Arreglo para almacenar los días seleccionados
+  const [selectedDias, setSelectedDias] = useState([]);
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [value, setValue] = useState('');
@@ -24,7 +25,6 @@ export const FormRegistrarSeccionPage = () => {
   const startRangeEnd = 21;
   const endRangeStart = 7;
   const endRangeEnd = 22;
-  const horaInicio = watch('Hora_Inicio');
 
   const handleTimeChange = (e, setter, rangeStart, rangeEnd) => {
     const value = e.target.value;
@@ -59,25 +59,35 @@ export const FormRegistrarSeccionPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [diasRes, edificioRes, docenteRes, aulasRes] = await Promise.all([
+        const [diasRes, edificioRes, docenteRes] = await Promise.all([
           axios.get('http://localhost:3000/api/department-head/dias'),
-          axios.get('http://localhost:3000/api/department-head/edificios'),
-          axios.post('http://localhost:3000/api/department-head/docentes/activos', { id_Departamento: user.id_departamento }),
-          axios.get('http://localhost:3000/api/department-head/aulas')
+          axios.get(`http://localhost:3000/api/department-head/edificios/${user.id_centro}`),
+          axios.post('http://localhost:3000/api/department-head/docentes/activos', { id_Departamento: user.id_departamento })
         ]);
 
         setDias(diasRes.data.data);
         setEdificios(edificioRes.data.data);
         setDocente(docenteRes.data.data);
-        setAulas(aulasRes.data.data);
       } catch (error) {
         console.log('Error al conseguir la data', error);
       }
     };
     fetchData();
-  }, [user.id_departamento]);
+  }, [user.id_departamento, user.id_centro]);
 
+  const fetchAulas = async (idEdificio) => {
+    try {
+      const aulasRes = await axios.get(`http://localhost:3000/api/department-head/aulas/${idEdificio}`);
+      setAulas(aulasRes.data.data);
+    } catch (error) {
+      console.log('Error al conseguir las aulas', error);
+    }
+  };
 
+  const onEdificioChange = (e) => {
+    const idEdificio = e.target.value;
+    fetchAulas(idEdificio);
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -89,7 +99,8 @@ export const FormRegistrarSeccionPage = () => {
         Hora_Final: data.Hora_Final,
         Cupos: data.Cupos,
         codigoAsignatura: asignatura.codigo,
-        dias: selectedDias
+        dias: selectedDias,
+        id_Departamento: user.id_departamento
       };
       console.log('datos enviados', payload);
       const response = await axios.post('http://localhost:3000/api/department-head/crear/secciones', payload);
@@ -124,15 +135,12 @@ export const FormRegistrarSeccionPage = () => {
                 Seleccione un docente
               </Typography>
             </div>
-            <select {...register('numeroEmpleado', {required:"Necesita seleccionar el docente a impartir la seccion" })}
-             id="numeroEmpleado" className="w-full p-2 border border-black rounded" defaultValue="">
-
+            <select {...register('numeroEmpleado')} id="numeroEmpleado" className="w-full p-2 border border-black rounded" defaultValue="">
               <option value="" disabled>Elegir</option>
               {docente.map((docent) => (
                 <option key={docent.numeroEmpleado} value={docent.numeroEmpleado}>{docent.Nombre_docente}</option>
               ))}
             </select>
-            {errors.numeroEmpleado && <span className="text-red-500">{errors.numeroEmpleado.message}</span>}
           </div>
         </div>
         <br />
@@ -143,29 +151,23 @@ export const FormRegistrarSeccionPage = () => {
             <Typography variant="h7" component="h1" gutterBottom>
               Seleccione un edificio
             </Typography>
-            <select {...register('id_Edficios', {required:"Necesita seleccionar el edifico donde se impartira la seccion" })}
-              id="id_Edficios" className="w-full p-2 border border-black rounded" defaultValue="">
+            <select {...register('id_Edficios')} id="id_Edficios" className="w-full p-2 border border-black rounded" defaultValue={""} onChange={onEdificioChange}>
               <option value="" disabled>Elegir</option>
               {edificios.map((edificio) => (
                 <option key={edificio.id_Edficios} value={edificio.id_Edficios}>{edificio.Nombre}</option>
               ))}
             </select>
-            {errors.id_Edficios && <span className="text-red-500">{errors.id_Edficios.message}</span>}
-
           </div>
           <div className="xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
             <Typography variant="h7" component="h1" gutterBottom>
               Seleccione un aula
             </Typography>
-            <select {...register('id_Aula', {required:"Necesita seleccionar el aula del edificio donde se impartira la seccion" })} 
-            id="id_Aula" className="w-full p-2 border border-black rounded" defaultValue="">
+            <select {...register('id_Aula')} id="id_Aula" className="w-full p-2 border border-black rounded" defaultValue={""}>
               <option value="" disabled>Elegir</option>
               {aulas.map((aula) => (
                 <option key={aula.id_Aula} value={aula.id_Aula}>{aula.Nombre}</option>
               ))}
             </select>
-            {errors.id_Aula && <span className="text-red-500">{errors.id_Aula.message}</span>}
-
           </div>
         </div>
         <br />
@@ -177,7 +179,7 @@ export const FormRegistrarSeccionPage = () => {
               Hora inicio
             </Typography>
             <input
-              {...register('Hora_Inicio', {required:"Necesita establecer la hora de inicio de la seccion" })}
+              {...register('Hora_inicio')}
               id="Hora_Inicio"
               type="time"
               className="w-full p-2 border border-black rounded"
@@ -187,20 +189,13 @@ export const FormRegistrarSeccionPage = () => {
               min="06:00"
               max="22:00"
             />
-            {errors.Hora_Inicio && <span className="text-red-500">{errors.Hora_Inicio.message}</span>}
-
           </div>
           <div className="xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
             <Typography variant="h7" component="h1" gutterBottom>
               Hora final
             </Typography>
             <input
-             {...register('Hora_Final', {required:"Necesita establecer la hora de fin de la seccion" ,validate: value=>{
-              if (value<horaInicio){
-                  return 'La hora de finalizacion no puede ser anterior a la hora de inicio'
-              }
-              return true;
-              } })}
+              {...register('Hora_Final')}
               id="Hora_Final"
               type="time"
               className="w-full p-2 border border-black rounded"
@@ -210,8 +205,6 @@ export const FormRegistrarSeccionPage = () => {
               min="07:00"
               max="22:00"
             />
-            {errors.Hora_Final && <span className="text-red-500">{errors.Hora_Final.message}</span>}
-
           </div>
         </div>
         <br />
@@ -224,15 +217,13 @@ export const FormRegistrarSeccionPage = () => {
                 Cantidad de cupos
               </Typography>
               <input
-                {...register('Cupos', {required:"Necesita establecer los cupos de la seccion" })}
+                {...register('Cupos')}
                 id="Cupos"
                 type="text"
                 className="w-full p-2 border border-black rounded"
                 onChange={handleChange}
                 value={value}
               />
-              {errors.Cupos && <span className="text-red-500">{errors.Cupos.message}</span>}
-
             </div>
             <div>
               <Typography variant="h7" component="h1" gutterBottom>
@@ -240,27 +231,31 @@ export const FormRegistrarSeccionPage = () => {
               </Typography>
 
               <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '10px', marginTop: '15px' }}>
-                
                 {dias.map((dia) => (
-                  <div key={dia.id_Dia} className="flex items-center"
-                  {...register('id_Dia', {required:"Necesita establecer los cupos de la seccion" })}
->
-
+                  <div key={dia.id_Dia} className="flex items-center">
                     <input
-
                       type="checkbox"
                       id={`dias.${dia.id_Dia}`}
                       value={dia.id_Dia}
                       onChange={(e) => handleCheckboxChange(e, dia.id_Dia)}
                     />
-
                     <label htmlFor={`dias.${dia.id_Dia}`} className="ml-2">{dia.Nombre}</label>
                   </div>
                 ))}
+                
               </div>
+              
             </div>
+            
           </div>
         </div>
+        <br />
+        <center>
+        <Typography variant="h9" component="h1" gutterBottom>
+          Debe seleccionar los dias conforme a las horas previstas para la seccion y a las UV de la clase.
+        </Typography>
+        </center>
+         
         <br />
 
         <div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center', alignItems: 'flex-end' }}>
