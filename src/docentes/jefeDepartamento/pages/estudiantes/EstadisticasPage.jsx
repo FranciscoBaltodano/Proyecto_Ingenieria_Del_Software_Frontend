@@ -54,7 +54,7 @@ export const EstadisticasPage = () => {
 
     return (
         <DocenteLayout titulo='Estadisticas Generales'>
-            <Button variant="outlined" color="primary" onClick={handleBack}>
+            <Button variant="text" color="primary" onClick={handleBack}>
                 Regresar
             </Button>
 
@@ -93,8 +93,7 @@ export const EstadisticasPage = () => {
                     Distribución de Estudiantes por Departamento en la Facultad
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                    Este gráfico de pastel muestra la distribución de estudiantes por departamento en la { userFaculty.nombre }.
-                </Typography>
+                Este gráfico de pastel muestra la distribución de estudiantes por departamento en la {userFaculty ? userFaculty.nombre : 'no disponible'}.                </Typography>
                 <GraficoPastel data={data} user={user} />
             </Box>
 
