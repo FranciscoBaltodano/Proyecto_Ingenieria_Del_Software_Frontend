@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Grid, Typography, Avatar, IconButton, Box, Button, TextField, Snackbar, Alert } from '@mui/material';
-import { Edit, Save, Cancel } from '@mui/icons-material';
+import { Edit, Save, Cancel, Send } from '@mui/icons-material';
 import { useDropzone } from 'react-dropzone';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
+import { FotoPerfil } from './FotoPerfil';
 
 export const PerfilMainPage = () => {
   const { user } = useAuth();
+  const [fotoPerfil, setFotoPerfil] = useState(user.imagen || '');
   const [avatar, setAvatar] = useState(user.imagen || null);
   const [gallery, setGallery] = useState([null, null, null]);
   const [formState, setFormState] = useState({
@@ -25,8 +27,7 @@ export const PerfilMainPage = () => {
     const fetchPerfil = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/student/perfil/${user.id}`);
-        const perfilData = response.data.data;
-        setAvatar(perfilData.Fotografia1);
+        const perfilData = response.data.data.Perfiles[0];
         setGallery([perfilData.Fotografia1, perfilData.Fotografia2, perfilData.Fotografia3]);
         setFormState({
           Descripcion: perfilData.Descripcion || '',
@@ -59,8 +60,7 @@ export const PerfilMainPage = () => {
       showSnackbar('Perfil actualizado correctamente', 'success');
       // Fetch updated profile data
       const response = await axios.get(`http://localhost:3000/api/student/perfil/${user.id}`);
-      const updatedData = response.data.data;
-      setAvatar(updatedData.Fotografia1);
+      const updatedData = response.data.data.Perfiles[0];
       setGallery([updatedData.Fotografia1, updatedData.Fotografia2, updatedData.Fotografia3]);
       setFormState({
         Descripcion: updatedData.Descripcion,
@@ -154,62 +154,88 @@ export const PerfilMainPage = () => {
   return (
     <Box sx={{ padding: '20px', flexGrow: 1 }}>
       <Grid container spacing={2}>
-        <Grid item xs={12} display="flex" alignItems="center">
-          <div {...getRootPropsAvatar()} style={{ display: 'inline-block', position: 'relative' }}>
-            <Avatar alt="User Photo" src={user.imagen} sx={{ width: 120, height: 120, cursor: 'pointer' }} />
-            <input {...getInputPropsAvatar()} style={{ display: 'none' }} />
-            <IconButton style={{  position: 'absolute', top: 0, right: -15 }}>
-              <Edit />
-            </IconButton>
-          </div>
-          <Typography variant="h5" sx={{ marginLeft: 2 }}>{`${user.nombre} ${user.apellido}`}</Typography>
-            <Typography variant="small" sx={{ marginLeft: 2 }}>
-            {` ${ user.roles.map( i => i)} `}
-            </Typography>
-        </Grid>
+        <FotoPerfil />
         <Grid item xs={12} sm={6}>
           <Typography variant="subtitle1"><strong>Centro:</strong> {user.centro}</Typography>
           <Typography variant="subtitle1"><strong>Carrera:</strong> {user.departamento}</Typography>
-          <Typography variant="subtitle1"><strong>Número de Cuenta:</strong> {user.numeroCuenta ? user.numeroCuenta : user.numeroEmpleado}</Typography>
+          <Typography variant="subtitle1"><strong>{user.numeroCuenta ? "Número de Cuenta: " : "Número Empleado: "}</strong> {user.numeroCuenta ? user.numeroCuenta : user.numeroEmpleado}</Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography variant="subtitle1"><strong>Descripción</strong></Typography>
-           {editingDescription ? (
-              <TextField
-                multiline
-                rows={2}
-                fullWidth
-                value={newDescription}
-                onChange={(e) => setNewDescription(e.target.value)}
-                variant="outlined"
-                sx={{ marginRight: 2 }}
-              />
-            ) : (
-              <Typography variant="body1" sx={{ display: 'inline-block', marginRight: 2 }}>
-                {formState.Descripcion}
-              </Typography>
-            )}
+          <Grid container display='flex' alignItems='center'>
+            <Typography variant="subtitle1"><strong>Descripción</strong></Typography>
             <IconButton onClick={editingDescription ? handleSaveDescription : handleEditDescription}>
-              {editingDescription ? <Save /> : <Edit />}
+              {editingDescription ? <Send color='primary' /> : <Edit />}
             </IconButton>
             {editingDescription && (
               <IconButton onClick={handleCancelEdit}>
                 <Cancel />
               </IconButton>
             )}
+          </Grid>
+          {editingDescription ? (
+            <TextField
+              multiline
+              rows={2}
+              fullWidth
+              value={newDescription}
+              onChange={(e) => setNewDescription(e.target.value)}
+              variant="outlined"
+              sx={{ marginRight: 2 }}
+            />
+          ) : (
+            <Typography variant="body1" sx={{ display: 'inline-block', marginRight: 2 }}>
+              {formState.Descripcion}
+            </Typography>
+          )}
         </Grid>
         <Grid item xs={12}>
           <Typography variant="subtitle1"><strong>Mi galería</strong></Typography>
           <Grid container spacing={2}>
             {gallery.map((image, index) => (
-              <Grid item xs={4} key={index}>
-                <div {...getRootPropsGallery(index)()} style={{ width: '100%', paddingTop: '75%', backgroundColor: '#f0f0f0', position: 'relative', cursor: 'pointer', overflow: 'hidden' }}>
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <div
+                  {...getRootPropsGallery(index)()}
+                  style={{
+                    width: '100%',
+                    paddingTop: '75%', // Ratio de 4:3
+                    backgroundColor: '#f0f0f0',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    borderRadius: '8px', 
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+                  }}
+                >
                   {image ? (
-                    <img src={image} alt={`Gallery ${index + 1}`} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img
+                      src={image}
+                      alt={`Gallery ${index + 1}`}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
                   ) : (
-                    <Typography style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>Imagen {index + 1}</Typography>
+                    <Typography
+                      style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        color: '#888', // Cambiar color para mejor visibilidad
+                      }}
+                    >
+                      Imagen {index + 1}
+                    </Typography>
                   )}
-                  <input {...getInputPropsGallery(index)()} style={{ display: 'none' }} />
+                  <input
+                    {...getInputPropsGallery(index)()}
+                    style={{ display: 'none' }}
+                  />
                 </div>
               </Grid>
             ))}
