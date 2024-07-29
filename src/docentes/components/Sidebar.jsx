@@ -24,7 +24,9 @@ import {
   Assignment as AssignmentIcon,  // Para 'Solicitudes'
   School as SchoolIcon,          // Para 'Estudiantes'
   AdminPanelSettings as AdminPanelSettingsIcon, 
-  ExitToApp as ExitToAppIcon // Para 'Jefe Departamento'
+  ExitToApp as ExitToAppIcon, // Para 'Jefe Departamento'
+  History,
+  AccountCircle
 } from '@mui/icons-material';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -33,16 +35,17 @@ import logoUNAHconLetras from '../../../public/assets/admisiones/logoUNAHconLetr
 // Define menu items with roles that are needed for visibility control
 const menuItems = [
   { text: 'Mis clases', icon: <ClassIcon />, to: '/docentes/clases', roles: ['Docente'] },
-  { text: 'Mi Perfil', icon: <HomeIcon />, to: '/docentes/perfil', roles: ['Docente'] },
+  { text: 'Mi Perfil', icon: <AccountCircle />, to: '/docentes/perfil', roles: ['Docente'] },
   { text: 'Chats', icon: <ChatIcon />, to: '/docentes/chats', roles: ['Docente'] },
   { text: 'Notas', icon: <GradeIcon />, to: '/docentes/notas', roles: ['Docente'] },
-  { text: 'Solicitudes', icon: <AssignmentIcon />, to: '/docentes/solicitudes', roles: ['Docente'] },
 
   { text: 'Matricula', icon: <SchoolIcon />, to: '/jefedepartamento/matricula', roles: ['JefeDepartamento'] },
   { text: 'Docentes', icon: <PersonIcon />, to: '/jefedepartamento/docentes', roles: ['JefeDepartamento'] },
   { text: 'Estudiantes', icon: <SchoolIcon />, to: '/jefedepartamento/estudiantes', roles: ['JefeDepartamento'] },
 
-  { text: 'Coordinador', icon: <SchoolIcon />, to: '/coordinadores', roles: ['Coordinador'] }
+  { text: 'Solicitudes', icon: <AssignmentIcon />, to: '/coordinadores/solicitudes', roles: ['Coordinador'] },
+  { text: 'Carga Academica', icon: <SchoolIcon />, to: '/coordinadores/cargaAcademica', roles: ['Coordinador'] },
+  { text: 'Historiales', icon: <History />, to: '/coordinadores/historiales', roles: ['Coordinador'] }
 ];
 
 export const Sidebar = () => {
