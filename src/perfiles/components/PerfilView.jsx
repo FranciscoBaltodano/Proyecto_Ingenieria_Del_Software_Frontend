@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -8,26 +7,117 @@ import {
   Typography,
   Button,
   CircularProgress,
+  Card,
+  CardContent,
   Modal,
-  IconButton,
+  IconButton
 } from '@mui/material';
-import { Email, Phone, LocationCity, School } from '@mui/icons-material';
-import Skeleton from '@mui/material/Skeleton';
+import axios from 'axios';
+
+
+const containerStyle = {
+  width: '100%',
+  height: '50vh', // 50% de la altura de la pantalla
+  background: 'lightblue',
+  position: 'relative',
+  overflow: 'hidden',
+  zIndex: 1, // Asegura que el fondo animado esté debajo del Card
+};
+
+const backgroundStyle = {
+  content: '""',
+  position: 'absolute',
+  top: '-50%',
+  left: '-50%',
+  width: '200%',
+  height: '200%',
+  background: 'radial-gradient(circle, #3498db 10%, transparent 20%), radial-gradient(circle, transparent 10%, #3498db 20%)',
+  backgroundSize: '30px 30px',
+  animation: 'moveBackground 8s linear infinite',
+};
+
+const keyframes = `
+  @keyframes moveBackground {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(20%, 20%);
+    }
+  }
+`;
+
+const cardStyle = {
+  position: 'absolute',
+  top: '400px',
+  left: '50%',
+  transform: 'translate(-50%, -60%)',
+  width: 'calc(100% - 40px)',
+  maxWidth: '1000px',
+  backgroundColor: 'white',
+  boxShadow: '4',
+  borderRadius: '8px',
+  zIndex: 2, 
+  paddingTop: '0px', 
+  marginTop: '100px', 
+};
+
+const avatarStyle = {
+  width: 120,
+  height: 120,
+  position: 'absolute',
+  top: 'calc(17% - 60px)', // Ajustar para que el Avatar esté centrado en la parte superior del Card
+  left: '50%',
+  transform: 'translateX(-50%)',
+  boxShadow: '4',
+  zIndex: 3, // Asegura que el Avatar esté por encima del Card
+};
+
+const buttonsContainerStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  mb: 2,
+};
+
+const galleryStyle = {
+  marginTop: '20px',
+};
+
+const imageContainerStyle = {
+  width: '100%',
+  height: 0,
+  paddingTop: '75%',
+  overflow: 'hidden',
+  borderRadius: '8px',
+  position: 'relative',
+  boxShadow: 9,
+  cursor: 'pointer',
+  '&:hover img': {
+    transform: 'scale(1.1)',
+  }
+};
+
+const imageStyle = {
+  width: '100%',
+  height: '100%',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  objectFit: 'cover',
+  transition: 'transform 0.3s ease-in-out',
+};
 
 const modalStyle = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "80%",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   borderRadius: '8px',
+  overflow: 'hidden',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 };
 
 export const PerfilView = () => {
@@ -64,11 +154,7 @@ export const PerfilView = () => {
   if (loading) {
     return (
       <Box sx={{ p: 3 }}>
-        <Skeleton variant="circular" width={100} height={100} />
-        <Skeleton variant="text" height={40} width="80%" />
-        <Skeleton variant="text" height={30} width="60%" />
-        <Skeleton variant="text" height={20} width="40%" />
-        <Skeleton variant="rectangular" width="100%" height={200} />
+        <CircularProgress />
       </Box>
     );
   }
@@ -77,140 +163,136 @@ export const PerfilView = () => {
     return <Typography variant="h6">Perfil no encontrado</Typography>;
   }
 
-  const {
-    Nombre,
-    Apellido,
-    Correo,
-    Telefono,
-    Imagen,
-    Perfiles,
-    estudiante
-  } = perfil;
-
+  const { Nombre, Apellido, Imagen, Perfiles, estudiante, Correo, empleado } = perfil;
   const perfilInfo = Perfiles[0] || {};
   const { Descripcion, Fotografia1, Fotografia2, Fotografia3 } = perfilInfo;
+ 
+  // Determina si el perfil es de un estudiante o empleado
+  const info = estudiante[0] || empleado[0] || {};
+  const { numeroCuenta, id_Centros, id_Departamento, correo_Institucional, numeroEmpleado } = info;
+
+  // Obtener nombres en lugar de IDs
+  const centroNombre = id_Centros?.Nombre || 'No disponible';
+  const departamentoNombre = id_Departamento?.Nombre || 'No disponible';
+  
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} md={3} sx={{ textAlign: 'center' }}>
-          <Avatar
-            alt={`${Nombre} ${Apellido}`}
-            src={Imagen}
-            sx={{ width: 120, height: 120, margin: '0 auto', boxShadow: 3 }}
-          />
-        </Grid>
-        <Grid item xs={12} md={9}>
-          <Typography variant="h4" color="primary">{`${Nombre} ${Apellido}`}</Typography>
-          <Typography variant="body1" color="textSecondary" sx={{ mt: 1, mb: 2 }}>
-            {Descripcion}
-          </Typography>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <Button
-                startIcon={<Email />}
-                variant="outlined"
-                color="primary"
-                href={`mailto:${Correo}`}
-                fullWidth
-              >
-                {Correo}
+    <>
+      <style>{keyframes}</style>
+      <Box sx={{ position: 'relative', height: '100vh', overflow: 'auto' }}>
+      <Box sx={containerStyle}>
+          <Box sx={backgroundStyle}></Box>
+        </Box>
+        <Avatar
+          alt="Usuario"
+          src={Imagen}
+          sx={avatarStyle}
+        />
+        <Card sx={cardStyle}>
+          <CardContent>
+            <Box sx={buttonsContainerStyle}>
+            <Button 
+              variant="outlined" 
+              color="primary" 
+              href={`mailto:${correo_Institucional ? correo_Institucional : Correo}`} 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              Email
+            </Button>
+              <Button variant="outlined" color="primary">
+                Agregar
               </Button>
+            </Box>
+            <Typography variant="h4" component="div" gutterBottom sx={{ textAlign: 'center', mb: 1 }} mt={{ xs:'130px', sm:'0px'}}    >
+              {`${Nombre} ${Apellido}`}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 4 }}>
+              {Descripcion}
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={3}>
+                <Typography variant="h6" component="div" gutterBottom>
+                  {numeroCuenta ? 'Número de Cuenta' : 'Número de Empleado'}
+                </Typography>
+                <Typography variant="body1">
+                  {numeroCuenta ? numeroCuenta : numeroEmpleado}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Typography variant="h6" component="div" gutterBottom>
+                  Departamento
+                </Typography>
+                <Typography variant="body1">
+                {departamentoNombre}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Typography variant="h6" component="div" gutterBottom>
+                  Centro Universitario
+                </Typography>
+                <Typography variant="body1">
+                {centroNombre}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Typography variant="h6" component="div" gutterBottom>
+                  {correo_Institucional ? 'Correo Institucional' : 'Correo Profesional'}
+                </Typography>
+                <Typography variant="body1">
+                  {correo_Institucional ? correo_Institucional : Correo}
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Button startIcon={<Phone />} variant="outlined" color="primary" fullWidth>
-                {Telefono}
-              </Button>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Button startIcon={<LocationCity />} variant="outlined" color="primary" fullWidth>
-                {`Centro: ${estudiante[0]?.id_Centros || 'N/A'}`}
-              </Button>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Button startIcon={<School />} variant="outlined" color="primary" fullWidth>
-                {`Carrera: ${estudiante[0]?.id_Departamento || 'N/A'}`}
-              </Button>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Button startIcon={<School />} variant="outlined" color="primary" fullWidth>
-                {`Número de Cuenta: ${estudiante[0]?.numeroCuenta || 'N/A'}`}
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      {Fotografia1 || Fotografia2 || Fotografia3 ? (
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h5" gutterBottom color="primary">Galería</Typography>
-          <Grid container spacing={2}>
-            {[Fotografia1, Fotografia2, Fotografia3].map((foto, index) => (
-              foto ? (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Box
-                    component="div"
-                    sx={{
-                      width: '100%',
-                      height: 0,
-                      paddingTop: '75%',
-                      overflow: 'hidden',
-                      borderRadius: '8px',
-                      position: 'relative',
-                      boxShadow: 3,
-                      cursor: 'pointer',
-                      '&:hover img': {
-                        transform: 'scale(1.1)',
-                      }
-                    }}
-                    onClick={() => handleImageClick(foto)}
-                  >
-                    <img
-                      src={foto}
-                      alt={`Foto ${index + 1}`}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        objectFit: 'cover',
-                        transition: 'transform 0.3s ease-in-out',
-                      }}
-                    />
-                  </Box>
+            {/* Galería de imágenes */}
+            {Fotografia1 || Fotografia2 || Fotografia3 ? (
+              <Box sx={galleryStyle}>
+                <Typography variant="h6" gutterBottom>Galería</Typography>
+                <Grid container spacing={2}>
+                  {[Fotografia1, Fotografia2, Fotografia3].map((foto, index) => (
+                    foto ? (
+                      <Grid item xs={4} key={index}>
+                        <Box
+                          component="div"
+                          sx={imageContainerStyle}
+                          onClick={() => handleImageClick(foto)}
+                        >
+                          <img
+                            src={foto}
+                            alt={`Foto ${index + 1}`}
+                            style={imageStyle}
+                          />
+                        </Box>
+                      </Grid>
+                    ) : null
+                  ))}
                 </Grid>
-              ) : null
-            ))}
-          </Grid>
-        </Box>
-      ) : null}
-      <Modal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box sx={modalStyle}>
-          <IconButton
-            onClick={handleCloseModal}
-            sx={{ position: 'absolute', top: 8, right: 8 }}
-          >
-            <span className="material-icons">close</span>
-          </IconButton>
-          {selectedImage && (
-            <img
-              src={selectedImage}
-              alt="Selected"
-              style={{
-                width: '100%',
-                height: 'auto',
-                maxHeight: '80vh',
-                borderRadius: '8px',
-              }}
-            />
-          )}
-        </Box>
-      </Modal>
-    </Box>
+              </Box>
+            ) : null}
+          </CardContent>
+        </Card>
+        <Modal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box sx={modalStyle}>
+            {selectedImage && (
+              <img
+                src={selectedImage}
+                alt="Selected"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '80vh',
+                  borderRadius: '8px',
+                }}
+              />
+            )}
+          </Box>
+        </Modal>
+      </Box>
+    </>
   );
 };
