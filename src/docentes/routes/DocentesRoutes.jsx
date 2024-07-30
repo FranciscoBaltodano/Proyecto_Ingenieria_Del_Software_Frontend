@@ -10,7 +10,6 @@ export const DocentesRoutes = () => {
       <Route path="notas"       element={<NotasPage/>} />
       <Route path="perfil"      element={<PerfilPage/>} />
 
-      {/* <Route path="coordinador/*"  element={<CoordinadoresRoutes/>} /> */}
       <Route path="/*"          element={ <Navigate to='/admisiones/' /> }/>
     </Routes>
   )

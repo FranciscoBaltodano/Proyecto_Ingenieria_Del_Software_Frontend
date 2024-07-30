@@ -10,6 +10,8 @@ import { CoordinadoresRoutes } from "../docentes/coordinadores/routes/Coordinado
 import { JefeDepartamentoRoutes} from "../docentes/jefeDepartamento/routes/JefeDepartamentoRoutes";
 import { DocentesRoutes } from "../docentes/routes/DocentesRoutes";
 
+import { PerfilView } from "../perfiles/components/PerfilView";
+
 
 export const AppRouter = () => {
   return (
@@ -23,6 +25,7 @@ export const AppRouter = () => {
         <Route path="matricula/*"        element={<ProcesoMatriculaRoutes/>} />
         <Route path="estudiantes/*"      element={<EstudiantesRoutes/>} />
 
+        <Route path="perfiles/:id_Usuario"      element={<PerfilView/>} />
         
         {/* <Route path="docentes/*"         element={<DocentesRoutes/>} /> */}
         {/* <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} /> 
