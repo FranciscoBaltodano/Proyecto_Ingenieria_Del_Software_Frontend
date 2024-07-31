@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Grid, Typography, IconButton, Box, TextField, Snackbar, Alert } from '@mui/material';
-import { Edit, Cancel, Send } from '@mui/icons-material';
+import { Grid, Typography, Avatar, IconButton, Box, Button, TextField, Snackbar, Alert } from '@mui/material';
+import { Edit, Save, Cancel, Send } from '@mui/icons-material';
 import { useDropzone } from 'react-dropzone';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
-import { FotoPerfil } from '../components/FotoPerfil';
+import { FotoPerfil } from './components/FotoPerfil';
 
 export const PerfilMainPage = () => {
   const { user } = useAuth();
+  const [fotoPerfil, setFotoPerfil] = useState(user.imagen || '');
+  const [avatar, setAvatar] = useState(user.imagen || null);
   const [gallery, setGallery] = useState([null, null, null]);
   const [formState, setFormState] = useState({
     Descripcion: '',
@@ -96,6 +98,20 @@ export const PerfilMainPage = () => {
     });
   };
 
+  const onDropAvatar = useCallback((acceptedFiles) => {
+    const file = acceptedFiles[0];
+    const newAvatarURL = URL.createObjectURL(file);
+    setAvatar(newAvatarURL);
+    setFormState(prevState => ({
+      ...prevState,
+      Fotografia1: file
+    }));
+    // Immediately update the profile on the server
+    updateProfile({
+      ...formState,
+      Fotografia1: file
+    });
+  }, [formState]);
 
   const onDropGallery = useCallback((acceptedFiles, index) => {
     const file = acceptedFiles[0];
