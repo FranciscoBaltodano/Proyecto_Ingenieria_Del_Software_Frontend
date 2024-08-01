@@ -17,6 +17,7 @@ export const MatriculaPage = () => {
         
         <OptionMatricula/>
 
+       
     </AdministradorLayout>
   )
 }
