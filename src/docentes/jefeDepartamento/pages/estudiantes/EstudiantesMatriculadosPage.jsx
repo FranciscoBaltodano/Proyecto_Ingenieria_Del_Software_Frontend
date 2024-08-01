@@ -160,7 +160,6 @@ export const EstudiantesMatriculadosPage = () => {
         { field: 'Hora_Final', headerName: 'Hora Final', width: 150 },
         { field: 'Cupos', headerName: 'Cupos', width: 100 },
         { field: 'estado', headerName: 'Estado', width: 150 },
-        { field: 'matriculados', headerName: 'Matriculados', width: 150 },
         {
             field: 'viewStudents',
             headerName: 'Ver',
@@ -205,7 +204,6 @@ export const EstudiantesMatriculadosPage = () => {
         Hora_Final: seccion.Hora_Final,
         Cupos: seccion.Cupos,
         estado: seccion.estado ? 'Activo' : 'Inactivo',
-        matriculados: seccion.matriculados,
     }));
 
     const estudiantesRows = estudiantesMatriculados;
