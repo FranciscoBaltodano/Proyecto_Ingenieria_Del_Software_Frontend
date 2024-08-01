@@ -252,7 +252,7 @@ export const FormRegistrarSeccionPage = () => {
         <br />
         <center>
         <Typography variant="h9" component="h1" gutterBottom>
-          Debe seleccionar los dias conforme a las horas previstas para la seccion y a las UV de la clase.
+          Debe seleccionar los dias conforme a las horas previstas para la seccion y a las UV de la asignatura.
         </Typography>
         </center>
          
