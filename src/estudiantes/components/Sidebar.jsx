@@ -7,7 +7,7 @@ import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 import { Chat as ChatIcon, Class as ClassIcon, Grade as GradeIcon } from '@mui/icons-material';
 
 const menuItems = [
-  { text: 'Mis clases',   icon: <HomeIcon />    ,to:'/estudiantes/clases'   },
+  { text: 'Inicio',   icon: <HomeIcon />    ,to:'/estudiantes/clases'   },
   { text: 'Mi Perfil',    icon: <ClassIcon />   ,to:'/estudiantes/perfil'   },
   { text: 'Chats',        icon: <ChatIcon />    ,to:'/estudiantes/chats'   },
   { text: 'Notas',        icon: <GradeIcon />   ,to:'/estudiantes/notas'   },

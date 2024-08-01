@@ -1,229 +1,68 @@
-// // src/chats/ChatsPage.jsx
-// import React from 'react';
-// import { CometChatLocalize, CometChatUsersWithMessages } from "@cometchat/chat-uikit-react";
-// import { Grid } from '@mui/material';
-// import {
-//   CometChatContacts,
-// } from "@cometchat/chat-uikit-react";
-// import {
-//   CometChatConversations,
-//   TitleAlignment,
-//   ConversationsStyle,
-// } from "@cometchat/chat-uikit-react";
-
-// export const ChatsMainPage = () => {
-//   CometChatLocalize.setLocale("es");
-//   let currentLanguage = CometChatLocalize.getLocale();
-//   const conversationsStyle = new ConversationsStyle({
-//     width: "100%",
-//     height: "100%",
-//   });
-
-//   return (
-//     <Grid width='100%' height='80vh' zIndex={-1} container>
-//       <CometChatContacts />
-//          <CometChatConversations/>
-//       <CometChatUsersWithMessages />;
-//     </Grid>
-//   );
-// };
-
-
-
-
-// // Creado por chatgpt
-// import React from 'react'
-// import { CometChatLocalize, CometChatUsersWithMessages } from "@cometchat/chat-uikit-react";
-// import { Grid } from '@mui/material';
-
-// export const ChatsMainPage = () => {
-//   CometChatLocalize.setLocale("es");
-//   let currentLanguage = CometChatLocalize.getLocale();
-
-//   return (
-//     <Grid width='100%' height='80vh' zIndex={-1} container>
-//     {/* //   <div className="conversations" style={{ width: "100%", height: "100%" }}>
-//     //     <div>
-//     //       <CometChatConversations */}
-//     {/* //         title="Your Custom Title"
-//     //         titleAlignment={TitleAlignment.center}
-//     //         conversationsStyle={conversationsStyle}
-//     //       />
-//     //     </div>
-//     //   </div>
-//     //   <CometChatContacts
-//     //      title="CometChat Contacts"
-//     //      /> */}
-//       <CometChatUsersWithMessages />;
-//     </Grid>  
-//     )
-// }
-
-
-
-
-
-
-
-
-
-// import { createComponent } from "@lit-labs/react";
-// import { CometChatGroupsWithMessages } from "@cometchat/chat-uikit-react";
-// import { CometChatLocalize } from "@cometchat/chat-uikit-react";
-// import { CometChat } from '@cometchat-pro/chat';
-
-// import { CometChatUsersWithMessages } from "@cometchat/chat-uikit-react";
-
-// import {
-//   CometChatContacts,
-// } from "@cometchat/chat-uikit-react";
-
-
-// import { CometChatConversationsWithMessages } from "@cometchat/chat-uikit-react"; //import the component in your App.js file
-// import React, { useEffect, useState } from 'react'
-// import { useAuth } from "../contexts/AuthContext";
-
-// export const ChatsMainPage = () => {
-
-//   CometChatLocalize.setLocale("es");
-//   let currentLanguage = CometChatLocalize.getLocale();
-
-//   return( 
-//     <div style={{ height: '50vh', width:'100%'}}>
-//         <CometChatGroupsWithMessages />
-//         <CometChatContacts
-//          title="CometChat Contacts"
-//          />
-//         <CometChatUsersWithMessages />
-//         <CometChatConversationsWithMessages />
-//     </div>
-
-//   )
-// }
-
-
-
-
-
-// import { CometChatGroupsWithMessages } from "@cometchat/chat-uikit-react";
-// import { CometChatLocalize } from "@cometchat/chat-uikit-react";
-// import { CometChat } from '@cometchat-pro/chat';
-
-// // import { CometChatUsersWithMessages } from "@cometchat/chat-uikit-react";
-// import { CometChatConversationsWithMessages } from "@cometchat/chat-uikit-react"; //import the component in your App.js file
-
-// export const ChatsMainPage = () => {
-
-//   CometChatLocalize.setLocale("es");
-//   let currentLanguage = CometChatLocalize.getLocale();
-
-//   return( 
-//     <div style={{ height: '50vh', width:'100%'}}>
-//         <CometChatGroupsWithMessages />
-//         {/* <CometChatUsersWithMessages /> */}
-//         <CometChatConversationsWithMessages usersRequestBuilder={new CometChat.UsersRequestBuilder()
-//         .friendsOnly(true)
-//         .setLimit(2)}
-//         />
-//     </div>
-
-//   )
-// }
-
-
-
-// import React, { useState } from 'react';
-// import { Tabs, Tab, Box } from '@mui/material';
-// import { CometChatGroupsWithMessages, CometChatUsersWithMessages, CometChatConversationsWithMessages, CometChatLocalize } from '@cometchat/chat-uikit-react';
-// import { CometChat } from '@cometchat-pro/chat';
-
-// export const ChatsMainPage = () => {
-//   CometChatLocalize.setLocale("es");
-//   let currentLanguage = CometChatLocalize.getLocale();
-
-//   const [value, setValue] = useState(0);
-
-//   const handleChange = (event, newValue) => {
-//     setValue(newValue);
-//   };
-
-//   return (
-//     <div style={{ height: '100vh', width: '100%' }}>
-//       <Tabs value={value} onChange={handleChange} aria-label="cometchat tabs">
-//         <Tab label="Grupos" />
-//         {/* <Tab label="Usuarios" /> */}
-//         <Tab label="Conversaciones" />
-//       </Tabs>
-//       <TabPanel value={value} index={0}>
-//         <CometChatGroupsWithMessages />
-//       </TabPanel>
-//       {/* <TabPanel value={value} index={1}>
-//         <CometChatUsersWithMessages />
-//       </TabPanel> */}
-//       <TabPanel value={value} index={1}>
-//         <CometChatConversationsWithMessages usersRequestBuilder={new CometChat.UsersRequestBuilder()
-//         .friendsOnly(true)
-//         .setLimit(2)}
-//     /> 
-//       </TabPanel>
-//     </div>
-//   );
-// };
-
-// const TabPanel = (props) => {
-//   const { children, value, index, ...other } = props;
-
-//   return (
-//     <div>
-//       {value === index && (
-//         <Box sx={{ p: 3 }}>
-//           {children}
-//         </Box>
-//       )}
-//     </div>
-//   );
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import { CometChatGroupsWithMessages } from "@cometchat/chat-uikit-react";
-import { CometChatLocalize } from "@cometchat/chat-uikit-react";
-import { CometChatConversationsWithMessages } from "@cometchat/chat-uikit-react"; //import the component in your App.js file
+import React, { useEffect, useState } from 'react';
+import { Tabs, Tab, Box } from '@mui/material';
+import { CometChatGroupsWithMessages, CometChatLocalize, WithMessagesStyle } from "@cometchat/chat-uikit-react";
+import { useAuth } from '../contexts/AuthContext';
+import { Contactos } from './Contactos';
 
 export const ChatsMainPage = () => {
-
+  const { user } = useAuth();
   CometChatLocalize.setLocale("es");
   let currentLanguage = CometChatLocalize.getLocale();
+  const [selectedTab, setSelectedTab] = useState('conversations');
+  const uid = user.numeroCuenta ? user.numeroCuenta : user.numeroEmpleado;
 
-  return( 
-    <div style={{ height: '50vh', width:'100%'}}>
-        <CometChatGroupsWithMessages />
-        <CometChatConversationsWithMessages />
+  useEffect(() => {
+    const fetchFriends = async () => {
+      const appId = import.meta.env.VITE_COMETCHAT_APP_ID;
+      const apiKey = import.meta.env.VITE_COMETCHAT_API_KEY;
+      const region = import.meta.env.VITE_COMETCHAT_REGION;
+      const userId = uid; // Puedes reemplazar esto con el ID del usuario correspondiente
+
+      const url = `https://${appId}.api-${region}.cometchat.io/v3/users/${userId}/friends?perPage=100&page=1`;
+
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            accept: 'application/json',
+            apikey: apiKey,
+          },
+        });
+        const data = await response.json();
+        console.log('Friends List:', data.data); // Imprime la lista de amigos en la consola
+      } catch (err) {
+        console.error('Error al cargar la lista de amigos:', err);
+      }
+    };
+
+    fetchFriends();
+  }, [uid]);
+
+  const handleTabChange = (event, newValue) => {
+    setSelectedTab(newValue);
+  };
+  const groupsWithMessagesStyle = new WithMessagesStyle({
+    height: "70vh",
+  });
+
+  return (
+    <div style={{ height: '80vh', width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
+        <Tabs
+          value={selectedTab}
+          onChange={handleTabChange}
+          aria-label="chat tabs"
+          variant="fullWidth"
+          centered
+        >
+          <Tab label="Amigos" value="conversations" />
+          <Tab label="Grupos" value="groups" />
+        </Tabs>
+        <Box minHeight='700px' sx={{ p: 3, height: 'calc(100% - 48px)' }}>
+          {selectedTab === 'conversations' && <Contactos />}
+          {selectedTab === 'groups' && <CometChatGroupsWithMessages  groupsWithMessagesStyle={groupsWithMessagesStyle} />}
+        </Box>
+      </Box>
     </div>
-  )
-}
-
-
-
-
-
+  );
+};

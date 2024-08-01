@@ -11,6 +11,7 @@ import { JefeDepartamentoRoutes} from "../docentes/jefeDepartamento/routes/JefeD
 import { DocentesRoutes } from "../docentes/routes/DocentesRoutes";
 
 import { PerfilView } from "../perfiles/components/PerfilView";
+import { SolicitudAceptadaPage } from "../perfiles/SolicitudAceptadaPage";
 
 
 export const AppRouter = () => {
@@ -26,6 +27,7 @@ export const AppRouter = () => {
         <Route path="estudiantes/*"      element={<EstudiantesRoutes/>} />
 
         <Route path="perfiles/:id_Usuario"      element={<PerfilView/>} />
+        <Route path="solicitudAceptada/"         element={<SolicitudAceptadaPage/>} />
         
         {/* <Route path="docentes/*"         element={<DocentesRoutes/>} /> */}
         {/* <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} /> 

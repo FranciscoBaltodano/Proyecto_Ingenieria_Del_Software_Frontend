@@ -13,6 +13,9 @@ import {
   IconButton
 } from '@mui/material';
 import axios from 'axios';
+import { CheckCircle, Email, PersonAdd } from '@mui/icons-material';
+import { useAuth } from '../../contexts/AuthContext';
+import { data } from 'autoprefixer';
 
 
 const containerStyle = {
@@ -62,16 +65,7 @@ const cardStyle = {
   marginTop: '100px', 
 };
 
-const avatarStyle = {
-  width: 120,
-  height: 120,
-  position: 'absolute',
-  top: 'calc(17% - 60px)', // Ajustar para que el Avatar esté centrado en la parte superior del Card
-  left: '50%',
-  transform: 'translateX(-50%)',
-  boxShadow: '4',
-  zIndex: 3, // Asegura que el Avatar esté por encima del Card
-};
+
 
 const buttonsContainerStyle = {
   display: 'flex',
@@ -121,11 +115,13 @@ const modalStyle = {
 };
 
 export const PerfilView = () => {
+  const { user } = useAuth();
   const { id_Usuario } = useParams();
   const [perfil, setPerfil] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [solicitudEnviada, setSolicitudEnviada] = useState(false);
 
   useEffect(() => {
     const fetchPerfil = async () => {
@@ -175,6 +171,31 @@ export const PerfilView = () => {
   const centroNombre = id_Centros?.Nombre || 'No disponible';
   const departamentoNombre = id_Departamento?.Nombre || 'No disponible';
   
+  const avatarStyle = {
+    width: 120,
+    height: 120,
+    position: 'absolute',
+    top: `calc(${Fotografia1 ? '17%':'330px'} - 60px)`, // Ajustar para que el Avatar esté centrado en la parte superior del Card
+    left: '50%',
+    transform: 'translateX(-50%)',
+    boxShadow: '4',
+    zIndex: 3, // Asegura que el Avatar esté por encima del Card
+  };
+
+  const enviarSolicitud = async() => {
+    const dataToSend = {
+      userName: `${user.nombre} ${user.apellido}`,
+      userId: user.numeroCuenta ? user.numeroCuenta : user.numeroEmpleado,
+      friendEmail: correo_Institucional ? correo_Institucional : Correo,
+      friendId: numeroCuenta ? JSON.stringify(numeroCuenta) : JSON.stringify(numeroEmpleado),
+    };
+
+    const response = await axios.post('/api/student/enviarSolicitud', dataToSend);
+    const { data:{ data } } = response;
+    console.log('Respuesta del servidor', data);
+
+    setSolicitudEnviada(true);
+  }
 
   return (
     <>
@@ -192,16 +213,22 @@ export const PerfilView = () => {
           <CardContent>
             <Box sx={buttonsContainerStyle}>
             <Button 
-              variant="outlined" 
+              variant="text" 
               color="primary" 
               href={`mailto:${correo_Institucional ? correo_Institucional : Correo}`} 
               target="_blank" 
               rel="noopener noreferrer"
+              endIcon={<Email />}
             >
               Email
             </Button>
-              <Button variant="outlined" color="primary">
-                Agregar
+              <Button 
+                variant="text" 
+                color={solicitudEnviada ? 'success' : 'primary'} 
+                endIcon={solicitudEnviada ? <CheckCircle/> :  <PersonAdd />} 
+                onClick={enviarSolicitud}
+              >
+                {solicitudEnviada ? 'Solicitud enviada' : 'Agregar'}
               </Button>
             </Box>
             <Typography variant="h4" component="div" gutterBottom sx={{ textAlign: 'center', mb: 1 }} mt={{ xs:'130px', sm:'0px'}}    >
@@ -239,7 +266,7 @@ export const PerfilView = () => {
                 <Typography variant="h6" component="div" gutterBottom>
                   {correo_Institucional ? 'Correo Institucional' : 'Correo Profesional'}
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="body1" overflow='auto'>
                   {correo_Institucional ? correo_Institucional : Correo}
                 </Typography>
               </Grid>
