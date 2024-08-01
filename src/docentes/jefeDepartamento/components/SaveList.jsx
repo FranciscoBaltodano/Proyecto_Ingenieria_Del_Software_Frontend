@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-const DownloadStudents = ({ seccionId }) => {
-  // Add prop validation
-  DownloadStudents.propTypes = {
-    seccionId: PropTypes.number.isRequired,
-  };
-  
+
 const DownloadStudents = ({ seccionId }) => {
 
   const fetchStudents = async () => {
@@ -35,14 +30,12 @@ const DownloadStudents = ({ seccionId }) => {
 
       alert('Archivo descargado exitosamente');
     } catch (error) {
-      console.error('Error:', error.message);
-      alert('Error al obtener los estudiantes de la sección');
+      console.error('Error al descargar los datos de la seccion:', error.message);
     }
   };
 
   return (
     <div>
-      <h1>Descargar Lista de Estudiantes</h1>
       <button onClick={fetchStudents}>Descargar Lista</button>
     </div>
   );
