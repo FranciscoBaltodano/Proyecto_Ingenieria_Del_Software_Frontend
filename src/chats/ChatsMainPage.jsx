@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
-import { CometChatGroupsWithMessages, CometChatLocalize } from "@cometchat/chat-uikit-react";
+import { CometChatGroupsWithMessages, CometChatLocalize, WithMessagesStyle } from "@cometchat/chat-uikit-react";
 import { useAuth } from '../contexts/AuthContext';
 import { Contactos } from './Contactos';
 
@@ -41,6 +41,9 @@ export const ChatsMainPage = () => {
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
+  const groupsWithMessagesStyle = new WithMessagesStyle({
+    height: "70vh",
+  });
 
   return (
     <div style={{ height: '80vh', width: '100%' }}>
@@ -55,9 +58,9 @@ export const ChatsMainPage = () => {
           <Tab label="Amigos" value="conversations" />
           <Tab label="Grupos" value="groups" />
         </Tabs>
-        <Box sx={{ p: 3, height: 'calc(100% - 48px)' }}>
+        <Box minHeight='700px' sx={{ p: 3, height: 'calc(100% - 48px)' }}>
           {selectedTab === 'conversations' && <Contactos />}
-          {selectedTab === 'groups' && <CometChatGroupsWithMessages />}
+          {selectedTab === 'groups' && <CometChatGroupsWithMessages  groupsWithMessagesStyle={groupsWithMessagesStyle} />}
         </Box>
       </Box>
     </div>
