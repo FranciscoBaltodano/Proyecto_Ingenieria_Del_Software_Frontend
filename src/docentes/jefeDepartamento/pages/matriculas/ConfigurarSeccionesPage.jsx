@@ -25,13 +25,14 @@ export const ConfigurarSeccionesPage = () => {
   const { user } = useAuth();
   const [openModal, setOpenModal] = useState(false);
   const [selectedAsignatura, setSelectedAsignatura] = useState({ codigo: '', nombre: '' });
-  const [open, setOpen] = useState(false);
-  const [open2, setOpen2] = useState(false);
-  const [selectedSection, setSelectedSection] = useState(null);
   const { register, formState: { errors } } = useForm();
-  const [value, setValue] = useState('');
-  const [justificacion, setJustificacion] = useState('');
-  const [isSectionDisabled, setIsSectionDisabled] = useState(false);
+  // const [value, setValue] = useState('');
+
+  const [disabledSections, setDisabledSections] = useState({});
+  const [sectionToDelete, setSectionToDelete] = useState('');
+  const [sectionToAddCupos, setSectionToAddCupos] = useState('');
+const [cuposValue, setCuposValue] = useState('');
+
   const handleBack = () => {
     navigate('/jefeDepartamento/matricula');
   };
@@ -86,69 +87,66 @@ export const ConfigurarSeccionesPage = () => {
     setSelectedAsignatura({ codigo: '', nombre: '' });
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
+  const handleClickOpen = (sectionId) => {
+    console.log("seccion a eliminar", sectionId);
+    setSectionToDelete(sectionId);
+  };
+  
   const handleClose = () => {
-    setOpen(false);
+    setSectionToDelete(null);
   };
 
-  const handleClickOpen2 = (sectionId) => {
-    setSelectedSection(sectionId);
-    setOpen2(true);
+  const handleClickOpenAddCupos = (sectionId) => {
+    setSectionToAddCupos(sectionId);
+    setCuposValue('');
   };
-
-  const handleClose2 = () => {
-    setOpen2(false);
-    setValue(''); // Reiniciar el valor del campo a 0
-  };
-
-  const handleJustificacionChange = (event) => {
-    setJustificacion(event.target.value);
+  
+  const handleCloseAddCupos = () => {
+    setSectionToAddCupos(null);
+    setCuposValue('');
   };
 
   const handleConfirmDisableSection = async () => {
-    if (!justificacion.trim()) {
-      alert('La justificación es obligatoria.');
-      return;
-    }
-
-    if (selectedSection !== null) {
+    if (sectionToDelete !== null) {
       try {
-        await axios.post('http://localhost:3000/api/department-head/just', {
-          id_Seccion: selectedSection,
-          justificacion: justificacion,
+        await axios.delete('http://localhost:3000/api/department-head/just', {
+          data: {
+          id_Seccion: parseInt(sectionToDelete)}
         });
-        setIsSectionDisabled(true); // Deshabilitar la sección en el frontend
+        console.log('Seccion cancelada');
+        setDisabledSections(prev => ({...prev, [sectionToDelete]: true}));
+        console.log(disabledSections);
         handleClose();
       } catch (error) {
         console.error("Error al deshabilitar la sección:", error);
-        console.log(selectedSection);
-        console.log(justificacion);
       }
     }
   };
 
 
   const handleConfirmAddCupos = async () => {
-    
+    if (sectionToAddCupos !== null) {
       try {
-        // Enviar solicitud PUT para actualizar los cupos
-        await axios.put(`http://localhost:3000/api/department-head/cupos`, {
-        id_Seccion: selectedSection,
-        Cupos: parseInt(value)
-        }
-        );
+        await axios.put('http://localhost:3000/api/department-head/cupos', {
+          id_Seccion: parseInt(sectionToAddCupos),
+          Cupos: parseInt(cuposValue)
+        });
         
-        handleClose2();
+        console.log('Cupos actualizados');
+        // Aquí deberías actualizar el estado local de las secciones
+        setSecciones(prevSecciones => prevSecciones.map(seccion => 
+          seccion.id_Secciones === sectionToAddCupos 
+            ? {...seccion, Cupos: seccion.Cupos + parseInt(cuposValue)} 
+            : seccion
+        ));
+        handleCloseAddCupos();
       } catch (error) {
         console.error("Error al actualizar los cupos:", error);
-        console.log(value);
-        console.log(selectedSection);
-
+        console.log(cuposValue);
+        console.log(sectionToAddCupos);
       }
-    
+    }
   };
 
   const columns = [
@@ -173,12 +171,6 @@ export const ConfigurarSeccionesPage = () => {
       ),
     },
   ];
-  const handleChange = (e) => {
-    const newValue = e.target.value;
-    if (/^\d*$/.test(newValue)) {
-      setValue(newValue);
-    }
-  };
 
   const columns2 = [
     {
@@ -224,65 +216,70 @@ export const ConfigurarSeccionesPage = () => {
       width: 450,
       renderCell: (params) => (
         <>
-          <Button variant="outlined" color="warning" endIcon={<DeleteIcon />} onClick={handleClickOpen} disabled={isSectionDisabled}>
-            Deshabilitar Seccion
-          </Button>
-          <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Deshabilitar Sección</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Justique el por que desea deshabilitar la seccion
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="Justificacion"
-                label="Justifique"
-                type="text"
-                fullWidth
-                onChange={handleJustificacionChange}
-                value={justificacion}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button color="primary" onClick={handleConfirmDisableSection}>
-                Confirmar
-              </Button>
-              <Button onClick={handleClose} color="primary">
-                Cancelar
-              </Button>
-            </DialogActions>
-          </Dialog>
+     <Button 
+  variant="outlined" 
+  color="warning" 
+  endIcon={<DeleteIcon />} 
+  onClick={() => handleClickOpen(params.row.id_Secciones)}
+  disabled={disabledSections[params.row.id_Secciones]}
+>
+  Eliminar
+</Button>
+<Dialog 
+  open={sectionToDelete === params.row.id_Secciones} 
+  onClose={handleClose} 
+  aria-labelledby="form-dialog-title"
+>
+  <DialogTitle id="form-dialog-title">Eliminar Sección</DialogTitle>
+  <DialogActions>
+    <Button color="primary" onClick={handleConfirmDisableSection}>
+      Confirmar
+    </Button>
+    <Button onClick={handleClose} color="primary">
+      Cancelar
+    </Button>
+  </DialogActions>
+</Dialog>
 
-          <Button type='submit' style={{ marginLeft: '15px' }} variant="outlined" color="primary" endIcon={<AddIcon />} onClick={() => handleClickOpen2(params.row.id_Secciones)}>
-            Añadir Cupos
-          </Button>
-          <Dialog open={open2} onClose={handleClose2} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Añadir Cupos</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Para añadir cupos, ingrese el número de cupos adicionales aquí.
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="nuevos_cupos"
-                label="Añadir cupos"
-                type="text"
-                fullWidth
-                onChange={handleChange}
-                value={value}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleConfirmAddCupos} color="primary">
-                Confirmar
-              </Button>
-              <Button onClick={handleClose2} color="primary">
-                Cancelar
-              </Button>
-            </DialogActions>
-          </Dialog>
+<Button 
+          style={{ marginLeft: '15px' }} 
+          variant="outlined" 
+          color="primary" 
+          endIcon={<AddIcon />} 
+          onClick={() => handleClickOpenAddCupos(params.row.id_Secciones)}
+        >
+          Añadir Cupos
+        </Button>
+        <Dialog 
+          open={sectionToAddCupos === params.row.id_Secciones} 
+          onClose={handleCloseAddCupos} 
+          aria-labelledby="add-cupos-dialog-title"
+        >
+          <DialogTitle id="add-cupos-dialog-title">Añadir Cupos</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Para añadir cupos, ingrese el número de cupos adicionales aquí.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="nuevos_cupos"
+              label="Añadir cupos"
+              type="number"
+              fullWidth
+              value={cuposValue}
+              onChange={(e) => setCuposValue(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleConfirmAddCupos} color="primary">
+              Confirmar
+            </Button>
+            <Button onClick={handleCloseAddCupos} color="primary">
+              Cancelar
+            </Button>
+          </DialogActions>
+        </Dialog>
         </>
       ),
     },
