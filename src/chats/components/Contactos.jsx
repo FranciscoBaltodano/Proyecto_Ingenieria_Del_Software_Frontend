@@ -4,15 +4,14 @@
 import React, { useEffect, useState } from "react";
 import { CometChat } from "@cometchat/chat-sdk-javascript";
 import {CometChatLocalize, CometChatMessageComposer, MessageComposerStyle, CometChatMessageList } from "@cometchat/chat-uikit-react";
-import { useAuth } from '../contexts/AuthContext';
 import { Avatar, Grid, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import { useAuth } from "../../contexts/AuthContext";
 
-
+ 
 export const Contactos = () => {
   
   const { user } = useAuth();
   const uid = user.numeroCuenta ? user.numeroCuenta : user.numeroEmpleado;
-
   const [friends, setFriends] = useState([]);
   const [chatUser, setChatUser] = useState();
   const [friendUID, setFriendUID] = useState();
