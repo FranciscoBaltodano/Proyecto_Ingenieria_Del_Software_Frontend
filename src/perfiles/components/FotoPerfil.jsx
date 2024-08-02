@@ -102,7 +102,7 @@ export const FotoPerfil = () => {
           {`${user.nombre} ${user.apellido}`}
         </Typography>
         <Typography variant="small" sx={{ marginLeft: 2 }}>
-          {user.roles.map((i) => i).join(", ")}
+          {user.roles.map((i) => i =='JefeDepartamento' ? i ='Jefe de Departamento' : i ).join(", ")}
         </Typography>
       </Grid>
 
