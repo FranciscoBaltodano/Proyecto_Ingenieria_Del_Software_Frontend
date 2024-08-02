@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Avatar, Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import { Description as NewspaperIcon, Menu as MenuIcon, Home as HomeIcon, Person as PersonIcon, Assignment as AssignmentIcon, Group as GroupIcon, EventNote as EventNoteIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
+import { Description as NewspaperIcon, Menu as MenuIcon, Home as HomeIcon, Person as PersonIcon, Assignment as AssignmentIcon, Group as GroupIcon, EventNote as EventNoteIcon, ExitToApp as ExitToAppIcon, Addchart } from '@mui/icons-material';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
@@ -12,6 +12,7 @@ const menuItems = [
   { text: 'Chats',        icon: <ChatIcon />    ,to:'/estudiantes/chats'   },
   { text: 'Notas',        icon: <GradeIcon />   ,to:'/estudiantes/notas'   },
   { text: 'Solicitudes',  icon: <PersonIcon />  ,to:'/estudiantes/solicitudes'   },
+  { text: 'Matricula',  icon: <Addchart />  ,to:'/estudiantes/matricula'   },
 ];
 
 export const Sidebar = () => {
