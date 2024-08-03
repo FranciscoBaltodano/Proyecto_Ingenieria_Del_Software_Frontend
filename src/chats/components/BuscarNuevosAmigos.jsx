@@ -98,10 +98,7 @@ export const BuscarNuevosAmigos = () => {
     const handleRowClick = (id, uid) => {
         console.log('ID:', id);
         console.log('UID:', uid);
-        if (friends.length === 0) {
-            console.log('No se han cargado los amigos aún');
-            return;
-        }
+       
         setIdUser(id);
         const friend = friends.find(friend => friend.uid.toString() === uid.toString());
         
