@@ -32,7 +32,7 @@ const modalStyle = {
 };
 
 export const FotoPerfil = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [fotoPerfil, setFotoPerfil] = useState(user.imagen || "");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -52,7 +52,7 @@ export const FotoPerfil = () => {
       setImagePreview(URL.createObjectURL(file));
     }
   };
-
+console.log(setUser)
   const handleUpdateProfile = async () => {
     if (selectedImage) {
       setLoading(true);
@@ -67,6 +67,7 @@ export const FotoPerfil = () => {
         await axios.put(apiUrl, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        setUser({ ...user, imagen: imagePreview });
         setFotoPerfil(imagePreview);
         setSnackbarMessage("Imagen actualizada, inicie sesión nuevamente para ver los cambios");
         setSnackbarSeverity("success");
