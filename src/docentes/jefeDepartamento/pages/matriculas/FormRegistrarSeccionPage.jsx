@@ -1,17 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Typography, Button, Stack } from '@mui/material';
+import { Divider, Typography, Button, Stack ,Snackbar,Alert} from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { DocenteLayout } from '../../../layout/DocenteLayout';
 import axios from 'axios';
+
+const crearSeccion = async (data) => {
+  try {
+    const response = await axios.post('http://localhost:3000/api/department-head/Nsecciones', data);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data.error || 'Error desconocido del servidor');
+    }
+    throw error;
+  }
+};
 
 export const FormRegistrarSeccionPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
   const location = useLocation();
   const asignatura = location.state?.asignatura || {};
-  
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [redirectToSeccionPage, setRedirectToSeccionPage] = useState(false); // Estado para redirección
   const { user } = useAuth();
   const [dias, setDias] = useState([]);
   const [edificios, setEdificios] = useState([]);
@@ -25,6 +40,7 @@ export const FormRegistrarSeccionPage = () => {
   const startRangeEnd = 21;
   const endRangeStart = 7;
   const endRangeEnd = 22;
+
 
   const handleTimeChange = (e, setter, rangeStart, rangeEnd) => {
     const value = e.target.value;
@@ -54,7 +70,6 @@ export const FormRegistrarSeccionPage = () => {
     }
   };
 
-  console.log("asignatura", asignatura);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,6 +106,7 @@ export const FormRegistrarSeccionPage = () => {
 
   const onSubmit = async (data) => {
     try {
+      setSnackbarMessage(''); // Limpiar cualquier mensaje de error previo
       const payload = {
         id_Docentes: data.numeroEmpleado,
         id_Aula: data.id_Aula,
@@ -103,14 +119,33 @@ export const FormRegistrarSeccionPage = () => {
         id_Departamento: user.id_departamento
       };
       console.log('datos enviados', payload);
-      const response = await axios.post('http://localhost:3000/api/department-head/crear/secciones', payload);
-      console.log('Sección registrada:', response.data);
-      navigate('/jefedepartamento/registrarSeccion');
+      const response = await crearSeccion(payload);
+      console.log('Sección registrada:', response);
+      setSnackbarMessage('Sección creada con éxito');
+      setSnackbarSeverity('success');
+      setOpenSnackbar(true);
+      setTimeout (()=>{
+        setRedirectToSeccionPage(true);
+      },2000) ;
+
     } catch (error) {
       console.error('Error al registrar la sección:', error);
+      setSnackbarMessage(error.message);
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
     }
   };
 
+  
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+  if (redirectToSeccionPage) {
+    return navigate('/jefedepartamento/registrarSeccion') ; // Ajusta esta ruta según la URL de tu página de inicio
+  }
   return (
     <DocenteLayout titulo='Formulario de Registro de Sección'>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -138,7 +173,7 @@ export const FormRegistrarSeccionPage = () => {
             <select {...register('numeroEmpleado')} id="numeroEmpleado" className="w-full p-2 border border-black rounded" defaultValue="">
               <option value="" disabled>Elegir</option>
               {docente.map((docent) => (
-                <option key={docent.numeroEmpleado} value={docent.numeroEmpleado}>{docent.Nombre_docente}</option>
+                <option key={docent.numeroEmpleado} value={docent.numeroEmpleado}> {docent.numeroEmpleado}  &nbsp; {docent.Nombre_docente}</option>
               ))}
             </select>
           </div>
@@ -257,7 +292,7 @@ export const FormRegistrarSeccionPage = () => {
         </center>
          
         <br />
-
+        
         <div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center', alignItems: 'flex-end' }}>
           <Stack direction="row" spacing={6}>
             <Button variant="contained" type="submit">
@@ -268,6 +303,16 @@ export const FormRegistrarSeccionPage = () => {
             </Button>
           </Stack>
         </div>
+        <Snackbar 
+                open={openSnackbar} 
+                autoHideDuration={6000} 
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                <Alert onClose={handleCloseSnackbar} variant='filled' severity={snackbarSeverity} sx={{ width: '100%' }}>
+                {snackbarMessage}
+                </Alert>
+            </Snackbar>
       </form>
     </DocenteLayout>
   );
