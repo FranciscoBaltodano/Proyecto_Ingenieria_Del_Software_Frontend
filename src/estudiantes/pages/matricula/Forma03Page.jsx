@@ -2,7 +2,7 @@ import React from 'react'
 import { EstudianteLayout } from '../../layout/EstudianteLayout'
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import ClaseMatriculadas from '../../components/ClaseMatriculadas';
+import {ClaseMatriculadas} from '../../components/ClaseMatriculadas';
 
 export const Forma03Page = () => {
   const navigate = useNavigate();

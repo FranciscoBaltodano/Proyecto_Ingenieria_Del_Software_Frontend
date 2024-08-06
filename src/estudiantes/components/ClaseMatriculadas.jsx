@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useAuth } from '../../contexts/AuthContext';
 
-const ClaseMatriculadas = () => {
+export const ClaseMatriculadas = () => {
     const [asignaturas, setAsignaturas] = useState([]);
     const { user, token } = useAuth();
 
@@ -75,5 +75,3 @@ const ClaseMatriculadas = () => {
     </TableContainer>
   );
 };
-
-export default ClaseMatriculadas;

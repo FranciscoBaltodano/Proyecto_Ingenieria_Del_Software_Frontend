@@ -1,7 +1,9 @@
 import React from 'react'
 import { EstudianteLayout } from '../../layout/EstudianteLayout'
-import { Button } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Matricula from '../../components/Matricula';
+import { ClaseMatriculadas } from '../../components/ClaseMatriculadas';
 
 export const AdicionarAsignaturaPage = () => {
   const navigate = useNavigate();
@@ -16,7 +18,9 @@ export const AdicionarAsignaturaPage = () => {
       </Button>
 
       
-      <div>AdicionarAsignaturaPage</div>
+      <Matricula/>
+      <Divider sx={{my:2}}/>
+      <ClaseMatriculadas/>
     </EstudianteLayout>
   )
 }
