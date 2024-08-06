@@ -2,6 +2,7 @@ import React from 'react'
 import { EstudianteLayout } from '../../layout/EstudianteLayout'
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import ClaseMatriculadas from '../../components/ClaseMatriculadas';
 
 export const Forma03Page = () => {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ export const Forma03Page = () => {
       </Button> 
       
       <div>Forma 03</div>
+
+      <ClaseMatriculadas/>
+      <br />
     </EstudianteLayout>
   )
 }
