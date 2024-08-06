@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Grid, InputAdornment, TextField, Typography, Modal ,Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle} from '@mui/material';
+import { Box, Button, Grid, InputAdornment, TextField, Typography, Modal ,Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle,Snackbar,Alert} from '@mui/material';
 import { DocenteLayout } from '../../../layout/DocenteLayout';
 import { DataGrid } from '@mui/x-data-grid';
-import { useAuth } from '../../../../contexts/AuthContext';
+import { useAuth } from '../../../../contexts/AuthContext'; 
 import { useEffect, useState } from 'react';
 import { esESLocaleText } from '../../../../components/esESLocaleText';
 import axios from 'axios';
@@ -10,8 +10,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { FormRegistrarSeccionModificar } from '../../components/FormRegistrarSeccionModificar'; 
 
 export const ConfigurarSeccionesPage = () => {
   const navigate = useNavigate();
@@ -24,14 +26,19 @@ export const ConfigurarSeccionesPage = () => {
   const [asignaturasFiltradas, setAsignaturasFiltradas] = useState([]);
   const { user } = useAuth();
   const [openModal, setOpenModal] = useState(false);
-  const [selectedAsignatura, setSelectedAsignatura] = useState({ codigo: '', nombre: '' });
+  const [openModalModificar, setOpenModalModificar] = useState(false);
+  const [selectedAsignatura, setSelectedAsignatura] = useState({ codigo: '', nombre: '',uv:'' });
   const { register, formState: { errors } } = useForm();
   // const [value, setValue] = useState('');
-
+  const [sectionToModificar, setSectionToModificar] = useState('');
+  const [selectedSection, setSelectedSection] = useState(null);  // <-- Solo ID
   const [disabledSections, setDisabledSections] = useState({});
   const [sectionToDelete, setSectionToDelete] = useState('');
   const [sectionToAddCupos, setSectionToAddCupos] = useState('');
-const [cuposValue, setCuposValue] = useState('');
+  const [cuposValue, setCuposValue] = useState('');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleBack = () => {
     navigate('/jefeDepartamento/matricula');
@@ -63,8 +70,9 @@ const [cuposValue, setCuposValue] = useState('');
     getAsignaturasByDepartamento();
   }, [user.id_departamento]);
 
-  const handleOpenModal = async (codigoAsignatura, nombre) => {
-    setSelectedAsignatura({ codigo: codigoAsignatura, nombre: nombre });
+  const handleOpenModal = async (codigoAsignatura, nombre, uv) => {
+    setSelectedAsignatura({ codigo: codigoAsignatura, nombre: nombre, uv:uv });
+    
     try {
       const [seccionesRes, edificiosRes, aulasRes, docentesRes] = await Promise.all([
         axios.get(`/api/department-head/secciones/${codigoAsignatura}`),
@@ -81,10 +89,11 @@ const [cuposValue, setCuposValue] = useState('');
     }
     setOpenModal(true);
   };
+  console.log('que datos tare esto', selectedAsignatura);
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    setSelectedAsignatura({ codigo: '', nombre: '' });
+    setSelectedAsignatura({ codigo: '', nombre: '' , uv:''});
   };
 
 
@@ -104,7 +113,17 @@ const [cuposValue, setCuposValue] = useState('');
   
   const handleCloseAddCupos = () => {
     setSectionToAddCupos(null);
-    setCuposValue('');
+
+  };
+ 
+  const handleClickOpenModificar = (section) => {
+    setSelectedSection(section.id_Secciones);  // <-- Solo ID
+    setOpenModalModificar(true);
+  };
+
+  const handleCloseModificar = () => {
+    setSectionToModificar(null);
+    setOpenModalModificar(false);
   };
 
   const handleConfirmDisableSection = async () => {
@@ -114,14 +133,34 @@ const [cuposValue, setCuposValue] = useState('');
           data: {
           id_Seccion: parseInt(sectionToDelete)}
         });
+
+       
+      
+      
         console.log('Seccion cancelada');
         setDisabledSections(prev => ({...prev, [sectionToDelete]: true}));
         console.log(disabledSections);
         handleClose();
+
+        const seccionesRes = await axios.get(`/api/department-head/secciones/${selectedAsignatura.codigo}`);
+        setSecciones(seccionesRes.data.data);
+        setSnackbarMessage('Seccion eliminada correctamente');
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
       } catch (error) {
         console.error("Error al deshabilitar la sección:", error);
+        setSnackbarMessage('Error al eliminar la seccion');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
       }
     }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
 
@@ -141,10 +180,16 @@ const [cuposValue, setCuposValue] = useState('');
             : seccion
         ));
         handleCloseAddCupos();
+        setSnackbarMessage(`Cupos actualizados correctamente`);
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
       } catch (error) {
         console.error("Error al actualizar los cupos:", error);
         console.log(cuposValue);
         console.log(sectionToAddCupos);
+        setSnackbarMessage('Error al actualizar los cupos');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
       }
     }
   };
@@ -162,7 +207,7 @@ const [cuposValue, setCuposValue] = useState('');
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleOpenModal(params.row.codigo, params.row.nombre)}
+            onClick={() => handleOpenModal(params.row.codigo, params.row.nombre, params.row.uv)}
             endIcon={<VisibilityIcon />}
           >
             Ver Secciones
@@ -206,42 +251,58 @@ const [cuposValue, setCuposValue] = useState('');
       field: "Capacidad",
       headerName: "Capacidad",
       width: 100,
-      
+      renderCell: (params) => {
+        const aula = aulas.find(aula => aula.id_Aula === params.row.id_Aula);
+        return aula ? aula.Capacidad : 'Desconocido';
+      }
     },
     { field: "Cupos", headerName: "Cupos", width: 100 },
     { field: "matriculados", headerName: "Matriculados", width: 100 },
     {
       field: "actions",
       headerName: "Accion",
-      width: 450,
+      width: 470,
       renderCell: (params) => (
         <>
      <Button 
-  variant="outlined" 
-  color="warning" 
-  endIcon={<DeleteIcon />} 
-  onClick={() => handleClickOpen(params.row.id_Secciones)}
-  disabled={disabledSections[params.row.id_Secciones]}
->
-  Eliminar
-</Button>
-<Dialog 
-  open={sectionToDelete === params.row.id_Secciones} 
-  onClose={handleClose} 
-  aria-labelledby="form-dialog-title"
->
-  <DialogTitle id="form-dialog-title">Eliminar Sección</DialogTitle>
-  <DialogActions>
-    <Button color="primary" onClick={handleConfirmDisableSection}>
-      Confirmar
-    </Button>
-    <Button onClick={handleClose} color="primary">
-      Cancelar
-    </Button>
-  </DialogActions>
-</Dialog>
-
-<Button 
+        variant="outlined" 
+        color="warning" 
+        endIcon={<DeleteIcon />} 
+        onClick={() => handleClickOpen(params.row.id_Secciones)}
+        disabled={disabledSections[params.row.id_Secciones]}
+      >
+        Eliminar
+      </Button>
+      <Dialog 
+        open={sectionToDelete === params.row.id_Secciones} 
+        onClose={handleClose} 
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Eliminar Sección</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Esta seguro de querer eliminar esta seccion?
+          </DialogContentText>
+        </DialogContent>      
+        <DialogActions>
+          <Button color="primary" onClick={handleConfirmDisableSection}>
+            Confirmar
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Cancelar
+          </Button>
+        </DialogActions>
+      </Dialog>
+        <Button 
+          style={{ marginLeft: '15px' }} 
+          variant="outlined" 
+          color="success" 
+          endIcon={<EditIcon />} 
+          onClick={() => handleClickOpenModificar(params.row)}          >
+          Modificar
+        </Button>
+        
+        <Button 
           style={{ marginLeft: '15px' }} 
           variant="outlined" 
           color="primary" 
@@ -280,9 +341,11 @@ const [cuposValue, setCuposValue] = useState('');
             </Button>
           </DialogActions>
         </Dialog>
+        
         </>
       ),
     },
+    
   ];
 
   return (
@@ -349,7 +412,7 @@ const [cuposValue, setCuposValue] = useState('');
           flexDirection: 'column'
         }}>
           <Typography id="modal-title" variant="h6" component="h2" gutterBottom>
-            Secciones de {selectedAsignatura.codigo} | {selectedAsignatura.nombre}
+            Secciones de {selectedAsignatura.codigo} | {selectedAsignatura.nombre} 
           </Typography>
           <Box sx={{ flexGrow: 1, minHeight: '300px', overflowY: 'auto', mb: 2 }}>
             <DataGrid
@@ -372,6 +435,50 @@ const [cuposValue, setCuposValue] = useState('');
           </Box>
         </Box>
       </Modal>
+
+      <Modal
+        open={openModalModificar}
+        onClose={handleCloseModificar}
+        aria-labelledby="modal-modificar-title"
+        aria-describedby="modal-modificar-description"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '90%',
+          height: '90%',
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'auto','::-webkit-scrollbar': {
+            display: 'none',
+          },
+        
+        }}>
+          {selectedSection && (
+              <FormRegistrarSeccionModificar
+                section={selectedSection}
+                asignatura={selectedAsignatura}
+                onClose={handleCloseModificar}
+              />
+            )}
+        </Box>
+  
+      </Modal>
+      <Snackbar 
+                open={openSnackbar} 
+                autoHideDuration={6000} 
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                <Alert onClose={handleCloseSnackbar} variant='filled' severity={snackbarSeverity} sx={{ width: '100%' }}>
+                {snackbarMessage}
+                </Alert>
+            </Snackbar>
     </DocenteLayout>
   );
 };

@@ -59,12 +59,12 @@ export const InfraestructuraPage = () => {
     {
       field: "Nombre",
       headerName: "Nombre Edificio",
-      width: 250
+      width: 300
     },
     {
       field: "actions",
       headerName: "Acción",
-      width: 250,
+      width: 300,
       renderCell: (params) => (
         <Button
           variant="contained"
@@ -82,17 +82,17 @@ export const InfraestructuraPage = () => {
     {
       field: "Nombre",
       headerName: "Aula",
-      width: 150
+      flex: 1
     },
     {
       field: "Capacidad",
       headerName: "Capacidad",
-      width: 150
+      flex: 1
     },
     {
       field: "Tipo",
       headerName: "Tipo Aula",
-      width: 150,
+      flex: 1,
       renderCell: (params) => {
         const tipo = tipoAulas.find(t => t.id === params.row.Tipo);
         return tipo ? tipo.Nombre_Tipo : 'Desconocido';
