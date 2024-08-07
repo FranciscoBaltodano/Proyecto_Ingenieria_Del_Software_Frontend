@@ -110,7 +110,9 @@ export const FormMatricula =()=>{
             setSnackbarSeverity('success');
             setOpenSnackbar(true);
             reset(); 
-            setRedirectToHome(true);
+            setTimeout(() => {
+                setRedirectToHome(true);
+            }, 2000); 
           } 
         } catch (error) {
           console.error('Error al enviar el formulario:', error);

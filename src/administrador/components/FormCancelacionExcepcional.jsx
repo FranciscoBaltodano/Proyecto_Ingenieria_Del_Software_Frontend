@@ -81,8 +81,10 @@ export const FormCancelacionExcepcional =()=>{
             setSnackbarSeverity('success');
             setOpenSnackbar(true);
             reset(); 
+            setTimeout(() => {
+              setRedirectToHome(true);
+            }, 2000);
             
-            setRedirectToHome(true);
 
           } 
         } catch (error) {

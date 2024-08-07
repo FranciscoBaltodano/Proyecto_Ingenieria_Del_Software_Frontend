@@ -1,14 +1,17 @@
 import React from 'react';
-import { AdmisionesLayout } from '../layout/AdmisionesLayout';
-import { Container, Typography } from '@mui/material';
+import { Container, Grid, Typography } from '@mui/material';
 import {Carrusel} from '../components/Carrusel';
-
+import { Footer } from '../components/Footer'; 
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 import { NoticiasList } from '../components/NoticiasList';
+import { Navbar } from '../components/Navbar';
 
 export const InicioPage = () => {
   return (
-      <AdmisionesLayout >
+    <Grid sx={{marginLeft:'10px'}}>
+  
+    <Navbar />
+
         <Container maxWidth="100%" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', mt: 4 }}>
           <Typography variant="h4" mb='10px' alignItems='center' sx={{ display: { sm: 'block', md: 'flex' } }}>
             Bienvenido a <img src={logoUNAHconLetras} alt="UNAH" width="200" style={{ marginLeft: '20px'}} />
@@ -21,7 +24,9 @@ export const InicioPage = () => {
 
           <Carrusel />
         </Container>
-      </AdmisionesLayout>
+        <Footer/>
+    </Grid>
+
   );
 };
 
