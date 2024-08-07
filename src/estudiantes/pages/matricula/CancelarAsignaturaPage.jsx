@@ -19,6 +19,7 @@ import {
   Alert
 } from '@mui/material';
 import { useAuth } from '../../../contexts/AuthContext';
+import { boat } from '@cloudinary/url-gen/qualifiers/focusOn';
 
 export const CancelarAsignaturaPage = () => {
   const navigate = useNavigate();
@@ -70,8 +71,15 @@ export const CancelarAsignaturaPage = () => {
   const handleConfirm = async () => {
     if (selectedAsignatura) {
       try {
-        await axios.delete(`/api/matricula/cancelar/${selectedAsignatura.id_matricula}`, {
-          headers: { Authorization: `Bearer ${token}` }
+
+        console.log('data a enviar:', selectedAsignatura.id_estudiante, selectedAsignatura.id_estudiante);
+        
+        await axios.post(`/api/matricula/cancelar`, {
+          // headers: { Authorization: `Bearer ${token}` },
+          // body: {
+            id_estudiante: selectedAsignatura.id_estudiante,
+            id_seccion: selectedAsignatura.id_seccion
+          // },
         });
         // Refresca la lista de asignaturas
         fetchAsignaturasMatriculadas(user.id);
