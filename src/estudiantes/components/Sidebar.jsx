@@ -6,14 +6,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 import { Chat as ChatIcon, Class as ClassIcon, Grade as GradeIcon } from '@mui/icons-material';
 
-const menuItems = [
-  { text: 'Inicio',   icon: <HomeIcon />    ,to:'/estudiantes/clases'   },
-  { text: 'Mi Perfil',    icon: <ClassIcon />   ,to:'/estudiantes/perfil'   },
-  { text: 'Chats',        icon: <ChatIcon />    ,to:'/estudiantes/chats'   },
-  { text: 'Notas',        icon: <GradeIcon />   ,to:'/estudiantes/notas'   },
-  { text: 'Solicitudes',  icon: <PersonIcon />  ,to:'/estudiantes/solicitudes'   },
-  { text: 'Matricula',  icon: <Addchart />  ,to:'/estudiantes/matricula'   },
-];
 
 export const Sidebar = () => {
   const { user, logout } = useAuth();
@@ -29,7 +21,15 @@ export const Sidebar = () => {
     logout();
     navigate('/login', { replace: true });
   };
-
+  
+  const menuItems = [
+    { text: 'Inicio',       icon: <HomeIcon />    ,to:'/estudiantes/clases'   },
+    { text: 'Mi Perfil',    icon: <Avatar sx={{width:'25px', height:'25px'}} src={user.imagen ? user.imagen : "/broken-image.jpg" } />  ,to:'/estudiantes/perfil'   },
+    { text: 'Chats',        icon: <ChatIcon />    ,to:'/estudiantes/chats'   },
+    { text: 'Notas',        icon: <GradeIcon />   ,to:'/estudiantes/notas'   },
+    { text: 'Solicitudes',  icon: <PersonIcon />  ,to:'/estudiantes/solicitudes'   },
+    { text: 'Matricula',     icon: <Addchart />  ,to:'/estudiantes/matricula'   },
+  ];
   const activeItemStyle = {
     color: 'primary.main',
     backgroundColor: '#F4F8FE',

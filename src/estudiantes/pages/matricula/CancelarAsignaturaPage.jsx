@@ -72,8 +72,6 @@ export const CancelarAsignaturaPage = () => {
     if (selectedAsignatura) {
       try {
 
-        console.log('data a enviar:', selectedAsignatura.id_estudiante, selectedAsignatura.id_estudiante);
-        
         await axios.post(`/api/matricula/cancelar`, {
           // headers: { Authorization: `Bearer ${token}` },
           // body: {
