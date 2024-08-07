@@ -82,7 +82,7 @@ export const ExcelInput = () => {
       setOpenSnackbar(true);
     } catch (error) {
       setSnackbarSeverity('error');
-      setSnackbarMessage('Error al enviar los datos: ' + error.message);
+      setSnackbarMessage('No hay datos para procesar');
       setOpenSnackbar(true);
     } finally {
       setLoading(false);
