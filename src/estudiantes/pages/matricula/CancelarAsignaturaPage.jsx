@@ -29,7 +29,9 @@ export const CancelarAsignaturaPage = () => {
 
   const [asignaturas, setAsignaturas] = useState([]);
   const { user, token } = useAuth();
-  
+  const [listaEspera, setListaEspera] = useState([]);
+  const [estaEnEspera, setEstaEnEspera] = useState(false);
+
   // Estado para el modal
   const [open, setOpen] = useState(false);
   const [selectedAsignatura, setSelectedAsignatura] = useState(null);
@@ -41,24 +43,53 @@ export const CancelarAsignaturaPage = () => {
 
   useEffect(() => {
     if (user && user.id) {
-      fetchAsignaturasMatriculadas(user.id);
+        fetchAsignaturasMatriculadas(user.id);
+        fetchAsignaturasListaEspera();
     }
-  }, [user]);
+}, [user]);
 
-  const fetchAsignaturasMatriculadas = async (idEstudiante) => {
+const fetchAsignaturasMatriculadas = async (idEstudiante) => {
     try {
-      const response = await axios.get(`/api/matricula/estudiantes/${idEstudiante}/asignatura`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      console.log('response', response);
-      setAsignaturas(response.data);
+        const response = await axios.get(`/api/matricula/estudiantes/${idEstudiante}/asignatura`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        setAsignaturas(response.data);
     } catch (error) {
-      console.error('Error fetching asignaturas matriculadas:', error);
+        console.error('Error fetching asignaturas matriculadas:', error);
     }
-  };
+};
+
+const obtenerIdEstudiante = async (id_user) => {
+  try {
+    const response = await axios.get(`/api/matricula/estudiante/${id_user}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    console.log(response.data.id);
+    return response.data.id;
+    
+  } catch (error) {
+    console.error('Error fetching student ID:', error);
+    throw error;
+  }
+};
+
+const fetchAsignaturasListaEspera = async () => {
+  const idEstudiante = await obtenerIdEstudiante(user.id);
+    try {
+        const response = await axios.get(`/api/matricula/lista-espera/estudiante/${idEstudiante}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        // console.log(idEstudiante)
+        setListaEspera(response.data);
+    } catch (error) {
+        console.error('Error fetching asignaturas en lista de espera:', error);
+    }
+};
 
   // Manejo del modal
-  const handleClickOpen = (asignatura) => {
+  const handleClickOpen = (asignatura, booleano) => {
+    setEstaEnEspera(booleano);
+    console.log('La clase seleccionada esta en lista de espera? ',booleano);
     setSelectedAsignatura(asignatura);
     setOpen(true);
   };
@@ -68,7 +99,7 @@ export const CancelarAsignaturaPage = () => {
     setSelectedAsignatura(null);
   };
 
-  const handleConfirm = async () => {
+  const cancelarAsignatura = async () => {
     if (selectedAsignatura) {
       try {
 
@@ -91,6 +122,38 @@ export const CancelarAsignaturaPage = () => {
         // Mostrar Snackbar de error
         setSnackbarMessage('Error al cancelar la asignatura.');
         setSnackbarSeverity('error');
+      }
+      handleClose();
+      setSnackbarOpen(true);
+    }
+  };
+
+  const cancelarAsignaturaEnEspera = async () => {
+    if (selectedAsignatura) {
+      const idEstudiante = await obtenerIdEstudiante(user.id);
+
+      try {
+        await axios.post(`/api/matricula/lista-espera/cancelar`, {
+          // headers: { Authorization: `Bearer ${token}` },
+          // body: {
+            id_estudiante: idEstudiante,
+            id_seccion: selectedAsignatura.id_seccion
+          // }
+        });
+        // Refresca la lista de asignaturas
+        fetchAsignaturasListaEspera();
+
+        // Mostrar Snackbar de éxito
+        setSnackbarMessage('Asignatura cancelada con éxito.');
+
+        setSnackbarSeverity('success');
+      } catch (error) {
+        console.error('Error cancelando asignatura:', error);
+
+        // Mostrar Snackbar de error
+        setSnackbarMessage('Error al cancelar la asignatura.');
+        setSnackbarSeverity('error');
+
       }
       handleClose();
       setSnackbarOpen(true);
@@ -137,7 +200,7 @@ export const CancelarAsignaturaPage = () => {
                 <TableCell>{asignatura.Secciones.Aula.Nombre}</TableCell>
                 <TableCell>{asignatura.Secciones.Asignaturas.uv}</TableCell>
                 <TableCell>
-                  <Button variant="contained" color="error" onClick={() => handleClickOpen(asignatura)}>
+                  <Button variant="contained" color="error" onClick={() => handleClickOpen(asignatura, false)}>
                     Cancelar
                   </Button>
                 </TableCell>
@@ -146,6 +209,52 @@ export const CancelarAsignaturaPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+
+
+
+
+
+      <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                  <TableRow>
+                      <TableCell sx={{ textAlign: 'center', color: 'white', backgroundColor: '#3f50b5' }}>Asignaturas en lista de espera</TableCell>
+                  </TableRow>
+              </TableHead>
+              </Table>
+
+              <Table>
+              <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Cod.</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Asignatura</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Sección</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>HI</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>HF</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>UV</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}></TableCell>
+                  </TableRow>
+                </TableHead>
+                    <TableBody>
+                        {listaEspera.map((asignatura) => (
+                            <TableRow key={asignatura.id}>
+                                <TableCell>{asignatura.Secciones.Asignaturas.codigo}</TableCell>
+                                <TableCell>{asignatura.Secciones.Asignaturas.nombre}</TableCell>
+                                <TableCell>{asignatura.Secciones.Hora_inicio}</TableCell>
+                                <TableCell>{asignatura.Secciones.Hora_inicio}</TableCell>
+                                <TableCell>{asignatura.Secciones.Hora_Final}</TableCell>
+                                <TableCell>{asignatura.Secciones.Asignaturas.uv}</TableCell>
+                                <TableCell>
+                                  <Button variant="contained" color="error" onClick={() => handleClickOpen(asignatura, true)}>
+                                    Cancelar
+                                  </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
 
       {/* Modal de confirmación */}
       <Dialog open={open} onClose={handleClose}>
@@ -162,7 +271,7 @@ export const CancelarAsignaturaPage = () => {
           <Button onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          <Button variant='contained' onClick={handleConfirm} color="primary">
+          <Button variant='contained' onClick={ estaEnEspera ? cancelarAsignaturaEnEspera : cancelarAsignatura} color="primary">
             Confirmar
           </Button>
         </DialogActions>

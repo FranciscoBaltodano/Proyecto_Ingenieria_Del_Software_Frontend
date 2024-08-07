@@ -16,10 +16,8 @@ export const Forma03Page = () => {
           Regresar
       </Button> 
       
-      <div>Forma 03</div>
-
       <ClaseMatriculadas/>
-      <br />
+      
     </EstudianteLayout>
   )
 }
