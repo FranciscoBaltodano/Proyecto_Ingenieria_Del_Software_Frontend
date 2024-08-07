@@ -19,7 +19,6 @@ import {
   Alert
 } from '@mui/material';
 import { useAuth } from '../../../contexts/AuthContext';
-import { boat } from '@cloudinary/url-gen/qualifiers/focusOn';
 
 export const CancelarAsignaturaPage = () => {
   const navigate = useNavigate();
