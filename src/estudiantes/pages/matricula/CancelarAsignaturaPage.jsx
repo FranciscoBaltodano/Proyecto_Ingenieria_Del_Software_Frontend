@@ -175,16 +175,16 @@ const fetchAsignaturasListaEspera = async () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Cod.</TableCell>
-              <TableCell>Asignatura</TableCell>
-              <TableCell>Sección</TableCell>
-              <TableCell>HI</TableCell>
-              <TableCell>HF</TableCell>
-              <TableCell>Días</TableCell>
-              <TableCell>Edificio</TableCell>
-              <TableCell>Aula</TableCell>
-              <TableCell>UV</TableCell>
-              <TableCell></TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Cod.</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Asignatura</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Sección</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>HI</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>HF</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Días</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Edificio</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Aula</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>UV</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
