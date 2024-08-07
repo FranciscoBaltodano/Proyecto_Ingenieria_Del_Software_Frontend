@@ -24,7 +24,7 @@ export const Sidebar = () => {
   
   const menuItems = [
     { text: 'Inicio',       icon: <HomeIcon />    ,to:'/estudiantes/clases'   },
-    { text: 'Mi Perfil',    icon: <Avatar sx={{width:'25px', height:'25px'}} src={user.imagen ? user.imagen : "/broken-image.jpg" } />  ,to:'/estudiantes/perfil'   },
+    { text: 'Mi Perfil',    icon: <Avatar sx={{width:'25px', height:'25px', boxShadow:4}} src={user.imagen ? user.imagen : "/broken-image.jpg" } />  ,to:'/estudiantes/perfil'   },
     { text: 'Chats',        icon: <ChatIcon />    ,to:'/estudiantes/chats'   },
     { text: 'Notas',        icon: <GradeIcon />   ,to:'/estudiantes/notas'   },
     { text: 'Solicitudes',  icon: <PersonIcon />  ,to:'/estudiantes/solicitudes'   },
@@ -97,7 +97,7 @@ export const Sidebar = () => {
         <NavLink to='/estudiantes/perfil' style={{ textDecoration: 'none' }}>
           <Box display='flex' alignItems='center' justifyContent='center' sx={{ display: { xs: 'none', sm: 'flex' }, mr:'31px' }}>
           <Typography color='primary' variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr:'31px' }}>{user.nombre} {user.apellido}</Typography>
-          <Avatar src={user.imagen ? user.imagen : "/broken-image.jpg" } />
+          <Avatar sx={{ boxShadow:2 }} src={user.imagen ? user.imagen : "/broken-image.jpg" } />
           </Box>
         </NavLink>
       </Box>
