@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { Divider, Typography, Button, Stack ,Snackbar,Alert} from '@mui/material';
+import { Divider, Typography, Button, Stack, Snackbar, Alert } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../../contexts/AuthContext'; 
 import axios from 'axios';
-
-
 export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) => {
-  
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
-  const navigate = useNavigate();
   const { user } = useAuth();
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [redirectToSeccionPage, setRedirectToSeccionPage] = useState(false);
   const [dias, setDias] = useState([]);
+  const [diasSecciones, setDiasSecciones] = useState([]);
   const [edificios, setEdificios] = useState([]);
   const [docente, setDocente] = useState([]);
   const [aulas, setAulas] = useState([]);
@@ -28,6 +25,76 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
   const endRangeStart = 7;
   const endRangeEnd = 22;
   const [seccionData, setSeccionData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [diasRes, edificioRes, docenteRes, seccionResponse, diasSeccionesRes] = await Promise.all([
+          axios.get('http://localhost:3000/api/department-head/dias'),
+          axios.get(`http://localhost:3000/api/department-head/edificios/${user.id_centro}`),
+          axios.post('http://localhost:3000/api/department-head/docentes/activos', { id_Departamento: user.id_departamento }),
+          axios.get(`http://localhost:3000/api/department-head/seccionesFiltro/${section}`),
+          axios.get(`http://localhost:3000/api/department-head/dias/${section}`)
+        ]);
+
+        setDias(diasRes.data.data);
+        setEdificios(edificioRes.data.data);
+        setDocente(docenteRes.data.data);
+        setDiasSecciones(diasSeccionesRes.data.data);
+
+        if (diasSeccionesRes.data.data) {
+          const selectedDiasIds = diasSeccionesRes.data.data.map(dia => dia.id_dia);
+          setSelectedDias(selectedDiasIds);
+        }
+
+        if (seccionResponse.data.data && seccionResponse.data.data.length > 0) {
+          const seccion = seccionResponse.data.data[0];
+          setSeccionData(seccion);
+          
+          setValue('id_Docentes', seccion.id_Docentes);
+          setValue('id_Aula', seccion.id_Aula);
+          setValue('Hora_inicio', seccion.Hora_inicio);
+          setValue('Hora_final', seccion.Hora_Final);
+          setValue('idEdificio', seccion.id_Edificios);
+          
+          setValue2(seccion.Cupos);
+  
+          if (seccion.id_Edificios) {
+            await fetchAulas(seccion.id_Edificios);
+          }
+        } else {
+          console.log('No se encontraron datos de sección');
+        }
+      } catch (error) {
+        console.error('Error al conseguir la data', error);
+        setSnackbarMessage('Error al cargar los datos. Por favor, intente de nuevo.');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [section, setValue, user.id_centro, user.id_departamento]);
+
+  const fetchAulas = async (idEdificio) => {
+    try {
+      console.log('Fetching aulas for edificio:', idEdificio);
+      const aulasRes = await axios.get(`http://localhost:3000/api/department-head/aulas/${idEdificio}`);
+      console.log('Aulas response:', aulasRes.data);
+      setAulas(aulasRes.data.data);
+    } catch (error) {
+      console.error('Error al conseguir las aulas', error.response?.data || error.message);
+    }
+  };
+
+  const onEdificioChange = async (e) => {
+    const idEdificio = e.target.value;
+    setValue('id_Aula', ''); // Resetear el aula seleccionada
+    await fetchAulas(idEdificio);
+  };
 
   const handleTimeChange = (e, setter, rangeStart, rangeEnd) => {
     const value = e.target.value;
@@ -57,66 +124,6 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [diasRes, edificioRes, docenteRes] = await Promise.all([
-          axios.get('http://localhost:3000/api/department-head/dias'),
-          axios.get(`http://localhost:3000/api/department-head/edificios/${user.id_centro}`),
-          axios.post('http://localhost:3000/api/department-head/docentes/activos', { id_Departamento: user.id_departamento })
-        ]);
-
-        setDias(diasRes.data.data);
-        setEdificios(edificioRes.data.data);
-        setDocente(docenteRes.data.data);
-
-        const seccionResponse = await axios.get(`http://localhost:3000/api/department-head/seccionesFiltro/${section}`);
-        setSeccionData(seccionResponse.data.data);
-
-        // Actualiza los valores del formulario con los datos de seccionData
-        if (seccionResponse.data.data) {
-          const data = seccionResponse.data.data;
-          setValue('id_Docentes', data.id_Docentes || '');
-          setValue('id_Aula', data.id_Aula || '');
-          setValue('id_Edificio', data.id_Edificio || '');
-          setStartTime(data.HoraInicio || '');
-          setEndTime(data.HoraFinal || '');
-          setSelectedDias(data.Dias || []);
-          setValue('Cupos', data.Cupos || '');
-        }
-      } catch (error) {
-        console.log('Error al conseguir la data', error);
-      }
-    };
-    fetchData();
-  }, [section, setValue, user.id_centro, user.id_departamento]);
-
-  useEffect(() => {
-    if (seccionData) {
-      setValue('id_Docentes', seccionData.id_Docentes || '');
-      setValue('id_Aula', seccionData.id_Aula || '');
-      setValue('id_Edificio', seccionData.id_Edificio || '');
-      setStartTime(seccionData.HoraInicio || '');
-      setEndTime(seccionData.HoraFinal || '');
-      setSelectedDias(seccionData.Dias || []);
-      setValue('Cupos', seccionData.Cupos || '');
-    }
-  }, [seccionData, setValue]);
-
-  const fetchAulas = async (idEdificio) => {
-    try {
-      const aulasRes = await axios.get(`http://localhost:3000/api/department-head/aulas/${idEdificio}`);
-      setAulas(aulasRes.data.data);
-    } catch (error) {
-      console.log('Error al conseguir las aulas', error);
-    }
-  };
-
-  const onEdificioChange = (e) => {
-    const idEdificio = e.target.value;
-    fetchAulas(idEdificio);
-  };
-
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -124,19 +131,23 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
     setOpenSnackbar(false);
   };
 
-  if (redirectToSeccionPage) {
-    return navigate('/jefedepartamento/registrarSeccion');
-  }
-
   const handleCloseModal = () => {
     if (onClose) {
       onClose();
     }
   };
 
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (!seccionData) {
+    return <div>No se encontraron datos de la sección</div>;
+  }
+
   return (
     <div>
-      <form onSubmit={handleSubmit(() => {})}>
+      <form onSubmit={handleSubmit()}>
         <Typography variant="h5" component="h1" gutterBottom>
           Departamento: {user.departamento}
         </Typography>
@@ -158,7 +169,10 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
                 Seleccione un docente
               </Typography>
             </div>
-            <select {...register('id_Docentes')} id="id_Docentes" className="w-full p-2 border border-black rounded" defaultValue="">
+            <select {...register('id_Docentes')} 
+            id="id_Docentes"
+            defaultValue={seccionData.id_Docentes}
+            className="w-full p-2 border border-black rounded">
               <option value="" disabled>Elegir</option>
               {docente.map((docent) => (
                 <option key={docent.numeroEmpleado} value={docent.numeroEmpleado}>
@@ -176,7 +190,10 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
             <Typography variant="h7" component="h1" gutterBottom>
               Seleccione un edificio
             </Typography>
-            <select {...register('id_Edificio')} id="id_Edificio" className="w-full p-2 border border-black rounded" defaultValue="" onChange={onEdificioChange}>
+            <select {...register('id_Edificio')} 
+            id="id_Edificio" 
+            defaultValue={seccionData.id_Edificios}
+            className="w-full p-2 border border-black rounded"  onChange={onEdificioChange}>
               <option value="" disabled>Elegir</option>
               {edificios.map((edificio) => (
                 <option key={edificio.id_Edificio} value={edificio.id_Edificio}>
@@ -189,7 +206,9 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
             <Typography variant="h7" component="h1" gutterBottom>
               Seleccione un aula
             </Typography>
-            <select {...register('id_Aula')} id="id_Aula" className="w-full p-2 border border-black rounded" defaultValue="">
+            <select {...register('id_Aula')} id="id_Aula" className="w-full p-2 border border-black rounded" 
+            defaultValue={seccionData.id_Aula}
+            >
               <option value="" disabled>Elegir</option>
               {aulas.map((aula) => (
                 <option key={aula.id_Aula} value={aula.id_Aula}>
@@ -212,11 +231,7 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
               id="Hora_Inicio"
               type="time"
               className="w-full p-2 border border-black rounded"
-              value={startTime}
-              onChange={(e) => handleTimeChange(e, setStartTime, startRangeStart, startRangeEnd)}
-              step="3600"
-              min="06:00"
-              max="22:00"
+              value={seccionData.Hora_inicio}
             />
           </div>
           <div className="xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
@@ -228,11 +243,7 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
               id="Hora_Final"
               type="time"
               className="w-full p-2 border border-black rounded"
-              value={endTime}
-              onChange={(e) => handleTimeChange(e, setEndTime, endRangeStart, endRangeEnd)}
-              step="3600"
-              min="07:00"
-              max="22:00"
+              value={seccionData.Hora_Final}
             />
           </div>
         </div>
@@ -264,7 +275,7 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
                   <div key={dia.id_Dia} className="flex items-center">
                     <input
                       type="checkbox"
-                      id={`dias.${dia.id_Dia}`}
+                      id={`id_dia`}
                       value={dia.id_Dia}
                       checked={selectedDias.includes(dia.id_Dia)}
                       onChange={(e) => handleCheckboxChange(e, dia.id_Dia)}
@@ -287,7 +298,7 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
         <div style={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center', alignItems: 'flex-end' }}>
           <Stack direction="row" spacing={6}>
             <Button variant="contained" type="submit">
-              Activar
+              Modificar
             </Button>
             <Button variant="contained" style={{ backgroundColor: 'gray' }} onClick={handleCloseModal}>
               Cancelar

@@ -300,7 +300,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_desdeMatri1" type="text" placeholder=" Desde"
+                    <input id="indice_desdeMatri1" type="text" placeholder=" Desde" 
                         {...register("indice_desdeMatri1", {required:"Requiere un indice inicial", min:{
                             value:0, message:"No puede ser menor que 0"
                         },pattern:{
@@ -320,7 +320,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_hastaMatri1"  type="text" placeholder="Hasta"
+                    <input id="indice_hastaMatri1"  type="text" placeholder="Hasta" 
                         {...register("indice_hastaMatri1", {required:"Requiere un indice final", min:{
                             value:0, message:"No puede ser menor que 0"
                         },validate: { 
@@ -343,7 +343,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Primer Ingreso PAA
                     </Typography>
-                    <input id="pIngreso_desdeMatri1" type="text" placeholder="Desde"
+                    <input id="pIngreso_desdeMatri1" type="text" placeholder="Desde" defaultValue="1000"
                         {...register("pIngreso_desdeMatri1", {required:"Requiere un puntaje inicial", min:{
                             value:0, message:"No puede ser menor que 0"
                         }, pattern:{
@@ -362,7 +362,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Primer Ingreso PAA
                     </Typography>
-                    <input id="pIngreso_hastaMatri1" type="text" placeholder="Hasta"
+                    <input id="pIngreso_hastaMatri1" type="text" placeholder="Hasta" defaultValue="1600"
                         {...register("pIngreso_hastaMatri1", {required:"Requiere un puntaje final" ,  min:{
                             value:0, message:"No puede ser menor que 0"
                         },
@@ -412,7 +412,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input  id="indice_desdeMatri2" type="text" placeholder=" Desde"
+                    <input  id="indice_desdeMatri2" type="text" placeholder=" Desde" 
                         {...register("indice_desdeMatri2", {required:"Requiere un indice inicial", min:{
                             value:0, message:"No puede ser menor que 0"
                         }, pattern:{
@@ -430,7 +430,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_hastaMatri2" type="text" placeholder="Hasta"
+                    <input id="indice_hastaMatri2" type="text" placeholder="Hasta" 
                         {...register("indice_hastaMatri2", {required:"Requiere un indice final", min:{
                             value:0, message:"No puede ser menor que 0"
                         },validate: { 
@@ -452,7 +452,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Primer Ingreso PAA
                     </Typography>
-                    <input id="pIngreso_desdeMatri2" type="text" placeholder="Desde"
+                    <input id="pIngreso_desdeMatri2" type="text" placeholder="Desde" defaultValue="0"
                         {...register("pIngreso_desdeMatri2", {required:"Requiere un puntaje inicial" , min:{
                             value:0, message:"No puede ser menor que 0"
                         }, pattern:{
@@ -470,7 +470,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Primer Ingreso PAA
                     </Typography>
-                    <input id="pIngreso_hastaMatri2" type="text" placeholder="Hasta"
+                    <input id="pIngreso_hastaMatri2" type="text" placeholder="Hasta" defaultValue="999"
                         {...register("pIngreso_hastaMatri2", {required:"Requiere un puntaje final" , min:{
                             value:0, message:"No puede ser menor que 0"
                         }, 
@@ -513,7 +513,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_desdeMatri3" type="text" placeholder=" Desde"
+                    <input id="indice_desdeMatri3" type="text" placeholder=" Desde" 
                         {...register("indice_desdeMatri3", {required:"Requiere un indice inicial" ,  min:{
                             value:0, message:"No puede ser menor que 0"
                         },pattern:{
@@ -531,7 +531,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_hastaMatri3" type="text" placeholder="Hasta"
+                    <input id="indice_hastaMatri3" type="text" placeholder="Hasta" 
                         {...register("indice_hastaMatri3", {required:"Requiere un indice final" , min:{
                             value:0, message:"No puede ser menor que 0"
                         },validate: { 
@@ -573,7 +573,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_desdeMatri4" type="text" placeholder=" Desde"
+                    <input id="indice_desdeMatri4" type="text" placeholder=" Desde" 
                         {...register("indice_desdeMatri4", {required:"Requiere un indice inicial" ,  min:{
                             value:0, message:"No puede ser menor que 0"
                         },pattern:{
@@ -652,7 +652,7 @@ export const FormMatricula =()=>{
                     <Typography variant="h7" component="h1" gutterBottom>
                     Indice matricula
                     </Typography>
-                    <input id="indice_hastaMatri5" type="text" placeholder="Hasta"
+                    <input id="indice_hastaMatri5" type="text" placeholder="Hasta" 
                         {...register("indice_hastaMatri5", {required:"Requiere un indice final" , min:{
                             value:0, message:"No puede ser menor que 0"
                         },validate: { 

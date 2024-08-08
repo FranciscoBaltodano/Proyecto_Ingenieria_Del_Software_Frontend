@@ -213,7 +213,9 @@ export const EstudiantesMatriculadosPage = () => {
             <Button variant="outlined" color="primary" onClick={handleBack}>
                 Regresar
             </Button>
-            
+             <br />
+             <br />
+
             <div style={{ height: '100%', width: '100%' }}>
                 <DataGrid
                     rows={rows}
@@ -224,7 +226,7 @@ export const EstudiantesMatriculadosPage = () => {
                 />
             </div>
 
-            <Dialog open={open} onClose={handleCloseModal} fullWidth maxWidth="md">
+            <Dialog open={open} fullWidth maxWidth="md">
                 <DialogTitle>Secciones del Docente</DialogTitle>
                 <DialogContent>
                     {seccionesDocenteSeleccionado.length > 0 ? (
@@ -247,7 +249,7 @@ export const EstudiantesMatriculadosPage = () => {
                 </DialogActions>
             </Dialog>
 
-            <Dialog open={openEstudiantesModal} onClose={handleCloseEstudiantesModal} fullWidth maxWidth="md">
+            <Dialog open={openEstudiantesModal}  fullWidth maxWidth="md">
                 <DialogTitle>Estudiantes Matriculados</DialogTitle>
                 <DialogContent>
                     {estudiantesMatriculados.length > 0 ? (

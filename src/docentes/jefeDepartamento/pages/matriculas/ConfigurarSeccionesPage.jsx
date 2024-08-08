@@ -350,7 +350,7 @@ export const ConfigurarSeccionesPage = () => {
 
   return (
     <DocenteLayout titulo='Configurar Secciones'>
-      <Button variant="text" color="primary" onClick={handleBack}>
+      <Button variant="outlined" color="primary" onClick={handleBack}>
         Regresar
       </Button>
 
@@ -438,7 +438,7 @@ export const ConfigurarSeccionesPage = () => {
 
       <Modal
         open={openModalModificar}
-        onClose={handleCloseModificar}
+        
         aria-labelledby="modal-modificar-title"
         aria-describedby="modal-modificar-description"
       >

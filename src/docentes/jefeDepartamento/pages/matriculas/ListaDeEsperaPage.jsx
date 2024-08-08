@@ -200,12 +200,20 @@ export const ListaDeEsperaPage = () => {
         return `${numeroCuenta || 'Desconocido'} `;
       }
     },
-    { field: 'fecha_solicitud', headerName: 'Fecha Solicitud', width: 150 }
+    { field: 'fecha', 
+      headerName: 'Fecha y Hora  Solicitud', 
+      width: 200,
+      renderCell: (params) => {
+        const fecha = new Date(params.value);
+        return `${fecha.toLocaleDateString()} - ${fecha.toLocaleTimeString()}`;
+      }
+      
+      }
   ];
 
   return (
     <DocenteLayout titulo='Lista De Espera'>
-      <Button variant="text" color="primary" onClick={handleBack}>
+      <Button variant="outlined" color="primary" onClick={handleBack}>
         Regresar
       </Button>
 
