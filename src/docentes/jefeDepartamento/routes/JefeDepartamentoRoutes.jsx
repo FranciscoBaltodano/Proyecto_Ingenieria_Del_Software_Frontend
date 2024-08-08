@@ -6,7 +6,7 @@ import { FormRegistrarSeccionPage } from '../pages/matriculas/FormRegistrarSecci
 export const JefeDepartamentoRoutes = () => {
   return (
     <Routes>
-      <Route path="/"           element={<DocentesPage /> }/>
+      <Route path="/"           element={<MatriculasPage /> }/>
       {/* <Route path="/"           element={<Navigate to='/docentes/clases' /> }/> */}
       <Route path="docentes"    element={<DocentesPage /> }/>
       <Route path="estudiantes" element={<EstudiantesPage /> }/>

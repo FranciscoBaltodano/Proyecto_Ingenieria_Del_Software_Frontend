@@ -28,12 +28,12 @@ export const MatriculaPage = () => {
       description: 'Completa y envía el formulario Forma 03.',
       icon: <Receipt sx={{ color: '#03A9F4' }} /> // Azul claro
     },
-    {
-      text: 'Lista de Asignaturas Canceladas',
-      to: '/estudiantes/matricula/listaCaceladas',
-      description: 'Consulta la lista de asignaturas que has cancelado.',
-      icon: <ListAlt sx={{ color: '#2196F3' }} /> // Azul medio
-    },
+    // {
+    //   text: 'Lista de Asignaturas Canceladas',
+    //   to: '/estudiantes/matricula/listaCaceladas',
+    //   description: 'Consulta la lista de asignaturas que has cancelado.',
+    //   icon: <ListAlt sx={{ color: '#2196F3' }} /> // Azul medio
+    // },
     {
       text: 'Lista de asignaturas en espera',
       to: '/estudiantes/matricula/listaEspera',

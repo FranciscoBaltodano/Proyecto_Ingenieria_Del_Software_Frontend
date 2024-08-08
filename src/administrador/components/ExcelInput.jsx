@@ -36,18 +36,20 @@ export const ExcelInput = () => {
   const readFile = (file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const data = e.target.result;
-      const workbook = XLSX.read(data, { type: 'binary' });
+      const data = new Uint8Array(e.target.result);
+      const text = new TextDecoder("utf-8").decode(data);  // Decode text as UTF-8
+      const workbook = XLSX.read(text, { type: 'string' });
       const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-
+  
       setDataJson(jsonData);
       console.log('Esta es la data', jsonData);
-
+  
       setCantidadEstudiantes(jsonData.length);
     };
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file); // Ensure ArrayBuffer is used
   };
+  
 
   const handleConfirmarMatricula = () => {
     setOpenModal(true);
@@ -66,6 +68,8 @@ export const ExcelInput = () => {
     setLoading(true);
     try {
       const response = await axios.post('http://localhost:3000/api/admisiones/usuarios/json', { dataJson });
+      console.log(dataJson);
+      
       setSnackbarSeverity('success');
       setSnackbarMessage('Datos enviados exitosamente.');
       console.log('Esta es la respuesta del backend', response.data);
@@ -78,7 +82,7 @@ export const ExcelInput = () => {
       setOpenSnackbar(true);
     } catch (error) {
       setSnackbarSeverity('error');
-      setSnackbarMessage('Error al enviar los datos: ' + error.message);
+      setSnackbarMessage('No hay datos para procesar');
       setOpenSnackbar(true);
     } finally {
       setLoading(false);

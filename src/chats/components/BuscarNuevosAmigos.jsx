@@ -4,6 +4,7 @@ import { Avatar, TextField, Paper, Grid, Modal, Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { PerfilView } from './PerfilView';
 import { useAuth } from "../../contexts/AuthContext";
+import { esESLocaleText } from '../../components/esESLocaleText';
 
 export const BuscarNuevosAmigos = () => {
     const { user } = useAuth();
@@ -29,7 +30,9 @@ export const BuscarNuevosAmigos = () => {
                 const response = await axios.get('/api/student/usuarios');
                 const { data: { data } } = response;
     
-                const processedData = data.map((usuario) => {
+                const filtredData = data.filter((usuario)=>usuario.UsuarioRol[0].id_Rol !== 5 && usuario.id !== user.id) 
+                
+                const processedData = filtredData.map((usuario) => {
                     // Procesar los datos del usuario
                     const uid = usuario.estudiante.length > 0 
                         ? usuario.estudiante[0].numeroCuenta 
@@ -121,9 +124,9 @@ export const BuscarNuevosAmigos = () => {
         {
             field: 'avatar',
             headerName: 'Avatar',
-            width: 100,
+            width: 150,
             renderCell: (params) => (
-                <Avatar src={params.value || ''} />
+                <Avatar sx={{width:'80px', height:'80px', mt:'10px', boxShadow:4}} src={params.value || ''} />
             ),
         },
         {
@@ -136,7 +139,7 @@ export const BuscarNuevosAmigos = () => {
         },
         {
             field: 'uid',
-            headerName: 'UID',
+            headerName: 'Numero de Cuenta',
             width: 200,
             renderCell: (params) => (
                 params.row.uid
@@ -168,6 +171,8 @@ export const BuscarNuevosAmigos = () => {
                         rows={rows}
                         columns={columns}
                         pageSize={10}
+                        rowHeight={100}
+                        localeText={ esESLocaleText }
                         rowsPerPageOptions={[10]}
                         onRowClick={(param) => handleRowClick(param.id, param.row.uid)}
                     />

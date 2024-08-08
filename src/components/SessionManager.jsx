@@ -1,8 +1,10 @@
 import React, { useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useAuth } from '../contexts/AuthContext';
 
 const SessionManager = ({ children }) => {
+  const {logout: cerrarSesion} = useAuth(); 
   const navigate = useNavigate();
   const inactivityTimeout = 15 * 60 * 1000; // 15 minutos en milisegundos
   const isReloading = useRef(false);
@@ -10,6 +12,7 @@ const SessionManager = ({ children }) => {
   const logout = useCallback(() => {
     if (!isReloading.current) {
       localStorage.removeItem('token');
+      cerrarSesion();
       navigate('/login');
     }
   }, [navigate]);

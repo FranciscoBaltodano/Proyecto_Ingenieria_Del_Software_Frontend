@@ -71,9 +71,9 @@ export const Contactos = () => {
             {friends.map((friend) => (
               <ListItem button key={friend.uid} onClick={() => handleItemClick(friend)}>
                 <ListItemAvatar>
-                  <Avatar src={friend.avatar} />
+                  <Avatar sx={{boxShadow:2}} src={friend.avatar} />
                 </ListItemAvatar>
-                <ListItemText primary={friend.name} secondary={friend.status} />
+                <ListItemText primary={friend.name} secondary={friend.status == 'offline' ? 'Desconectado' : 'En linea' } />
               </ListItem>
             ))}
         </List>

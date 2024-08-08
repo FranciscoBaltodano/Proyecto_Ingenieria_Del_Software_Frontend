@@ -21,32 +21,20 @@ import {
   Class as ClassIcon,
   Grade as GradeIcon,
   Person as PersonIcon,
-  Assignment as AssignmentIcon,  // Para 'Solicitudes'
-  School as SchoolIcon,          // Para 'Estudiantes'
+  Assignment as AssignmentIcon, 
+  School as SchoolIcon,         
   AdminPanelSettings as AdminPanelSettingsIcon, 
-  ExitToApp as ExitToAppIcon, // Para 'Jefe Departamento'
+  ExitToApp as ExitToAppIcon, 
   History,
-  AccountCircle
+  AccountCircle,
+  Groups3,
+  ContactEmergency,
+  DisplaySettings
 } from '@mui/icons-material';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import logoUNAHconLetras from '../../../public/assets/admisiones/logoUNAHconLetras.webp';
 
-// Define menu items with roles that are needed for visibility control
-const menuItems = [
-  { text: 'Mis clases', icon: <ClassIcon />, to: '/docentes/clases', roles: ['Docente'] },
-  { text: 'Mi Perfil', icon: <AccountCircle />, to: '/docentes/perfil', roles: ['Docente'] },
-  { text: 'Chats', icon: <ChatIcon />, to: '/docentes/chats', roles: ['Docente'] },
-  { text: 'Notas', icon: <GradeIcon />, to: '/docentes/notas', roles: ['Docente'] },
-
-  { text: 'Matricula', icon: <SchoolIcon />, to: '/jefedepartamento/matricula', roles: ['JefeDepartamento'] },
-  { text: 'Docentes', icon: <PersonIcon />, to: '/jefedepartamento/docentes', roles: ['JefeDepartamento'] },
-  { text: 'Estudiantes', icon: <SchoolIcon />, to: '/jefedepartamento/estudiantes', roles: ['JefeDepartamento'] },
-
-  { text: 'Solicitudes', icon: <AssignmentIcon />, to: '/coordinadores/solicitudes', roles: ['Coordinador'] },
-  { text: 'Carga Academica', icon: <SchoolIcon />, to: '/coordinadores/cargaAcademica', roles: ['Coordinador'] },
-  { text: 'Historiales', icon: <History />, to: '/coordinadores/historiales', roles: ['Coordinador'] }
-];
 
 export const Sidebar = () => {
   const { user, logout } = useAuth();
@@ -58,6 +46,23 @@ export const Sidebar = () => {
     JefeDepartamento: [],
     Coordinador: []
   });
+
+    // Define menu items with roles that are needed for visibility control
+  const menuItems = [
+    { text: 'Mis clases', icon: <ClassIcon />, to: '/docentes/clases', roles: ['Docente'] },
+    { text: 'Mi Perfil', icon: <Avatar sx={{width:'25px', height:'25px',boxShadow:4}} src={user.imagen ? user.imagen : "/broken-image.jpg" } /> , to: '/docentes/perfil', roles: ['Docente'] },
+    { text: 'Chats', icon: <ChatIcon />, to: '/docentes/chats', roles: ['Docente'] },
+    { text: 'Notas', icon: <GradeIcon />, to: '/docentes/notas', roles: ['Docente'] },
+
+    { text: 'Matricula', icon: <DisplaySettings />, to: '/jefedepartamento/matricula', roles: ['JefeDepartamento'] },
+    { text: 'Docentes', icon: <ContactEmergency />, to: '/jefedepartamento/docentes', roles: ['JefeDepartamento'] },
+    { text: 'Estudiantes', icon: <Groups3 />, to: '/jefedepartamento/estudiantes', roles: ['JefeDepartamento'] },
+
+    { text: 'Solicitudes', icon: <AssignmentIcon />, to: '/coordinadores/solicitudes', roles: ['Coordinador'] },
+    { text: 'Carga Academica', icon: <SchoolIcon />, to: '/coordinadores/cargaAcademica', roles: ['Coordinador'] },
+    { text: 'Historiales', icon: <History />, to: '/coordinadores/historiales', roles: ['Coordinador'] }
+  ];
+
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -203,7 +208,7 @@ export const Sidebar = () => {
         <NavLink to='/docentes/perfil' style={{ textDecoration: 'none' }}>
           <Box display='flex' alignItems='center' justifyContent='center' sx={{ display: { xs: 'none', sm: 'flex' }, mr:'31px' }}>
           <Typography color='primary' variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr:'31px' }}>{user.nombre} {user.apellido}</Typography>
-          <Avatar src={user.imagen ? user.imagen : "/broken-image.jpg" } />
+          <Avatar sx={{ boxShadow:2}} src={user.imagen ? user.imagen : "/broken-image.jpg" } />
           </Box>
         </NavLink>
       </Box>
