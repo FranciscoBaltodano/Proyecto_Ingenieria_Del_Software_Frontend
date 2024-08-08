@@ -16,8 +16,8 @@ export const Forma03Page = () => {
     const fetchPerfil = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/student/perfil/${user.id}`);
-        setEstudianteInfo(response.data.data.estudiante[0]);
-        console.log('Perfil:', response.data.data.estudiante[0]);
+        setEstudianteInfo(response.data.data.estudiante[0] ? response.data.data.estudiante[0] : {});
+        console.log('Perfil:', response.data.data.estudiante[0] ? response.data.data.estudiante[0] : {});
         
       } catch (error) {
         console.error(error);
@@ -97,7 +97,7 @@ export const Forma03Page = () => {
                       </Grid>
                       <Grid item>
                         <Typography variant="body1">
-                          <strong>Correo: </strong>{estudianteInfo.correo_Institucional ? estudianteInfo.correo_Institucional : user.correo}
+                          {/* <strong>Correo: </strong>{estudianteInfo.correo_Institucional ? estudianteInfo.correo_Institucional : user.correo} */}
                         </Typography>
                       </Grid>
                       
@@ -117,12 +117,12 @@ export const Forma03Page = () => {
                       </Grid>
                       <Grid item>
                         <Typography variant="body1">
-                          <strong>Índice Global: </strong>{estudianteInfo.indice_global}
+                          {/* <strong>Índice Global: </strong>{estudianteInfo.indice_global} */}
                         </Typography>
                       </Grid>
                       <Grid item>
                         <Typography variant="body1">
-                          <strong>Índice del periodo: </strong>{estudianteInfo.indice_periodo}
+                          {/* <strong>Índice del periodo: </strong>{estudianteInfo.indice_periodo} */}
                         </Typography>
                       </Grid>
                     </Grid>

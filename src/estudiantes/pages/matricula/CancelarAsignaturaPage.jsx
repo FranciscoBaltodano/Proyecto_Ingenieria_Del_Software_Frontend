@@ -170,20 +170,28 @@ const fetchAsignaturasListaEspera = async () => {
         Regresar
       </Button> 
       
+      <br /><br />
       <TableContainer component={Paper}>
+      <Table>
+              <TableHead>
+                  <TableRow>
+                      <TableCell sx={{ textAlign: 'center', color: 'white', backgroundColor: '#060270' }}>Asignaturas Matriculadas</TableCell>
+                  </TableRow>
+              </TableHead>
+              </Table>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Cod.</TableCell>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Asignatura</TableCell>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Sección</TableCell>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>HI</TableCell>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>HF</TableCell>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Días</TableCell>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Edificio</TableCell>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Aula</TableCell>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>UV</TableCell>
-              <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}></TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>Cod.</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>Asignatura</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>Sección</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>HI</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>HF</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>Días</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>Edificio</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>Aula</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>UV</TableCell>
+              <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -208,17 +216,12 @@ const fetchAsignaturasListaEspera = async () => {
           </TableBody>
         </Table>
       </TableContainer>
-
-
-
-
-
-
+      <br /><br />
       <TableContainer component={Paper}>
             <Table>
               <TableHead>
                   <TableRow>
-                      <TableCell sx={{ textAlign: 'center', color: 'white', backgroundColor: '#3f50b5' }}>Asignaturas en lista de espera</TableCell>
+                      <TableCell sx={{ textAlign: 'center', color: 'white', backgroundColor: '#060270' }}>Asignaturas en lista de espera</TableCell>
                   </TableRow>
               </TableHead>
               </Table>
@@ -226,13 +229,13 @@ const fetchAsignaturasListaEspera = async () => {
               <Table>
               <TableHead>
                   <TableRow>
-                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Cod.</TableCell>
-                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Asignatura</TableCell>
-                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>Sección</TableCell>
-                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>HI</TableCell>
-                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>HF</TableCell>
-                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}>UV</TableCell>
-                    <TableCell sx={{ color: 'white', backgroundColor: '#3f50b5' }}></TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>Cod.</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>Asignatura</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>Sección</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>HI</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>HF</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}>UV</TableCell>
+                    <TableCell sx={{ color: 'white', backgroundColor: '#060270' }}></TableCell>
                   </TableRow>
                 </TableHead>
                     <TableBody>
