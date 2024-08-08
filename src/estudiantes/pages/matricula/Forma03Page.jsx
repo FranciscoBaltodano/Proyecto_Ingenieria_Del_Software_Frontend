@@ -10,6 +10,7 @@ export const Forma03Page = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [estudianteInfo, setEstudianteInfo] = useState();
+  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     const fetchPerfil = async () => {
@@ -25,8 +26,6 @@ export const Forma03Page = () => {
     fetchPerfil();
   }, []);
   
-  // Obtener el año actual
-  const currentYear = new Date().getFullYear();
 
   const handleBack = () => {
     navigate('/estudiantes/matricula');
@@ -45,24 +44,6 @@ export const Forma03Page = () => {
       throw error;
     }
   };
-
-  // useEffect(() => {
-
-  //   const obtenerEstudiante = async (userId) => {
-
-  //     let { data: estudiante, error } = await supabase
-  //     .from('estudiante')
-  //     .select("*")
-  //     .eq('column', 'Equal to')
-
-  //     setEstudianteInfo(estudiante);
-  //     console.log(estudiante);
-      
-  //   };
-
-  //   obtenerEstudiante(user.id);
-  // }, []);
-  
 
   return (
     <EstudianteLayout titulo='Forma 03'>
@@ -116,7 +97,7 @@ export const Forma03Page = () => {
                       </Grid>
                       <Grid item>
                         <Typography variant="body1">
-                          <strong>Correo: </strong>{estudianteInfo.correo_Institucional}
+                          <strong>Correo: </strong>{estudianteInfo.correo_Institucional ? estudianteInfo.correo_Institucional : user.correo}
                         </Typography>
                       </Grid>
                       
