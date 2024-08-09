@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Grid, Typography, Avatar, IconButton, Box, Button, TextField, Snackbar, Alert } from '@mui/material';
+import { Grid, Typography, Avatar, IconButton, Box, Button, TextField, Snackbar, Alert, Divider } from '@mui/material';
 import { Edit, Save, Cancel, Send } from '@mui/icons-material';
 import { useDropzone } from 'react-dropzone';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { FotoPerfil } from './components/FotoPerfil';
+import './../index.css';
 
 export const PerfilMainPage = () => {
   const { user } = useAuth();
@@ -152,45 +153,64 @@ export const PerfilMainPage = () => {
   };
 
   return (
-    <Box sx={{ padding: '20px', flexGrow: 1 }}>
-      <Grid container spacing={2}>
-        <FotoPerfil />
-        <Grid item xs={12} sm={6}>
-          <Typography variant="subtitle1"><strong>Centro:</strong> {user.centro}</Typography>
-          <Typography variant="subtitle1"><strong>Carrera:</strong> {user.departamento}</Typography>
-          <Typography variant="subtitle1"><strong>{user.numeroCuenta ? "Número de Cuenta: " : "Número Empleado: "}</strong> {user.numeroCuenta ? user.numeroCuenta : user.numeroEmpleado}</Typography>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Grid container display='flex' alignItems='center'>
-            <Typography variant="subtitle1"><strong>Descripción</strong></Typography>
-            <IconButton onClick={editingDescription ? handleSaveDescription : handleEditDescription}>
-              {editingDescription ? <Send color='primary' /> : <Edit />}
-            </IconButton>
-            {editingDescription && (
-              <IconButton onClick={handleCancelEdit}>
-                <Cancel />
-              </IconButton>
-            )}
+    <Box sx={{ flexGrow: 1, borderRadius:'15px', padding:'30px' , width:'100%', boxShadow:'2px 2px 10px 0px #D0D0D0', backgroundColor:'#F9F9F9' }}>
+
+      <Grid container>
+
+        <Grid container mb='20px'>
+          <Grid item xs={12} md={3} sx={{ mb: { xs: '20px', md:'0px' }, mr: { xs: '0px', md:'30px' } }} >
+            <FotoPerfil />
           </Grid>
-          {editingDescription ? (
-            <TextField
-              multiline
-              rows={2}
-              fullWidth
-              value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
-              variant="outlined"
-              sx={{ marginRight: 2 }}
-            />
-          ) : (
-            <Typography variant="body1" sx={{ display: 'inline-block', marginRight: 2 }}>
-              {formState.Descripcion}
-            </Typography>
-          )}
+
+          <Grid display='flex' item xs={12} md={8.5} sx={{ borderRadius: '15px',boxShadow:'2px 2px 10px 0px #D0D0D0', padding:'30px',  backgroundColor:'#FCFDFD' }} >
+            <Grid container spacing={2}>
+                      <Grid item xs={12} md={5} sx={{ mt:'7px'}} direction='column'>
+                        <Typography variant="subtitle1"><strong>Centro:</strong> {user.centro}</Typography>
+                        <Typography variant="subtitle1"><strong>Carrera:</strong> {user.departamento}</Typography>
+                        <Typography variant="subtitle1">
+                          <strong>{user.numeroCuenta ? "Número de Cuenta: " : "Número Empleado: "}</strong> 
+                          {user.numeroCuenta ? user.numeroCuenta : user.numeroEmpleado}
+                        </Typography>
+                      </Grid>
+
+                      <Divider orientation="vertical" flexItem />
+
+                      <Grid item xs={12} md={6.9} >
+                        <Grid display='flex' alignItems='center'>
+
+                        <Typography variant="subtitle1"><strong>Descripción</strong></Typography>
+                        <IconButton onClick={editingDescription ? handleSaveDescription : handleEditDescription}>
+                          {editingDescription ? <Send fontSize='small' color='primary' /> : <Edit fontSize='small' color='primary' />}
+                        </IconButton>
+                        {editingDescription && (
+                          <IconButton onClick={handleCancelEdit}>
+                            <Cancel fontSize='small' color='error'/>
+                          </IconButton>
+                        )}
+                        </Grid>
+                      {editingDescription ? (
+                        <TextField
+                          multiline
+                          rows={4}
+                          fullWidth
+                          inputProps={{ maxLength: 200 }} 
+                          value={newDescription}
+                          onChange={(e) => setNewDescription(e.target.value)}
+                          variant="outlined"
+                        />
+                      ) : (
+                        <Typography variant="body1" sx={{ display: 'inline-block', marginTop: 2 }}>
+                          {formState.Descripcion}
+                        </Typography>
+                      )}
+                      </Grid>
+                </Grid>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="subtitle1"><strong>Mi galería</strong></Typography>
-          <Grid container spacing={2}>
+
+
+        <Grid item xs={12} padding='20px' sx={{boxShadow:'2px 2px 10px 0px #D0D0D0',  backgroundColor:'#FCFDFD' }}>
+          <Grid justifyContent='center' container spacing={2}>
             {gallery.map((image, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <div
@@ -241,6 +261,7 @@ export const PerfilMainPage = () => {
             ))}
           </Grid>
         </Grid>
+
       </Grid>
       <Snackbar
         open={openSnackbar}

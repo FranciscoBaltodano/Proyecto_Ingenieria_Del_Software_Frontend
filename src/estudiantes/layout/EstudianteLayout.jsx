@@ -5,7 +5,7 @@ import { Box, Divider, Grid, Typography } from '@mui/material'
 export const EstudianteLayout = ({children,  titulo='Titulo'}) => {
 return (
     <>
-        <Sidebar />
+        <Sidebar titulo={titulo} />
         <Grid
         container
         justifyContent="center"
@@ -14,10 +14,7 @@ return (
         >
         <Grid item sx={{ width: '100%', padding: 2 }}>
             <Box sx={{ padding: 2 }}>
-                <Typography variant="h4" component="h2" gutterBottom>
-                    {titulo}
-                </Typography>
-                <Divider sx={{ marginBottom: 2 }} />
+               
             
                 {children}
             </Box>

@@ -7,7 +7,7 @@ import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
 import { Chat as ChatIcon, Class as ClassIcon, Grade as GradeIcon } from '@mui/icons-material';
 
 
-export const Sidebar = () => {
+export const Sidebar = ({ titulo }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,7 +61,7 @@ export const Sidebar = () => {
               backgroundColor: location.pathname === item.to ? activeItemStyle.backgroundColor : 'transparent',
               position: 'relative',
               '&:hover': {
-                backgroundColor: '#F4F8FE',
+                backgroundColor: '##F0F6FF',
               },
               '&::after': location.pathname === item.to ? activeItemStyle['&::after'] : {}, // Aplica el estilo del pseudo-elemento solo cuando está activo
             }}
@@ -73,7 +73,7 @@ export const Sidebar = () => {
       </List>
       <List>
         <ListItemButton onClick={handleLogout} sx={{ '&:hover': { backgroundColor: '#F4F8FE' } }}>
-          <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+          <ListItemIcon><ExitToAppIcon sx={{ color: '#AD0102' }}/></ListItemIcon>
           <ListItemText primary="Salir" />
         </ListItemButton>
       </List>
@@ -84,6 +84,7 @@ export const Sidebar = () => {
     <Box py='10px' 
     sx={{ position: 'fixed', top: 0, left: 0, zIndex: 1, backgroundColor: '#ffffff80', width: '100%', backdropFilter: 'blur(10px)', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'}}>
       <Box display='flex' alignItems='center' justifyContent='space-between'>
+        <Box display='flex' alignItems='center' justifyContent='center'>
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -93,10 +94,12 @@ export const Sidebar = () => {
           >
           <MenuIcon />
         </IconButton>
+        <Typography variant="h6" component="h1" sx={{ ml: 2 }}>{titulo}</Typography>
+        </Box>
 
         <NavLink to='/estudiantes/perfil' style={{ textDecoration: 'none' }}>
           <Box display='flex' alignItems='center' justifyContent='center' sx={{ display: { xs: 'none', sm: 'flex' }, mr:'31px' }}>
-          <Typography color='primary' variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr:'31px' }}>{user.nombre} {user.apellido}</Typography>
+          <Typography variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr:'15px', color:'#0D39A1' }}>{user.nombre} {user.apellido}</Typography>
           <Avatar sx={{ boxShadow:2 }} src={user.imagen ? user.imagen : "/broken-image.jpg" } />
           </Box>
         </NavLink>
