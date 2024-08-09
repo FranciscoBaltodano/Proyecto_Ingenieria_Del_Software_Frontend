@@ -12,7 +12,7 @@ export const ReinicioClavesPage = () => {
 
     return (
         <DocenteLayout titulo='Reinicio de claves'>
-            <Button variant="outlined" color="primary" onClick={handleBack}>
+            <Button variant="text" color="primary" onClick={handleBack}>
                 Regresar
             </Button>
             

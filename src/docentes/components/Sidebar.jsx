@@ -36,7 +36,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import logoUNAHconLetras from '../../../public/assets/admisiones/logoUNAHconLetras.webp';
 
 
-export const Sidebar = () => {
+export const Sidebar = ({ titulo }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -90,7 +90,7 @@ export const Sidebar = () => {
 
   const activeItemStyle = {
     color: 'primary.main',
-    backgroundColor: '#F4F8FE',
+    backgroundColor: '#eff5ff',
     position: 'relative',
     '&:hover': {
       backgroundColor: '#F4F8FE',
@@ -108,7 +108,7 @@ export const Sidebar = () => {
 
   const DrawerList = (
     <Box sx={{ width: 250, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }} role="presentation" onClick={toggleDrawer}>
-      <List>
+      <List sx={{backgroundColor:'#fff', borderRadius:'12px', mx:'10px', mt:'30px' , boxShadow:'1px 1px 7px 0px #D0D0D0',}}>
         {filteredMenuItems.Docente.length > 0 && (
           <>
             {filteredMenuItems.Docente.map((item) => (
@@ -185,7 +185,7 @@ export const Sidebar = () => {
       </List>
       <List>
         <ListItemButton onClick={handleLogout} sx={{ '&:hover': { backgroundColor: '#F4F8FE' } }}>
-          <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+          <ListItemIcon><ExitToAppIcon sx={{ color: '#AD0102' }}/></ListItemIcon>
           <ListItemText primary="Salir" />
         </ListItemButton>
       </List>
@@ -193,21 +193,30 @@ export const Sidebar = () => {
   );
 
   return (
-    <Box py='10px' sx={{ position: 'fixed', top: 0, left: 0, zIndex: 1, backgroundColor: '#ffffff80', width: '100%', backdropFilter: 'blur(10px)', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'}}>
+    <Box py='10px' 
+    sx={{
+      background: '#ffffff', 
+      background: 'linear-gradient(200deg, #ffffff 29%, #f6fdff 84%, #edf5ff 100%)',
+
+    position: 'fixed', top: 0, left: 0, zIndex: 1, width: '100%', backdropFilter: 'blur(10px)', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'}}>
       <Box display='flex' alignItems='center' justifyContent='space-between'>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          edge="start"
-          onClick={toggleDrawer}
-          sx={{ ml: 1, backgroundColor: 'white', boxShadow: '0px 3px 10px 0px rgba(0,0,0,0.3)' }}
-        >
-          <MenuIcon />
-        </IconButton>
+        <Box display='flex' alignItems='center' justifyContent='center'>
+
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={toggleDrawer}
+            sx={{ ml: 1, backgroundColor: 'white', boxShadow: '0px 3px 10px 0px rgba(0,0,0,0.3)' }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="h1" sx={{ ml: 2 }}>{titulo}</Typography>
+        </Box>
         
         <NavLink to='/docentes/perfil' style={{ textDecoration: 'none' }}>
           <Box display='flex' alignItems='center' justifyContent='center' sx={{ display: { xs: 'none', sm: 'flex' }, mr:'31px' }}>
-          <Typography color='primary' variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr:'31px' }}>{user.nombre} {user.apellido}</Typography>
+          <Typography color='primary' variant="h6" component="h1" sx={{ display: { xs: 'none', sm: 'block' }, mr:'15px', color:'#0D39A1' }}>{user.nombre} {user.apellido}</Typography>
           <Avatar sx={{ boxShadow:2}} src={user.imagen ? user.imagen : "/broken-image.jpg" } />
           </Box>
         </NavLink>
