@@ -84,7 +84,7 @@ export const Sidebar = ({ titulo }) => {
   return (
     <Box py='10px' 
     sx={{
-      background: '#ffffff', 
+      // background: '#ffffff', 
       background: 'linear-gradient(200deg, #ffffff 29%, #f6fdff 84%, #edf5ff 100%)',
 
     position: 'fixed', top: 0, left: 0, zIndex: 1, width: '100%', backdropFilter: 'blur(10px)', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'}}>

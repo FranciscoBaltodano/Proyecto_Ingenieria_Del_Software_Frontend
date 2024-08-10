@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { EstudianteLayout } from '../../layout/EstudianteLayout';
-import { Button, Grid, Card, CardContent, Typography, Box, Paper } from '@mui/material';
+import { Button, Grid, Card, CardContent, Typography, Box, Paper, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ClaseMatriculadas } from '../../components/ClaseMatriculadas';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -9,16 +9,29 @@ import axios from 'axios';
 export const Forma03Page = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [estudianteInfo, setEstudianteInfo] = useState();
+  const [estudianteInfo, setEstudianteInfo] = useState([]);
   const currentYear = new Date().getFullYear();
+
 
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/student/perfil/${user.id}`);
-        setEstudianteInfo(response.data.data.estudiante[0] ? response.data.data.estudiante[0] : {});
-        console.log('Perfil:', response.data.data.estudiante[0] ? response.data.data.estudiante[0] : {});
-        
+        const data = response.data.data.estudiante[0];
+
+        const estudianteInfo = [
+          { titulo: 'Nombre', data:`${user.nombre} ${user.apellido}`},
+          { titulo: 'Cuenta', data: user.numeroCuenta},
+          { titulo: 'Año', data: currentYear},
+          { titulo: 'Correo', data: data.correo_Institucional ? data.correo_Institucional : user.correo},
+          { titulo: 'Centro', data: user.centro},
+          { titulo: 'Departamento', data: user.departamento},
+          { titulo: 'Índice Global', data: data.indice_global},
+          { titulo: 'Índice del periodo', data: data.indice_periodo},
+        ];
+
+        setEstudianteInfo(estudianteInfo);
+
       } catch (error) {
         console.error(error);
       }
@@ -31,24 +44,11 @@ export const Forma03Page = () => {
     navigate('/estudiantes/matricula');
   };
 
-  const obtenerIdEstudiante = async (id_user) => {
-    try {
-      const response = await axios.get(`/api/matricula/estudiante/${id_user}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      console.log(response.data.id);
-      return response.data.id;
-      
-    } catch (error) {
-      console.error('Error fetching student ID:', error);
-      throw error;
-    }
-  };
 
   return (
     <EstudianteLayout titulo='Forma 03'>
       <Button 
-        variant="contained" 
+        variant="text" 
         color="primary" 
         onClick={handleBack}
         style={{ marginBottom: 20 }}
@@ -62,79 +62,62 @@ export const Forma03Page = () => {
           display: 'flex', 
           flexDirection: 'column', 
           alignItems: 'center', 
-          padding: 20 
+          padding: 20 ,
         }}
       >
         <Card style={{ width: '100%', maxWidth:'1000px' }}>
-          <CardContent>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={3}>
-                <Box 
-                  component="img" 
-                  src={user.imagen} 
-                  alt={`${user.nombre} ${user.apellido}`} 
-                  sx={{ width: 150, height: 150, objectFit: 'cover', boxShadow: 2 }} 
-                />
-              </Grid>
-              <Grid item xs={12} md={9}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Grid container direction="column" spacing={2}>
-                      <Grid item>
-                        <Typography variant="body1">
-                          <strong>Nombre: </strong>{user.nombre} {user.apellido}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Typography variant="body1">
-                          <strong>Cuenta: </strong>{user.numeroCuenta}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Typography variant="body1">
-                          <strong>Año: </strong>{currentYear}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Typography variant="body1">
-                          {/* <strong>Correo: </strong>{estudianteInfo.correo_Institucional ? estudianteInfo.correo_Institucional : user.correo} */}
-                        </Typography>
-                      </Grid>
-                      
-                    </Grid>
+              <Grid container padding={2} spacing={3}>
+
+                  <Grid xs={12} md={2}
+                    item
+                    padding={2}
+                    ml={2}
+                    mt={2} 
+                    justifyContent="center"
+                    sx={{
+                      borderRadius: '15px',
+                      boxShadow:'1px 1px 7px 0px #D0D0D0',
+                      backgroundColor:'#FCFDFD',
+                      display: { xs: 'flex' } 
+                    }}
+                  >
+                    <Box
+                      component="img" 
+                      src={user.imagen} 
+                      alt={`${user.nombre} ${user.apellido}`} 
+                      sx={{ width: 150, height: 150, objectFit: 'cover', boxShadow: 2}} 
+                      />
+
                   </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Grid container direction="column" spacing={2}>
-                      <Grid item>
-                        <Typography variant="body1">
-                          <strong>Centro: </strong>{user.centro}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Typography variant="body1">
-                          <strong>Departamento: </strong>{user.departamento}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Typography variant="body1">
-                          {/* <strong>Índice Global: </strong>{estudianteInfo.indice_global} */}
-                        </Typography>
-                      </Grid>
-                      <Grid item>
-                        <Typography variant="body1">
-                          {/* <strong>Índice del periodo: </strong>{estudianteInfo.indice_periodo} */}
-                        </Typography>
-                      </Grid>
+
+                <Grid item xs={12} md={5}>
+                  {estudianteInfo.slice(0,4).map((info, index) => (
+                    <Grid item mb={2} key={index}>
+                      <Typography >
+                        <strong style={{color:'#060270'}}>{info.titulo}: </strong>{info.data}
+                      </Typography>
                     </Grid>
-                  </Grid>
+                  ))}
                 </Grid>
+
+                <Divider orientation="vertical" flexItem />
+
+                <Grid item xs={12} md={4}>
+                  {estudianteInfo.slice(4,8).map((info, index) => (
+                    <Grid item mb={2} key={index}>
+                      <Typography>
+                        <strong style={{color:'#060270'}}>{info.titulo}: </strong>{info.data}
+                      </Typography>
+                    </Grid>
+                  ))}
+                </Grid>
+                
               </Grid>
-            </Grid>
-          </CardContent>
         </Card>
       </Paper>
 
       <ClaseMatriculadas />
+
     </EstudianteLayout>
   );
 };

@@ -110,7 +110,7 @@ console.log(setUser)
         <Typography align="center" variant="h5" >
           {`${user.nombre} ${user.apellido}`}
         </Typography>
-        <Typography color='text.secondary' variant="body2" >
+        <Typography  align="center" color='text.secondary' variant="body2" >
           {user.roles.map((i) => i === 'JefeDepartamento' ? 'Jefe de Departamento' : i).join(", ")}
         </Typography>
       </Grid>

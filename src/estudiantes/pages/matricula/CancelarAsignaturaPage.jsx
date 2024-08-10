@@ -110,6 +110,8 @@ const fetchAsignaturasListaEspera = async () => {
           // },
         });
         // Refresca la lista de asignaturas
+        console.log('id_seccion', selectedAsignatura.id_seccion);
+        
         fetchAsignaturasMatriculadas(user.id);
 
         // Mostrar Snackbar de éxito

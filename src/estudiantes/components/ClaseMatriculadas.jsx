@@ -60,7 +60,7 @@ export const ClaseMatriculadas = () => {
               <Table>
               <TableHead>
                   <TableRow>
-                      <TableCell sx={{ textAlign: 'center', color: 'white', backgroundColor: '#060270' }}>Asignaturas Matriculadas</TableCell>
+                      <TableCell sx={{ textAlign: 'center', color: 'white', backgroundColor: '#060270' }}>ASIGNATURAS MATRICULADAS</TableCell>
                   </TableRow>
               </TableHead>
               </Table>
@@ -103,7 +103,7 @@ export const ClaseMatriculadas = () => {
             <Table>
               <TableHead>
                   <TableRow>
-                      <TableCell sx={{ textAlign: 'center', color: 'white', backgroundColor: '#060270' }}>Asignaturas en lista de espera</TableCell>
+                      <TableCell sx={{ textAlign: 'center', color: 'white', backgroundColor: '#060270' }}>ASIGNATURAS EN LISTA DE ESPERA</TableCell>
                   </TableRow>
               </TableHead>
               </Table>
