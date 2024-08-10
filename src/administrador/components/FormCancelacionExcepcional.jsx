@@ -228,7 +228,10 @@ export const FormCancelacionExcepcional =()=>{
                 onClose={handleCloseSnackbar}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
-                <Alert onClose={handleCloseSnackbar} variant='filled' severity={snackbarSeverity} sx={{ width: '100%' }}>
+                <Alert onClose={handleCloseSnackbar} 
+                variant='filled' 
+                severity={snackbarSeverity} 
+                sx={{ width: '100%' }}>
                 {snackbarMessage}
                 </Alert>
             </Snackbar>

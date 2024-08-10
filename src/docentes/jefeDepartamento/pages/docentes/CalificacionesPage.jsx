@@ -131,12 +131,12 @@ export const CalificacionesPage = () => {
     };
 
     const columns = [
-        { field: 'numeroEmpleado', headerName: 'Número de Empleado', width: 200 },
-        { field: 'Nombre_docente', headerName: 'Nombre del Docente', width: 300 },
+        { field: 'numeroEmpleado', headerName: 'Número de Empleado', flex: 1 },
+        { field: 'Nombre_docente', headerName: 'Nombre del Docente', flex: 1 },
         {
             field: 'actions',
             headerName: 'Acciones',
-            width: 180,
+            flex: 1,
             renderCell: (params) => (
                 <Button
                     variant="contained"
