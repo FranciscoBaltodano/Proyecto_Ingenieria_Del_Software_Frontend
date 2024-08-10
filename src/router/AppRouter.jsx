@@ -9,7 +9,7 @@ import { AdmisionesRoutes } from "../admisiones/routes/AdmisionesRoutes";
 import { CoordinadoresRoutes } from "../docentes/coordinadores/routes/CoordinadoresRoutes";
 import { JefeDepartamentoRoutes} from "../docentes/jefeDepartamento/routes/JefeDepartamentoRoutes";
 import { DocentesRoutes } from "../docentes/routes/DocentesRoutes";
-
+import { ReinicioClaveRoutes } from "../reinicioClave/routes/ReinicioClaveRoutes";
 import { PerfilView } from "../perfiles/components/PerfilView";
 import { SolicitudAceptadaPage } from "../perfiles/SolicitudAceptadaPage";
 
@@ -20,7 +20,8 @@ export const AppRouter = () => {
         <Route path="/"                  element={<AdmisionesRoutes/>} />
         <Route path="/*"                 element={<AdmisionesRoutes/>} />
         <Route path="login/*"            element={<LoginRoutes/>} />
-               
+        <Route path="reinicioClave/*"    element={<ReinicioClaveRoutes/>} />
+  
         <Route path="admisiones/*"       element={<AdmisionesRoutes/>} />
         <Route path="notas/*"            element={<IngresoNotasRoutes/>} />
         <Route path="matricula/*"        element={<ProcesoMatriculaRoutes/>} />

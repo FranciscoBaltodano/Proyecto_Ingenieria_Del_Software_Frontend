@@ -91,13 +91,13 @@ export const HistorialesPage = () => {
     };
 
     const columns = [
-        { field: 'numeroCuenta', headerName: 'Número de Cuenta', width: 200 },
-        { field: 'nombreEstudiante', headerName: 'Nombre Completo', width: 300 },
-        { field: 'correo_Institucional', headerName: 'Correo Institucional', width: 300 },
+        { field: 'numeroCuenta', headerName: 'Número de Cuenta', flex: 1},
+        { field: 'nombreEstudiante', headerName: 'Nombre Completo', flex: 1 },
+        { field: 'correo_Institucional', headerName: 'Correo Institucional', flex: 1 },
         {
             field: 'actions',
             headerName: 'Acciones',
-            width: 150,
+            flex: 1,
             renderCell: (params) => (
                 <Button
                     variant="contained"
