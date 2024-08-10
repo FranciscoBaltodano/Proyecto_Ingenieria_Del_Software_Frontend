@@ -265,7 +265,7 @@ export const ConfigurarSeccionesPage = () => {
       renderCell: (params) => (
         <>
      <Button 
-        variant="outlined" 
+        variant="text" 
         color="warning" 
         endIcon={<DeleteIcon />} 
         onClick={() => handleClickOpen(params.row.id_Secciones)}
@@ -350,7 +350,7 @@ export const ConfigurarSeccionesPage = () => {
 
   return (
     <DocenteLayout titulo='Configurar Secciones'>
-      <Button variant="outlined" color="primary" onClick={handleBack}>
+      <Button variant="text" color="primary" onClick={handleBack}>
         Regresar
       </Button>
 

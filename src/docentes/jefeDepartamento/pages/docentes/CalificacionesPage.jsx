@@ -203,7 +203,7 @@ export const CalificacionesPage = () => {
 
     return (
         <DocenteLayout titulo='Calificaciones De Docentes'>
-            <Button variant="outlined" color="primary" onClick={handleBack}>
+            <Button variant="text" color="primary" onClick={handleBack}>
                 Regresar
             </Button>
             <br />

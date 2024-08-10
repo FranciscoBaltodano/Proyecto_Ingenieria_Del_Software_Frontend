@@ -12,7 +12,7 @@ export const EvaluacionesPage = () => {
 
   return (
     <DocenteLayout titulo='Evaluaciones de docentes'>
-      <Button variant="outlined" color="primary" onClick={handleBack}>
+      <Button variant="text" color="primary" onClick={handleBack}>
           Regresar
       </Button>
       

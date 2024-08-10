@@ -132,7 +132,7 @@ export const HistorialesPage = () => {
 
     return (
         <DocenteLayout titulo='Historiales'>
-            <Button variant="outlined" color="primary" onClick={handleBack}>
+            <Button variant="text" color="primary" onClick={handleBack}>
                 Regresar
             </Button>
             <br />

@@ -88,22 +88,30 @@ console.log(setUser)
   return (
     <>
       <Grid
-        item
-        xs={12}
-        display="flex"
+        container
+        padding={2} 
+        justifyContent="center"
         alignItems="center"
-        >
+        direction="column"
+        sx={{
+          borderRadius: '15px',
+          boxShadow:'1px 1px 7px 0px #D0D0D0',
+          // boxShadow: '0px 0px 3px 0px #D0D0D0',
+           backgroundColor:'#FCFDFD',
+          display: { xs: 'flex' } 
+        }}
+      >
         <Avatar
           onClick={handleModalOpen}
           alt="User Photo"
           src={fotoPerfil}
-          sx={{ width: 120, height: 120 ,cursor: "pointer", boxShadow: 3}}
+          sx={{ width: 120, height: 120,mb:'20px', cursor: "pointer", boxShadow: 2 }}
         />
-        <Typography variant="h5" sx={{ marginLeft: 2 }}>
+        <Typography align="center" variant="h5" >
           {`${user.nombre} ${user.apellido}`}
         </Typography>
-        <Typography variant="small" sx={{ marginLeft: 2 }}>
-          {user.roles.map((i) => i =='JefeDepartamento' ? i ='Jefe de Departamento' : i ).join(", ")}
+        <Typography color='text.secondary' variant="body2" >
+          {user.roles.map((i) => i === 'JefeDepartamento' ? 'Jefe de Departamento' : i).join(", ")}
         </Typography>
       </Grid>
 
