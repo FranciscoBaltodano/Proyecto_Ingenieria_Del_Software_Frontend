@@ -148,7 +148,7 @@ export const SolicitudesPage = () => {
 
       <Divider orientation="vertical" flexItem sx={{ mx:2}} />
 
-      <Grid display={ isLoading || solicitudes.length == 0 && 'flex'} justifyContent={ isLoading || solicitudes.length == 0 && 'center'} alignItems={ isLoading || solicitudes.length == 0 && 'center'} item xs={12} lg={5.5} sx={{ flexGrow: 1, borderRadius:'15px', padding:'20px' , width:'100%', boxShadow:'0px 0px 5px 0px #C6C6C6', backgroundColor:'#ffffff', overflowX:'auto' }}>
+      <Grid display={ (isLoading || solicitudes.length == 0) && 'flex'} justifyContent={ (isLoading || solicitudes.length == 0) && 'center'} alignItems={ (isLoading || solicitudes.length == 0) && 'center'} item xs={12} lg={5.5} sx={{ flexGrow: 1, borderRadius:'15px', padding:'20px' , width:'100%', boxShadow:'0px 0px 5px 0px #C6C6C6', backgroundColor:'#ffffff', overflowX:'auto' }}>
       
       {isLoading && <CircularProgress />}
       

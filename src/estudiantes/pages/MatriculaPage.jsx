@@ -117,7 +117,7 @@ export const MatriculaPage = () => {
     {
       text: 'Cancelar Asignatura',
       to: '/estudiantes/matricula/cancelar',
-      description: 'Cancela una asignatura previamente registrada.',
+      description: 'Cancela una asignatura registrada.',
       icon: <Cancel sx={{ color: '#F44336' }} /> // Rojo
     },
 
@@ -127,7 +127,7 @@ export const MatriculaPage = () => {
     {
       text: 'Forma03',
       to: '/estudiantes/matricula/forma03',
-      description: 'Completa y envía el formulario Forma 03.',
+      description: 'Revisa tus clases matriculadas oficialmente.',
       icon: <Receipt sx={{ color: '#03A9F4' }} /> // Azul claro
     },
     // {

@@ -165,9 +165,9 @@ export const PerfilMainPage = () => {
           <Grid display='flex' item xs={12} md={8.5} sx={{ borderRadius: '15px',boxShadow:'2px 2px 10px 0px #D0D0D0', padding:'30px',  backgroundColor:'#FCFDFD' }} >
             <Grid container spacing={2}>
                       <Grid item xs={12} md={5} sx={{ mt:'7px'}} direction='column'>
-                        <Typography variant="subtitle1"><strong>Centro:</strong> {user.centro}</Typography>
-                        <Typography variant="subtitle1"><strong>Carrera:</strong> {user.departamento}</Typography>
-                        <Typography variant="subtitle1">
+                        <Typography mb={3} variant="subtitle1"><strong>Centro:</strong> {user.centro}</Typography>
+                        <Typography mb={3} variant="subtitle1"><strong>Carrera:</strong> {user.departamento}</Typography>
+                        <Typography mb={0} variant="subtitle1">
                           <strong>{user.numeroCuenta ? "Número de Cuenta: " : "Número Empleado: "}</strong> 
                           {user.numeroCuenta ? user.numeroCuenta : user.numeroEmpleado}
                         </Typography>
