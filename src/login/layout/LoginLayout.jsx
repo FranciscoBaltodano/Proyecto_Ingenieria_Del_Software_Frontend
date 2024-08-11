@@ -1,4 +1,4 @@
-import { Button, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export const LoginLayout = ({ children }) => {
@@ -15,14 +15,6 @@ export const LoginLayout = ({ children }) => {
         padding: 2
       }}
     >
-      <Button
-        variant="outlined"
-        color="primary"
-        sx={{ position: 'absolute', top: '10px', left: '10px', zIndex: 2 }}
-        onClick={() => navigate('/')}
-      >
-        Regresar a Inicio
-      </Button>
       <Grid 
         item
         className="box-shadow"

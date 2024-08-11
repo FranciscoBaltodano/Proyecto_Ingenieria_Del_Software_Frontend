@@ -1,11 +1,13 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { AdicionarAsignaturaPage, CancelarAsignaturaPage, ChatsPage, ClasesPage, Forma03Page, ListadoAsignaturasCanceladasPage, ListadoAsignaturasEnEsperaPage, MatriculaPage, NotasPage, PerfilPage, SolicitudesPage } from "../pages";
+import { ClasePage } from "../pages/ClasePage";
 
 export const EstudiantesRoutes = () => {
   return (
     <Routes>
       <Route path="/"      element={<ClasesPage/>} />
       <Route path="clases"      element={<ClasesPage/>} />
+      <Route path="clase/:id"      element={<ClasePage/>} />
       <Route path="chats"       element={<ChatsPage/>} />
       <Route path="notas"       element={<NotasPage/>} />
       <Route path="perfil"      element={<PerfilPage/>} />

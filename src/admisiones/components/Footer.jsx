@@ -11,7 +11,9 @@ export const Footer = ()=> {
             bottom: 0,
             width: '100%',
             mt: 5,
-            }} component="footer" square variant="outlined"
+            backgroundColor: 'transparent',
+
+        }} component="footer" square variant="outlined"
         >
             <Container maxWidth="lg">
                 <Box

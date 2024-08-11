@@ -39,6 +39,7 @@ export const Navbar = (props) => {
     }
   };
 
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [value, setValue] = useState(getValueFromLocation(location.pathname));
 

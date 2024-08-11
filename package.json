@@ -27,7 +27,7 @@
     "@reduxjs/toolkit": "^2.2.5",
     "axios": "^1.7.2",
     "codegpt-nextjs": "file:c:/Users/OSCAR/.vscode/extensions/danielsanmedium.dscodegpt-3.4.22/standalone",
-    "date-fns": "^2.29.2",
+    "date-fns": "^2.30.0",
     "dotenv": "^16.4.5",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
