@@ -5,6 +5,7 @@ import { Button, Grid, Tabs, Tab, Box } from '@mui/material';
 import { GroupChat } from '../../chats/components/GroupChat';
 import { ClasesLayout } from '../layout/ClasesLayout';
 import { Forum } from '@mui/icons-material';
+import ListDownloader from '../components/SaveList';
 
 export const ClasePage = () => {
   const { id } = useParams();
@@ -58,6 +59,8 @@ export const ClasePage = () => {
           }
         </Box>
       </Box>
+
+      <ListDownloader seccion={id} />
     </ClasesLayout>
   );
 };
