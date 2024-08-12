@@ -1,4 +1,4 @@
-/*import React from "react";
+import React from "react";
 import { EstudianteLayout } from "../layout/EstudianteLayout";
 
 
@@ -34,35 +34,34 @@ export const ClasesLayout = ({ children, titulo}) => {
     </EstudianteLayout>
   );
 };
-*/
 
-import React from "react";
-import { EstudianteLayout } from "../layout/EstudianteLayout";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import 'dayjs/locale/es'; // Importa el idioma español
-import { Divider, Grid } from "@mui/material";
+// import React from "react";
+// import { EstudianteLayout } from "../layout/EstudianteLayout";
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import 'dayjs/locale/es'; // Importa el idioma español
+// import { Divider, Grid } from "@mui/material";
 
-export const ClasesLayout = ({ children, titulo}) => {
-  return (
-    <EstudianteLayout titulo={titulo}>
-      <Grid container justifyContent='center'>
-        <Grid container maxWidth='2000px'>
-          <Grid item xs={12} xl={9.5} maxWidth='2000px'>
-            {children}
-          </Grid>
+// export const ClasesLayout = ({ children, titulo}) => {
+//   return (
+//     <EstudianteLayout titulo={titulo}>
+//       <Grid container justifyContent='center'>
+//         <Grid container maxWidth='2000px'>
+//           <Grid item xs={12} xl={9.5} maxWidth='2000px'>
+//             {children}
+//           </Grid>
 
-          <Divider sx={{ mx: 1 }} orientation="vertical" flexItem />
+//           <Divider sx={{ mx: 1 }} orientation="vertical" flexItem />
           
-          <Grid item xs={12} xl={1.5}>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
-              <DateCalendar />
-            </LocalizationProvider>
-          </Grid>
-        </Grid>
-      </Grid>
-    </EstudianteLayout>
-  );
-};
+//           <Grid item xs={12} xl={1.5}>
+//             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+//               <DateCalendar />
+//             </LocalizationProvider>
+//           </Grid>
+//         </Grid>
+//       </Grid>
+//     </EstudianteLayout>
+//   );
+// };
 
