@@ -1,10 +1,12 @@
 import React from 'react'
 import { DocenteLayout } from '../layout/DocenteLayout'
+import { ClasesLayout } from '../layout/ClasesLayout'
+import { ClasesList } from '../components/ClasesList'
 
 export const ClasesPage = () => {
   return (
-    <DocenteLayout titulo='Clases'>
-    <div>ClasesPage</div>
-    </DocenteLayout>
+    <ClasesLayout titulo='Mis Clases'>
+      <ClasesList/>
+    </ClasesLayout>
   )
 }

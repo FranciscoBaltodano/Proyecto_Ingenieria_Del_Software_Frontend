@@ -15,7 +15,7 @@ export const ClasesPage = () => {
 
   return (
 
-    <ClasesLayout>
+    <ClasesLayout titulo='Mis Clases'>
       <ClasesList/>
     </ClasesLayout>
    
