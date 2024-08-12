@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Grid, Tabs, Tab, Box } from '@mui/material';
+import { Button, Grid, Tabs, Tab, Box, Typography } from '@mui/material';
 import { GroupChat } from '../../chats/components/GroupChat';
 import { ClasesLayout } from '../layout/ClasesLayout';
 import { Forum } from '@mui/icons-material';
@@ -35,7 +35,7 @@ export const ClasePage = () => {
   };
 
   return (
-    <ClasesLayout titulo={ seccion?.Asignaturas?.nombre || '...' }>
+    <ClasesLayout titulo={ seccion?.Asignaturas?.nombre || 'Mis Clases' }>
       {/* <Button variant="text" onClick={onNavigateBack}>
         Regresar
       </Button>
@@ -43,8 +43,8 @@ export const ClasePage = () => {
 
       <Box sx={{ width: '100%', mb:'100px' }}>
         <Tabs value={tabIndex} onChange={handleTabChange} aria-label="Clase Page Tabs">
-          <Tab label={seccion?.codigoAsignatura} />
-          <Tab label={<Forum/>} />
+          <Tab label={seccion?.codigoAsignatura ? seccion?.codigoAsignatura : 'Información' } />
+          <Tab label={<div>Chat <Forum fontSize='small' /></div>} />
         </Tabs>
         <Box sx={{ padding: 2 }}>
           {tabIndex === 0 && <div>ClasePage</div>}
