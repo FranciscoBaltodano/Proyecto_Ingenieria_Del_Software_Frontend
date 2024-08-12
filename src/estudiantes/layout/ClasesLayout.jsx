@@ -10,10 +10,10 @@ import {es} from 'date-fns/locale'
 import { ClasesList } from "../components/ClasesList";
 import { Divider, Grid } from "@mui/material";
 
-export const ClasesLayout = ({ children}) => {
+export const ClasesLayout = ({ children, titulo}) => {
 
   return (
-    <EstudianteLayout titulo="Mis Clases">
+    <EstudianteLayout titulo={titulo}>
 
     <Grid container justifyContent='center'>
       <Grid container maxWidth='2000px' >

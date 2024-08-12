@@ -36,7 +36,7 @@ export const GroupChat = ( { GUID } ) => {
     <div style={{ height: '60vh', width:'100%', display:'flex' }}>
 
         <Grid style={{ width:'100%' }}>
-            <CometChatMessageList group={chatGroup} />
+            <CometChatMessageList showAvatar={true}  group={chatGroup} />
             <CometChatMessageComposer messageComposerStyle={messageComposerStyle} group={chatGroup}/>
         </Grid>
 

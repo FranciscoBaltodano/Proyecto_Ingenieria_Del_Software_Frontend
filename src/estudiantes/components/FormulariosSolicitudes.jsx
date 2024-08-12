@@ -69,6 +69,13 @@ export const FormularioCancelacion = ({ fetchSolicitudes }) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file && file.type === 'application/pdf') {
+      if(file.size > 500000){
+        setSnackbarMessage('El archivo PDF seleccionado es muy grande, por favor seleccione un archivo PDF menor a 500KB.');
+        setSnackbarOpen(true);
+        setSnackbarSeverity("error");
+        setFile( null);
+        return;
+      }
       setFile(file);
       setSnackbarSeverity("success");
       setSnackbarMessage('Archivo PDF seleccionado.');
@@ -278,7 +285,7 @@ export const FormularioCancelacion = ({ fetchSolicitudes }) => {
       )}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
@@ -486,7 +493,7 @@ export const FormularioCambioDepartamento = ({ fetchSolicitudes }) => {
       </Button>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
@@ -688,7 +695,7 @@ export const FormularioCambioCentro = ({ fetchSolicitudes }) => {
       </Button>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
@@ -736,7 +743,17 @@ export const FormularioPagoDeReposición = ({ fetchSolicitudes }) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    console.log(file);
+    
     if (file && file.type === 'application/pdf') {
+      if(file.size > 500000){
+        setSnackbarMessage('El archivo PDF seleccionado es muy grande, por favor seleccione un archivo PDF menor a 500KB.');
+        setSnackbarOpen(true);
+        setSnackbarSeverity("error");
+        setFile( null);
+        return;
+      }
+      console.log('tamaño PDF seleccionado:', file.size);
       setFile(file);
       setSnackbarSeverity("success");
       setSnackbarMessage('Archivo PDF seleccionado.');
@@ -839,9 +856,9 @@ export const FormularioPagoDeReposición = ({ fetchSolicitudes }) => {
     >
       {loading && <LinearProgress />}
 
-      <Grid container display="flex" spacing={2}>
+      <Grid container display="flex" direction='column' spacing={2}>
 
-        <Grid item xs={12} md={4} sx={{display:'flex', alignItems:'center', justifyContent:'center'}} >
+        <Grid item xs={12} md={4} sx={{display:'flex' ,alignItems:'center', justifyContent:'center'}} >
           <FormControl >
             <label htmlFor="file-upload">
               <Input
@@ -883,7 +900,7 @@ export const FormularioPagoDeReposición = ({ fetchSolicitudes }) => {
 
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >

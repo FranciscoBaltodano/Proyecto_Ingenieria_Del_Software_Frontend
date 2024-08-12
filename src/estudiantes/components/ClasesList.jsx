@@ -84,7 +84,20 @@ export const ClasesList = () => {
             </Grid>
         </Grid>
         }
+          {/* <Grid display='flex' item xs={12} md={8.5} sx={{ borderRadius: '15px',boxShadow:'2px 2px 10px 0px #D0D0D0', padding:'30px',  backgroundColor:'#FCFDFD' }} > */}
 
+        {
+          !loading && asignaturas.length === 0 && (
+            <Grid container display='flex' justifyContent="center" alignItems='center' sx={{ padding:'30px', mb:'100px'  }} >
+            <Grid container maxWidth='400px' justifyContent="center" sx={{ borderRadius: '15px',boxShadow:'2px 2px 10px 0px #D0D0D0', padding:'30px', pt:'20px', backgroundColor:'#FCFDFD' }}>
+            <Typography variant="h5" sx={{ mt: 3 }}>
+              No tienes clases matriculadas
+            </Typography>
+
+            </Grid>
+            </Grid>
+          )
+        }
 
       <Grid container spacing={3}>
         {asignaturas.map((asignatura) => (
