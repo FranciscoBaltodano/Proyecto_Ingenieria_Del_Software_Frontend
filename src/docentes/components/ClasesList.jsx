@@ -20,11 +20,11 @@ export const ClasesList = () => {
 
   useEffect(() => {
     if (user && user.id) {
-      fetchAsignaturasMatriculadas();
+      fetchAsignaturasAsignadas();
     }
   }, [user]);
 
-  const fetchAsignaturasMatriculadas = async () => {
+  const fetchAsignaturasAsignadas = async () => {
     try {
       const response = await axios.post(
         `/api/teacher/secciones`,{
@@ -95,7 +95,7 @@ export const ClasesList = () => {
             <Grid container display='flex' justifyContent="center" alignItems='center' sx={{ padding:'30px', mb:'100px'  }} >
             <Grid container maxWidth='400px' justifyContent="center" sx={{ borderRadius: '15px',boxShadow:'2px 2px 10px 0px #D0D0D0', padding:'30px', pt:'20px', backgroundColor:'#FCFDFD' }}>
             <Typography variant="h5" sx={{ mt: 3 }}>
-              No tienes clases matriculadas
+              No tienes clases Asignadas
             </Typography>
 
             </Grid>
@@ -111,9 +111,9 @@ export const ClasesList = () => {
             xs={12}
             sm={6}
             md={6}
-            key={asignatura.id_matricula}
+            key={asignatura.id_Secciones}
             component={Link}
-            to={`/docentes/clase/${asignatura.id_seccion}`}
+            to={`/docentes/clase/${asignatura.id_Secciones}`}
 
           >
             <Card className="card1" sx={{ paddingRight : 2 ,boxShadow:'2px 2px 10px 0px #D0D0D0'}} >
@@ -122,18 +122,18 @@ export const ClasesList = () => {
               </div>
               <CardContent>
                 <Typography  mb={2} variant="h6">
-                  {asignatura.Secciones.Asignaturas.codigo}{" "}
-                  {asignatura.Secciones.Asignaturas.nombre}
+                  {asignatura.Asignaturas.codigo}{" "}
+                  {asignatura.Asignaturas.nombre}
                 </Typography>
-                <Chip sx={{ mb: 1}} className="chipAula" label={`Aula: ${asignatura.Secciones.Aula.Nombre}`} variant="outlined" color="warning" />
+                <Chip sx={{ mb: 1}} className="chipAula" label={`Aula: ${asignatura.Aula.Nombre}`} variant="outlined" color="warning" />
                 <br />
-                <Chip sx={{ mb: 1}} className="chipEdificio" label={`Edificio: ${asignatura.Secciones.Edificios.Nombre}`} variant="outlined" color="warning" />
+                <Chip sx={{ mb: 1}} className="chipEdificio" label={`Edificio: ${asignatura.Edificios.Nombre}`} variant="outlined" color="warning" />
                 <br />
-                <Chip sx={{ mb: 1}} className="chipHorario" label={`Horario: ${asignatura.Secciones.Hora_inicio} - ${asignatura.Secciones.Hora_Final}` } variant="outlined" />
+                <Chip sx={{ mb: 1}} className="chipHorario" label={`Horario: ${asignatura.Hora_inicio} - ${asignatura.Hora_Final}` } variant="outlined" />
               </CardContent>
               <Grid direction="row-reverse" container display="flex" className="dias">
                 <Typography color="textSecondary">
-                  {asignatura.Secciones.Dias.map((dia) =>
+                  {asignatura.Dias.map((dia) =>
                     dia.Dia.Nombre.slice(0, 2)
                   ).join(", ")}
                 </Typography>
