@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import {
+  Chip,
   CircularProgress,
   Divider,
   Grid,
@@ -178,7 +179,11 @@ export const SolicitudesPage = () => {
             {solicitudes.map((solicitud) => (
               <TableRow key={solicitud.id}>
                 <TableCell>{solicitud.tipo_solicitud.nombre}</TableCell>
-                <TableCell>{solicitud.estado}</TableCell>
+                <TableCell>
+                <Chip variant="outlined" color={solicitud.estado == 'aceptada' ? 'success' : solicitud.estado == 'rechazada' ? 'error':'default' } label = {solicitud.estado} />
+
+                </TableCell>
+
                 <TableCell>
                   {new Date(solicitud.fecha_solicitud).toLocaleDateString('es-ES', {
                     day: 'numeric',
@@ -193,7 +198,11 @@ export const SolicitudesPage = () => {
                 </TableCell>
                 <TableCell>
                   {solicitud.fecha_respuesta
-                    ? solicitud.fecha_respuesta
+                    ? (new Date(solicitud.fecha_respuesta).toLocaleDateString('es-ES', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    }))
                     : "Sin respuesta aún"}
                 </TableCell>
               </TableRow>
