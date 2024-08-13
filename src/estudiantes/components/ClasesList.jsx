@@ -118,18 +118,18 @@ export const ClasesList = () => {
               </div>
               <CardContent>
                 <Typography  mb={2} variant="h6">
-                  {asignatura.Secciones.Asignaturas.codigo}{" "}
-                  {asignatura.Secciones.Asignaturas.nombre}
+                  {asignatura.Secciones?.Asignaturas.codigo}{" "}
+                  {asignatura.Secciones?.Asignaturas.nombre}
                 </Typography>
-                <Chip sx={{ mb: 1}} className="chipAula" label={`Aula: ${asignatura.Secciones.Aula.Nombre}`} variant="outlined" color="warning" />
+                <Chip sx={{ mb: 1}} className="chipAula" label={`Aula: ${asignatura.Secciones?.Aula?.Nombre}`} variant="outlined" color="warning" />
                 <br />
-                <Chip sx={{ mb: 1}} className="chipEdificio" label={`Edificio: ${asignatura.Secciones.Edificios.Nombre}`} variant="outlined" color="warning" />
+                <Chip sx={{ mb: 1}} className="chipEdificio" label={`Edificio: ${asignatura.Secciones?.Edificios.Nombre}`} variant="outlined" color="warning" />
                 <br />
-                <Chip sx={{ mb: 1}} className="chipHorario" label={`Horario: ${asignatura.Secciones.Hora_inicio} - ${asignatura.Secciones.Hora_Final}` } variant="outlined" />
+                <Chip sx={{ mb: 1}} className="chipHorario" label={`Horario: ${asignatura.Secciones?.Hora_inicio} - ${asignatura.Secciones?.Hora_Final}` } variant="outlined" />
               </CardContent>
               <Grid direction="row-reverse" container display="flex" className="dias">
                 <Typography color="textSecondary">
-                  {asignatura.Secciones.Dias.map((dia) =>
+                  {asignatura.Secciones?.Dias.map((dia) =>
                     dia.Dia.Nombre.slice(0, 2)
                   ).join(", ")}
                 </Typography>

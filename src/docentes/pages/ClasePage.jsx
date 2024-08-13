@@ -52,7 +52,7 @@ export const ClasePage = () => {
           {tabIndex === 0 && <Clase fetchVideo={fetchSeccion} claseData={seccion} />}
           {tabIndex === 1 && seccion.nombreChat && 
             (
-              <Grid container justifyContent='center' height='75vh' sx={{ backgroundColor: 'red', borderRadius: '15px', boxShadow: '2px 2px 10px 0px #D0D0D0', padding: '0px', pt: '20px', backgroundColor: '#FCFDFD' }}>
+              <Grid container justifyContent='center' height='75vh' sx={{ borderRadius: '15px', boxShadow: '2px 2px 10px 0px #D0D0D0', padding: '0px', pt: '20px', backgroundColor: '#FCFDFD' }}>
                 <GroupChat GUID={seccion.nombreChat} />
               </Grid>
             )

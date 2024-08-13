@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Button, CircularProgress } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
+import { Button, CircularProgress, Snackbar } from '@mui/material';
 import Alert from '@mui/material/Alert';
 
-const PdfDownloader = ({ id_Departamento }) => {
+const PdfDownloader = ({ id_Departamento, nombre }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -40,7 +39,7 @@ const PdfDownloader = ({ id_Departamento }) => {
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
-      a.download = `secciones_${id_Departamento}.pdf`; // Nombre del archivo con el ID de la sección
+      a.download = `secciones_${nombre}.pdf`; // Nombre del archivo con el ID de la sección
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -54,11 +53,13 @@ const PdfDownloader = ({ id_Departamento }) => {
 
   return (
     <>
+      <style>{EstilosPdf}</style>
       <Button 
         variant="contained" 
-        color="primary" 
+        color="error" 
         onClick={handleDownload}
         disabled={isLoading}
+        className="custom-button"
       >
         {isLoading ? <CircularProgress size={24} /> : 'Descargar PDF'}
       </Button>
@@ -73,8 +74,57 @@ const PdfDownloader = ({ id_Departamento }) => {
           No hay datos de estudiantes por el momento, intente más tarde.
         </Alert>
       </Snackbar>
+
+     
     </>
   );
 };
 
 export default PdfDownloader;
+
+
+const EstilosPdf = `
+  .custom-button {
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s ease-out;
+  }
+
+  .custom-button:hover {
+    transition: all 0.2s ease-out;
+  }
+
+  .custom-button:hover::before {
+    content: '';
+    display: block;
+    width: 0px;
+    height: 86%;
+    position: absolute;
+    top: 7%;
+    left: 0%;
+    opacity: 0;
+    background: #fff;
+    box-shadow: 0 0 50px 30px #fff;
+    transform: skewX(-20deg);
+    animation: sh02 0.5s 0s linear;
+  }
+
+  @keyframes sh02 {
+    from {
+      opacity: 0;
+      left: 0%;
+    }
+    50% {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      left: 100%;
+    }
+  }
+
+  .custom-button:active {
+    box-shadow: 0 0 0 0 transparent;
+    transition: box-shadow 0.2s ease-in;
+  }
+`

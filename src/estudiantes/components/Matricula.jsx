@@ -61,7 +61,7 @@ const Matricula = ({ fetchAsignaturasMatriculadas, fetchAsignaturasEnEspera }) =
       });
       const seccionesConDocentes = await Promise.all(response.data.map(async (seccion) => {
         try {
-          const docenteResponse = await axios.get(`/api/matricula/seccion/${seccion.id_Secciones}`, {
+          const docenteResponse = await axios.get(`/api/matricula/docenteInfo/${seccion.id_Secciones}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           return { ...seccion, docente: docenteResponse.data };
@@ -111,7 +111,7 @@ const Matricula = ({ fetchAsignaturasMatriculadas, fetchAsignaturasEnEspera }) =
   const formatSeccionInfo = (seccion) => {
     const dias = seccion.seccion_dias.map(sd => sd.Dias.Nombre).join(', ');
     const docenteInfo = seccion.docente ? `${seccion.docente.nombre} ${seccion.docente.apellido}` : 'No asignado';
-    return `Sección ${seccion.id_Secciones} - ${dias} ${seccion.Hora_inicio} - ${seccion.Hora_Final} - Docente: ${docenteInfo} - Cupos: ${seccion.cuposDisponibles}`;
+    return `Sección ${seccion.id_Secciones} - ${dias} ${seccion.Hora_inicio} - ${seccion.Hora_Final} - Cupos: ${seccion.cuposDisponibles}`;
   };
 
   const handleMatricular = async () => {

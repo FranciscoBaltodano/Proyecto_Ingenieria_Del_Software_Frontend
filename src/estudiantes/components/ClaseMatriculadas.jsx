@@ -82,15 +82,15 @@ export const ClaseMatriculadas = () => {
                 <TableBody>
                   {asignaturas.map((asignatura) => (
                     <TableRow key={asignatura.id_matricula}>
-                      <TableCell>{asignatura.Secciones.Asignaturas.codigo}</TableCell>
-                      <TableCell>{asignatura.Secciones.Asignaturas.nombre}</TableCell>
-                      <TableCell>{asignatura.Secciones.Hora_inicio}</TableCell>
-                      <TableCell>{asignatura.Secciones.Hora_inicio}</TableCell>
-                      <TableCell>{asignatura.Secciones.Hora_Final}</TableCell>
-                      <TableCell>{asignatura.Secciones.Dias.map(dia => dia.Dia.Nombre).join(', ')}</TableCell>
-                      <TableCell>{asignatura.Secciones.Edificios.Nombre}</TableCell>
-                      <TableCell>{asignatura.Secciones.Aula.Nombre}</TableCell>
-                      <TableCell>{asignatura.Secciones.Asignaturas.uv}</TableCell>
+                      <TableCell>{asignatura.Secciones?.Asignaturas.codigo}</TableCell>
+                      <TableCell>{asignatura.Secciones?.Asignaturas.nombre}</TableCell>
+                      <TableCell>{asignatura.Secciones?.Hora_inicio}</TableCell>
+                      <TableCell>{asignatura.Secciones?.Hora_inicio}</TableCell>
+                      <TableCell>{asignatura.Secciones?.Hora_Final}</TableCell>
+                      <TableCell>{asignatura.Secciones?.Dias.map(dia => dia.Dia.Nombre).join(', ')}</TableCell>
+                      <TableCell>{asignatura.Secciones?.Edificios.Nombre}</TableCell>
+                      <TableCell>{asignatura.Secciones?.Aula.Nombre}</TableCell>
+                      <TableCell>{asignatura.Secciones?.Asignaturas.uv}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
