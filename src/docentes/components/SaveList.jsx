@@ -22,13 +22,12 @@ const ListDownloader = ({ seccion }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/teacher/estudiantes', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:3000/api/teacher/estudiantes/${seccion}`, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ seccion })
+        }
       });
 
       if (!response.ok) {
