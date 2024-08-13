@@ -54,7 +54,7 @@ export const EstadisticasPage = () => {
 
     return (
         <DocenteLayout titulo='Estadisticas Generales'>
-            <Button variant="text" color="primary" onClick={handleBack}>
+            <Button variant="outlined" color="primary" onClick={handleBack}>
                 Regresar
             </Button>
 
