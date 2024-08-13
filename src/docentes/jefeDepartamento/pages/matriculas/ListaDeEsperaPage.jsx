@@ -213,7 +213,7 @@ export const ListaDeEsperaPage = () => {
 
   return (
     <DocenteLayout titulo='Lista De Espera'>
-      <Button variant="text" color="primary" onClick={handleBack}>
+      <Button variant="outlined" color="primary" onClick={handleBack}>
         Regresar
       </Button>
 

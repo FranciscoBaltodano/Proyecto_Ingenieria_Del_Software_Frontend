@@ -1,25 +1,25 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, TextField, InputAdornment } from '@mui/material';
 import { DocenteLayout } from '../../../layout/DocenteLayout';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { esESLocaleText } from '../../../../components/esESLocaleText';
-import DownloadStudents from '../../components/SaveList';
 import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
-function CustomToolbar({ name }) {
+import SearchIcon from '@mui/icons-material/Search';
+
+function CustomToolbar() {
     return (
-      <GridToolbarContainer>
-        <GridToolbarExport 
-          csvOptions={{ 
-            delimiter: ';', 
-            utf8WithBom: true, 
-            fileName: 'estudiantes_matriculados' 
-          }} 
-        />
-      </GridToolbarContainer>
+        <GridToolbarContainer>
+            <GridToolbarExport 
+                csvOptions={{ 
+                    delimiter: ';', 
+                    utf8WithBom: true, 
+                    fileName: 'estudiantes_matriculados' 
+                }} 
+            />
+        </GridToolbarContainer>
     );
-  }
-  
+}
 
 export const EstudiantesMatriculadosPage = () => {
     const { user } = useAuth();
@@ -29,7 +29,12 @@ export const EstudiantesMatriculadosPage = () => {
     const [seccionesDocenteSeleccionado, setSeccionesDocenteSeleccionado] = useState([]);
     const [estudiantesMatriculados, setEstudiantesMatriculados] = useState([]);
     const [docenteSeleccionado, setDocenteSeleccionado] = useState(null);
+    const [docenteNombreSeleccionado, setDocenteNombreSeleccionado] = useState(''); // Nuevo estado
     const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
+    const [codigoAsignatura, setCodigoAsignatura] = useState('');  // Estado para el código de la asignatura
+    const [nombreSeccionSeleccionada, setNombreSeccionSeleccionada] = useState(''); // Nuevo estado
+    const [codigoSeccionSeleccionada, setCodigoSeccionSeleccionada] = useState(''); // Nuevo estado
+    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
     const handleBack = () => {
@@ -76,8 +81,15 @@ export const EstudiantesMatriculadosPage = () => {
             }
 
             const data = await response.json();
-            console.log( 'SECCIONES', data.data);
-            setSeccionesDocenteSeleccionado(data.data);
+            console.log('SECCIONES', data.data);
+            
+            // Actualiza las secciones del docente con el código de la asignatura
+            const seccionesConCodigo = data.data.map(seccion => ({
+                ...seccion,
+                codigoAsignatura: seccion.Asignaturas ? seccion.Asignaturas.codigo : 'Desconocido'
+            }));
+
+            setSeccionesDocenteSeleccionado(seccionesConCodigo);
         } catch (error) {
             console.error('Error:', error.message);
         }
@@ -85,12 +97,11 @@ export const EstudiantesMatriculadosPage = () => {
 
     const fetchEstudiantes = async (idSeccion) => {
         try {
-            const response = await fetch('http://localhost:3000/api/teacher/estudiantes', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:3000/api/teacher/students/${idSeccion}`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ seccion: idSeccion }),
             });
 
             if (!response.ok) {
@@ -99,25 +110,33 @@ export const EstudiantesMatriculadosPage = () => {
 
             const data = await response.json();
             console.log('ESTUDIANTES', data.data.estudiantes);
+            console.log('CODIGO ASIGNATURA', data.data.codigo);  // Verifica que el código esté bien
+
             const estudiantesData = data.data.estudiantes.map(estudiante => ({
                 id: estudiante.estudiante[0].numeroCuenta,
                 nombre: `${estudiante.Nombre} ${estudiante.Apellido}`,
                 numeroCuenta: estudiante.estudiante[0].numeroCuenta,
             }));
+
             setEstudiantesMatriculados(estudiantesData);
+            setCodigoAsignatura(data.data.codigoAsignatura);  // Guarda el código de la asignatura en el estado
+
         } catch (error) {
             console.error('Error:', error.message);
         }
     };
 
-    const handleVerSecciones = (numeroEmpleado) => {
+    const handleVerSecciones = (numeroEmpleado, nombreDocente) => {
         setDocenteSeleccionado(numeroEmpleado);
+        setDocenteNombreSeleccionado(nombreDocente); // Actualiza el nombre del docente
         fetchSecciones(numeroEmpleado);
         setOpen(true);
     };
 
-    const handleVerEstudiantes = (idSeccion) => {
+    const handleVerEstudiantes = (idSeccion, nombreSeccion, codigoSeccion) => {
         setSeccionSeleccionada(idSeccion);
+        setNombreSeccionSeleccionada(nombreSeccion); // Actualiza el nombre de la sección
+        setCodigoSeccionSeleccionada(codigoSeccion); // Actualiza el código de la sección
         fetchEstudiantes(idSeccion);
         setOpenEstudiantesModal(true);
     };
@@ -126,16 +145,28 @@ export const EstudiantesMatriculadosPage = () => {
         setOpen(false);
         setSeccionesDocenteSeleccionado([]);
         setDocenteSeleccionado(null);
+        setDocenteNombreSeleccionado(''); // Restablece el nombre del docente
     };
 
     const handleCloseEstudiantesModal = () => {
         setOpenEstudiantesModal(false);
         setEstudiantesMatriculados([]);
+        setCodigoAsignatura('');  // Restablece el código de la asignatura
         setSeccionSeleccionada(null);
+        setNombreSeccionSeleccionada(''); // Restablece el nombre de la sección
+        setCodigoSeccionSeleccionada(''); // Restablece el código de la sección
     };
 
+    const normalizeText = (text) => {
+        return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    };
+
+    const filteredDocentes = docentesActivos.filter(docente =>
+        normalizeText(docente.Nombre_docente).toLowerCase().includes(normalizeText(searchTerm.toLowerCase()))
+    );
+
     const columns = [
-        { field: 'numeroEmpleado', headerName: 'Número de Empleado',flex: 1},
+        { field: 'numeroEmpleado', headerName: 'Número de Empleado', flex: 1 },
         { field: 'Nombre_docente', headerName: 'Nombre del Docente', flex: 1 },
         {
             field: 'actions',
@@ -145,7 +176,7 @@ export const EstudiantesMatriculadosPage = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleVerSecciones(params.row.numeroEmpleado)}
+                    onClick={() => handleVerSecciones(params.row.numeroEmpleado, params.row.Nombre_docente)}
                 >
                     Ver Secciones
                 </Button>
@@ -154,9 +185,9 @@ export const EstudiantesMatriculadosPage = () => {
     ];
 
     const seccionesColumns = [
-        { field: 'id', headerName: 'ID Sección', width: 150 },
+        { field: 'horaInicio1', headerName: 'Sección', width: 150 },
         { field: 'codigoAsignatura', headerName: 'Código Asignatura', width: 200 },
-        { field: 'Hora_inicio', headerName: 'Hora Inicio', width: 150 },
+        { field: 'horaInicio2', headerName: 'Hora de Inicio', width: 150 },
         { field: 'Hora_Final', headerName: 'Hora Final', width: 150 },
         { field: 'Cupos', headerName: 'Cupos', width: 100 },
         { field: 'estado', headerName: 'Estado', width: 150 },
@@ -168,53 +199,60 @@ export const EstudiantesMatriculadosPage = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleVerEstudiantes(params.row.id)}
+                    onClick={() => handleVerEstudiantes(params.row.id, params.row.horaInicio1, params.row.codigoAsignatura)}
                 >
                     Ver Estudiantes
                 </Button>
             ),
         },
-        // {
-        //     field: 'downloadStudents',
-        //     headerName: 'Descargar',
-        //     width: 200,
-        //     renderCell: (params) => (
-        //         <DownloadStudents seccionId={params.row.id} />
-
-        //     ),
-        // },
     ];
 
     const estudiantesColumns = [
-        { field: 'nombre', headerName: 'Nombre Completo', width: 300 },
-        { field: 'numeroCuenta', headerName: 'Número de Cuenta', width: 200 },
-        // Agrega más columnas si es necesario
+        { field: 'nombre', headerName: 'Nombre Completo', flex: 1},
+        { field: 'numeroCuenta', headerName: 'Número de Cuenta', flex: 1 },
     ];
 
-    const rows = docentesActivos.map((docente) => ({
+    const rows = filteredDocentes.map((docente) => ({
         id: docente.id_Usuario,
         Nombre_docente: docente.Nombre_docente,
         numeroEmpleado: docente.numeroEmpleado,
     }));
 
     const seccionesRows = seccionesDocenteSeleccionado.map((seccion) => ({
-        id: seccion.id_Secciones,
+        horaInicio1: seccion.Hora_inicio,  
+        horaInicio2: seccion.Hora_inicio, 
         codigoAsignatura: seccion.codigoAsignatura,
-        Hora_inicio: seccion.Hora_inicio,
         Hora_Final: seccion.Hora_Final,
         Cupos: seccion.Cupos,
         estado: seccion.estado ? 'Activo' : 'Inactivo',
+        id: seccion.id_Secciones,  
     }));
 
     const estudiantesRows = estudiantesMatriculados;
 
     return (
         <DocenteLayout titulo='Estudiantes matriculados'>
-            <Button variant="text" color="primary" onClick={handleBack}>
+            <Button variant="outlined" color="primary" onClick={handleBack}>
                 Regresar
             </Button>
-             <br />
-             <br />
+            <br />
+            <br />
+
+            <TextField
+                label="Buscar Docente"
+                variant="outlined"
+                fullWidth
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ marginBottom: 20, width: '33%' }}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
+                        </InputAdornment>
+                    ),
+                }}
+            />
 
             <div style={{ height: '100%', width: '100%' }}>
                 <DataGrid
@@ -227,7 +265,7 @@ export const EstudiantesMatriculadosPage = () => {
             </div>
 
             <Dialog open={open} fullWidth maxWidth="md">
-                <DialogTitle>Secciones del Docente</DialogTitle>
+                <DialogTitle>Secciones del Docente: {docenteNombreSeleccionado}</DialogTitle>
                 <DialogContent>
                     {seccionesDocenteSeleccionado.length > 0 ? (
                         <div style={{ height: 400, width: '100%' }}>
@@ -249,24 +287,21 @@ export const EstudiantesMatriculadosPage = () => {
                 </DialogActions>
             </Dialog>
 
-            <Dialog open={openEstudiantesModal}  fullWidth maxWidth="md">
-                <DialogTitle>Estudiantes Matriculados</DialogTitle>
+            <Dialog open={openEstudiantesModal} fullWidth maxWidth="md">
+                <DialogTitle>Estudiantes Matriculados en la Sección: {codigoSeccionSeleccionada} | {nombreSeccionSeleccionada}</DialogTitle>
                 <DialogContent>
+                    {codigoAsignatura && (
+                        <Typography variant="h6">Código de Asignatura: {codigoAsignatura}</Typography>
+                    )}
                     {estudiantesMatriculados.length > 0 ? (
                         <div style={{ height: 400, width: '100%' }}>
-                            {/* <DataGrid
-                                rows={estudiantesRows}
-                                columns={estudiantesColumns}
-                                pageSize={5}
-                                localeText={esESLocaleText}
-                            /> */}
                             <DataGrid
                                 rows={estudiantesRows}
                                 columns={estudiantesColumns}
                                 pageSize={5}
                                 localeText={esESLocaleText}
-                                slots={{
-                                    toolbar: () => <CustomToolbar name={name} />,
+                                components={{
+                                    Toolbar: CustomToolbar,
                                 }}
                             />
                         </div>

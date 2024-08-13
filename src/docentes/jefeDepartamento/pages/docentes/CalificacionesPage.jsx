@@ -18,8 +18,8 @@ export const CalificacionesPage = () => {
     const [docenteNombreSeleccionado, setDocenteNombreSeleccionado] = useState('');
     const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
     const [seccionNombreSeleccionada, setSeccionNombreSeleccionada] = useState('');
-    const [horaInicioSeleccionada, setHoraInicioSeleccionada] = useState(''); // Nuevo estado para la hora de inicio
-    const [searchTerm, setSearchTerm] = useState(''); // Estado para el término de búsqueda
+    const [horaInicioSeleccionada, setHoraInicioSeleccionada] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
     const handleBack = () => {
@@ -62,7 +62,7 @@ export const CalificacionesPage = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Error al obtener las notas ingresadas por el docente');
+                throw new Error('Error al obtener las secciones del docente');
             }
 
             const data = await response.json();
@@ -92,7 +92,7 @@ export const CalificacionesPage = () => {
                 numeroCuenta: nota.id_Estudiante,
                 nota: nota.nota,
                 obs: nota.obs,
-                horaSeccion: `${nota.codigoAsignatura} - ${nota.horaInicio}`, // Combinando sección y hora
+                horaSeccion: `${nota.codigoAsignatura} - ${nota.horaInicio}`,
             }));
             setNotasEstudiantes(notasData);
         } catch (error) {
@@ -110,7 +110,7 @@ export const CalificacionesPage = () => {
     const handleVerEstudiantes = (idSeccion, nombreSeccion, horaInicio) => {
         setSeccionSeleccionada(idSeccion);
         setSeccionNombreSeleccionada(nombreSeccion);
-        setHoraInicioSeleccionada(horaInicio); // Establece la hora de inicio seleccionada
+        setHoraInicioSeleccionada(horaInicio);
         fetchNotas(idSeccion);
         setOpenEstudiantesModal(true);
     };
@@ -127,7 +127,7 @@ export const CalificacionesPage = () => {
         setNotasEstudiantes([]);
         setSeccionSeleccionada(null);
         setSeccionNombreSeleccionada('');
-        setHoraInicioSeleccionada(''); // Limpia la hora de inicio
+        setHoraInicioSeleccionada('');
     };
 
     const columns = [
@@ -150,9 +150,9 @@ export const CalificacionesPage = () => {
     ];
 
     const seccionesColumns = [
-        { field: 'id', headerName: 'ID Sección', width: 150 },
+        { field: 'Hora_inicio_1', headerName: 'Seccion', width: 150 },
         { field: 'codigoAsignatura', headerName: 'Código Asignatura', width: 200 },
-        { field: 'Hora_inicio', headerName: 'Hora Inicio', width: 150 },
+        { field: 'Hora_inicio_2', headerName: 'Hora Inicio', width: 150 },
         { field: 'Hora_Final', headerName: 'Hora Final', width: 150 },
         { field: 'Cupos', headerName: 'Cupos', width: 100 },
         { field: 'estado', headerName: 'Estado', width: 100 },
@@ -164,7 +164,7 @@ export const CalificacionesPage = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleVerEstudiantes(params.row.id, params.row.codigoAsignatura, params.row.Hora_inicio)}
+                    onClick={() => handleVerEstudiantes(params.row.id, params.row.codigoAsignatura, params.row.Hora_inicio_1)}
                 >
                     Ver Notas
                 </Button>
@@ -179,7 +179,6 @@ export const CalificacionesPage = () => {
         { field: 'obs', headerName: 'Observaciones', width: 150 },
     ];
 
-    // Filtrar docentes según el término de búsqueda
     const filteredDocentes = docentesActivos.filter(docente =>
         docente.Nombre_docente.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -192,8 +191,9 @@ export const CalificacionesPage = () => {
 
     const seccionesRows = seccionesDocenteSeleccionado.map((seccion) => ({
         id: seccion.id_Secciones,
-        codigoAsignatura: seccion.codigoAsignatura,
-        Hora_inicio: seccion.Hora_inicio,
+        codigoAsignatura: seccion.Asignaturas.codigo, // Accediendo al código de asignatura
+        Hora_inicio_1: seccion.Hora_inicio,
+        Hora_inicio_2: seccion.Hora_inicio, // Duplicado de la hora de inicio
         Hora_Final: seccion.Hora_Final,
         Cupos: seccion.Cupos,
         estado: seccion.estado ? 'Activo' : 'Inactivo',
@@ -203,7 +203,7 @@ export const CalificacionesPage = () => {
 
     return (
         <DocenteLayout titulo='Calificaciones De Docentes'>
-            <Button variant="text" color="primary" onClick={handleBack}>
+            <Button variant="outlined" color="primary" onClick={handleBack}>
                 Regresar
             </Button>
             <br />
@@ -215,7 +215,7 @@ export const CalificacionesPage = () => {
                 fullWidth
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ marginBottom: 20, width: '33%' }} // 1/3 del ancho de la pantalla
+                style={{ marginBottom: 20, width: '33%' }}
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
@@ -225,7 +225,6 @@ export const CalificacionesPage = () => {
                 }}
             />
 
-            {/* Tabla de datos */}
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
                     rows={rows}
@@ -237,7 +236,7 @@ export const CalificacionesPage = () => {
             </div>
 
             <Dialog open={open} fullWidth maxWidth="md">
-                <DialogTitle>Notas Ingresadas Por El Docente: {docenteNombreSeleccionado}</DialogTitle>
+                <DialogTitle>Secciones del Docente: {docenteNombreSeleccionado}</DialogTitle>
                 <DialogContent>
                     {seccionesDocenteSeleccionado.length > 0 ? (
                         <div style={{ height: 400, width: '100%' }}>
