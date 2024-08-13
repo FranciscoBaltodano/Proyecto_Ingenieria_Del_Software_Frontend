@@ -47,15 +47,28 @@ export const ClasePage = () => {
           <Tab label={<div>Chat <Forum fontSize='small' /></div>} />
         </Tabs>
         <Box sx={{ padding: 2 }}>
-          {tabIndex === 0 && <div>ClasePage</div>}
           {tabIndex === 1 && seccion.nombreChat && 
             (
-
               <Grid container justifyContent='center' height='75vh' sx={{ backgroundColor:'red',  borderRadius: '15px',boxShadow:'2px 2px 10px 0px #D0D0D0', padding:'0px', pt:'20px', backgroundColor:'#FCFDFD'}}>
-              <GroupChat GUID={seccion.nombreChat} />
+                <GroupChat GUID={seccion.nombreChat} />
               </Grid>
             )
           }
+          {tabIndex === 0 && (
+            <div>
+             {/* <div>{JSON.stringify(seccion)}</div> */}
+              {seccion.urlVideo && (
+                <iframe 
+                width="560" 
+                height="315" 
+                src={seccion.urlVideo} 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                ></iframe>
+              )}
+            </div>
+          )}
         </Box>
       </Box>
     </ClasesLayout>
