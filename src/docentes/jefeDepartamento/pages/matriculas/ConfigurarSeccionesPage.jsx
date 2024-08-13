@@ -261,12 +261,13 @@ export const ConfigurarSeccionesPage = () => {
     {
       field: "actions",
       headerName: "Accion",
-      width: 470,
+      width: 485,
       renderCell: (params) => (
         <>
      <Button 
-        variant="text" 
-        color="warning" 
+        style={{ marginLeft: '15px' }} 
+        variant="outlined" 
+        color="error" 
         endIcon={<DeleteIcon />} 
         onClick={() => handleClickOpen(params.row.id_Secciones)}
         disabled={disabledSections[params.row.id_Secciones]}
@@ -350,7 +351,7 @@ export const ConfigurarSeccionesPage = () => {
 
   return (
     <DocenteLayout titulo='Configurar Secciones'>
-      <Button variant="text" color="primary" onClick={handleBack}>
+      <Button variant="outlined" color="primary" onClick={handleBack}>
         Regresar
       </Button>
 

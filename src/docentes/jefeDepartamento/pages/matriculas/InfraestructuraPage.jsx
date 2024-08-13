@@ -102,7 +102,7 @@ export const InfraestructuraPage = () => {
 
   return (
     <DocenteLayout titulo='Registrar Secciones'>
-      <Button variant="text" color="primary" onClick={handleBack}>
+      <Button variant="outlined" color="primary" onClick={handleBack}>
         Regresar
       </Button>
 

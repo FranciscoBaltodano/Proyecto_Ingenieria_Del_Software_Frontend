@@ -4,6 +4,7 @@ import { Divider, Typography, Button, Stack, Snackbar, Alert } from '@mui/materi
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../../contexts/AuthContext'; 
 import axios from 'axios';
+
 export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const { user } = useAuth();
@@ -59,8 +60,11 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
           setValue('Hora_final', seccion.Hora_Final);
           setValue('idEdificio', seccion.id_Edificios);
           
+          setStartTime(seccion.Hora_inicio); 
+          setEndTime(seccion.Hora_Final); 
           setValue2(seccion.Cupos);
   
+          console.log('que muestra esta seccion',seccion.id_Edificios)
           if (seccion.id_Edificios) {
             await fetchAulas(seccion.id_Edificios);
           }
@@ -145,9 +149,64 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
     return <div>No se encontraron datos de la sección</div>;
   }
 
+  const onSubmit = async (data) => {
+    try {
+      // Preparar los datos para enviar
+      const updatedData = {
+        id_Secciones: section,
+        id_Docentes: data.id_Docentes,
+        id_Aula: data.id_Aula,
+        id_Edificios: data.id_Edificio,
+        Hora_inicio: startTime,
+        Hora_Final: endTime,
+        Cupos: value,
+        dias: selectedDias
+      };
+  
+      console.log('Datos a enviar:', updatedData);
+      console.log('URL de la petición:', 'http://localhost:3000/api/department-head/useccion');
+  
+      // Realizar la petición PUT
+      const response = await axios.put('http://localhost:3000/api/department-head/useccion', updatedData);
+  
+      console.log('Respuesta del servidor:', response);
+      console.log('Datos a enviar:', {
+        id_Secciones: section,
+        id_Docentes: data.id_Docentes,
+        id_Aula: data.id_Aula,
+        id_Edificios: data.id_Edificio,
+        Hora_inicio: startTime,
+        Hora_Final: endTime,
+        Cupos: value,
+        dias: selectedDias
+      });
+      if (response.status === 200) {
+        setSnackbarMessage('Sección modificada exitosamente');
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
+        
+         
+        // Cerrar el modal después de un breve retraso
+        setTimeout(() => {
+          if (onClose) {
+            onClose();
+          }
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error al modificar la sección:', error);
+      console.error('Detalles del error:', error.response);
+      setSnackbarMessage('Error al modificar la sección. Por favor, intente de nuevo.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+    }
+  };
+
+
+
   return (
     <div>
-      <form onSubmit={handleSubmit()}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Typography variant="h5" component="h1" gutterBottom>
           Departamento: {user.departamento}
         </Typography>
@@ -199,6 +258,7 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
                 <option key={edificio.id_Edificio} value={edificio.id_Edificio}>
                   {edificio.Nombre}
                 </option>
+                
               ))}
             </select>
           </div>
@@ -231,7 +291,11 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
               id="Hora_Inicio"
               type="time"
               className="w-full p-2 border border-black rounded"
-              value={seccionData.Hora_inicio}
+              value={startTime}
+              onChange={(e) => handleTimeChange(e, setStartTime, startRangeStart, startRangeEnd)}
+              step="3600"
+              min="06:00"
+              max="22:00"
             />
           </div>
           <div className="xl:w-10/12 lg:w-10/12 sm:w-full md:w-10/12">
@@ -243,7 +307,11 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
               id="Hora_Final"
               type="time"
               className="w-full p-2 border border-black rounded"
-              value={seccionData.Hora_Final}
+              value={endTime}
+              onChange={(e) => handleTimeChange(e, setEndTime, endRangeStart, endRangeEnd)}
+              step="3600"
+              min="07:00"
+              max="22:00"
             />
           </div>
         </div>
@@ -290,7 +358,7 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
         <br />
         <center>
           <Typography variant="h9" component="h1" gutterBottom>
-            Debe seleccionar los dias conforme a las horas previstas para la seccion y a las UV de la clase.
+            Debe seleccionar los días conforme a las horas previstas para la sección y a las UV de la clase.
           </Typography>
         </center>
         <br />

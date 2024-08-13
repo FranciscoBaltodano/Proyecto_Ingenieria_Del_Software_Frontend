@@ -206,11 +206,11 @@ const Matricula = ({ fetchAsignaturasMatriculadas, fetchAsignaturasEnEspera }) =
       {loading && <LinearProgress sx={{ mt: 2 }} />} {/* Mostrar barra de progreso */}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={() => setSnackbarOpen(false)}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Posición del Snackbar
       >
-        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
+        <Alert variant='filled' onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
