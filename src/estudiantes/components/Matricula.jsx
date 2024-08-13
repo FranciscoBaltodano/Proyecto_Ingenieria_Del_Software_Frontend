@@ -23,18 +23,24 @@ const Matricula = ({ fetchAsignaturasMatriculadas, fetchAsignaturasEnEspera }) =
   const [selectedSeccion, setSelectedSeccion] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // Añadido para el severity
-  const [loading, setLoading] = useState(false); // Añadido para el estado de carga
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [loading, setLoading] = useState(false);
 
   const { user, token } = useAuth();
 
   useEffect(() => {
-    fetchDepartamentos();
-  }, []);
+    if (user?.numeroCuenta) {
+      fetchDepartamentos();
+    }
+  }, [user]);
 
   const fetchDepartamentos = async () => {
     try {
-      const response = await axios.get('/api/matricula/departamentos', {
+      const numeroCuenta = user?.numeroCuenta;
+      if (!numeroCuenta) {
+        throw new Error("Número de cuenta no disponible");
+      }
+      const response = await axios.get(`/api/matricula/departamentos/${numeroCuenta}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDepartamentos(response.data);
@@ -45,7 +51,7 @@ const Matricula = ({ fetchAsignaturasMatriculadas, fetchAsignaturasEnEspera }) =
 
   const fetchAsignaturas = async (id_Departamento) => {
     try {
-      const response = await axios.get(`/api/matricula/asignaturas/${id_Departamento}`, {
+      const response = await axios.get(`/api/matricula/asignaturas/${user?.numeroCuenta}/${id_Departamento}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAsignaturas(response.data);
@@ -117,16 +123,15 @@ const Matricula = ({ fetchAsignaturasMatriculadas, fetchAsignaturasEnEspera }) =
   const handleMatricular = async () => {
     if (!selectedSeccion) {
       setSnackbarMessage('Por favor, seleccione una sección');
-      setSnackbarSeverity('error'); // Asegúrate de usar "error" para mensajes de error
+      setSnackbarSeverity('error');
       setSnackbarOpen(true);
       return;
     }
 
-    setLoading(true); // Mostrar la barra de progreso
+    setLoading(true);
 
     try {
       const id_estudiante = await obtenerIdEstudiante(user.id);
-
       const response = await axios.post('/api/matricula/proceder-matricula', {
         id_estudiante: id_estudiante,
         id_seccion: selectedSeccion
@@ -136,14 +141,14 @@ const Matricula = ({ fetchAsignaturasMatriculadas, fetchAsignaturasEnEspera }) =
       fetchAsignaturasMatriculadas();
       fetchAsignaturasEnEspera();
       setSnackbarMessage('Matrícula realizada con éxito');
-      setSnackbarSeverity('success'); // Asegúrate de usar "success" para mensajes de éxito
+      setSnackbarSeverity('success');
       setSnackbarOpen(true);
     } catch (error) {
       setSnackbarMessage(error.response?.data?.error || 'Error al matricular');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     } finally {
-      setLoading(false); // Ocultar la barra de progreso
+      setLoading(false);
     }
   };
 
@@ -199,18 +204,13 @@ const Matricula = ({ fetchAsignaturasMatriculadas, fetchAsignaturasEnEspera }) =
         </Grid>
       </Grid>
       <Box mt={2}>
-        <Button disabled={loading} variant="contained" color="primary" onClick={handleMatricular}>
-          Matricular Asignatura
+        <Button disabled={loading} onClick={handleMatricular} variant="contained" color="primary">
+          Matricular
         </Button>
+        {loading && <LinearProgress sx={{ mt: 1 }} />}
       </Box>
-      {loading && <LinearProgress sx={{ mt: 2 }} />} {/* Mostrar barra de progreso */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={2000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Posición del Snackbar
-      >
-        <Alert variant='filled' onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
