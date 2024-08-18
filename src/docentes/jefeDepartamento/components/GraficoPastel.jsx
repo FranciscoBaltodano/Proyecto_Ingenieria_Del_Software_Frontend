@@ -32,11 +32,13 @@ export const GraficoPastel = ({ data, user }) => {
     label: department.nombre,
   }));
 
+  const palette = ['#FF5722', '#F44336', '#E91E63', '#9C27B0', '#FF9800', '#FFEB3B', '#D32F2F', '#C2185B', '#7B1FA2', '#F57F17'];
+
   return (
       <PieChart
         series={[
           {
-            arcLabel: (item) => `${item.value}`,
+            arcLabel: (item) => `${item.label} (${item.value})`,
             arcLabelMinAngle: 45,
             data: pieChartData,
             highlightScope: { faded: 'global', highlighted: 'item' },
@@ -49,7 +51,9 @@ export const GraficoPastel = ({ data, user }) => {
             fontWeight: 'bold',
           },
         }}
-        height={300}
+        height={450}
+        colors={palette}
+
       />
   );
 };

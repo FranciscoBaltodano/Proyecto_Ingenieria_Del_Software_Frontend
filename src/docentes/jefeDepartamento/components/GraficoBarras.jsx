@@ -23,6 +23,7 @@ export const GraficoBarras = ({ data, user }) => {
   };
 
   const { series, faculties } = transformData(data);
+  const palette = ['#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#607D8B', '#9E9E9E', '#B3E5FC'];
 
   return (
     <>
@@ -42,6 +43,7 @@ export const GraficoBarras = ({ data, user }) => {
                 .filter(s => s.value !== null);
             },
             }}
+            colors={palette}
         />
 
     </>
