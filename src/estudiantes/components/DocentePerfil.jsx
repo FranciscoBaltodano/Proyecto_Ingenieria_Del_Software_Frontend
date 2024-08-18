@@ -26,7 +26,8 @@ import {
   Card,
   CardContent,
   Modal,
-  IconButton
+  IconButton,
+  Skeleton
 } from '@mui/material';
 import axios from 'axios';
 import { CheckCircle, Email, Favorite, PersonAdd } from '@mui/icons-material';
@@ -45,9 +46,7 @@ const keyframes = `
 `;
 
 const cardStyle = {
-  position: 'absolute',
-  width: 'calc(100% - 40px)',
-  maxWidth: '1000px',
+  mb: 4,
   backgroundColor: 'white',
   boxShadow: '4',
   borderRadius: '8px',
@@ -166,7 +165,12 @@ export const DocentePerfil = ( { id_Usuario } ) => {
   }
 
   if (!perfil) {
-    return <Typography variant="h6">Perfil no encontradoo</Typography>;
+    return(
+      <Grid display='flex' justifyContent='center'>
+        {/* <Typography variant="body1">Cargando</Typography> */}
+        <Skeleton variant="rectangular" width={810} height={250} />
+      </Grid>
+    )
   }
 
   const { Nombre, Apellido, Imagen, Perfiles, estudiante, Correo, empleado } = perfil;
@@ -210,7 +214,7 @@ export const DocentePerfil = ( { id_Usuario } ) => {
   return (
     <>
       <style>{keyframes}</style>
-      <Box sx={{ position: 'relative', height: '75vh', overflow: 'auto' , borderRadius:'40px'}}>
+      <Box justifyContent='center' display='flex' sx={{ position: 'relative', overflow: 'auto' }}>
 
         <Card sx={cardStyle}>
           <CardContent>
