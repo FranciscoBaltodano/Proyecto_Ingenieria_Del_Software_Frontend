@@ -15,19 +15,26 @@ export const EvaluacionesPage = () => {
     const [seccionesDocenteSeleccionado, setSeccionesDocenteSeleccionado] = useState([]);
     const [docenteNombreSeleccionado, setDocenteNombreSeleccionado] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [docenteSeleccionado, setDocenteSeleccionado] = useState(null);
+    const [openEvaluacionesIndividuales, setOpenEvaluacionesIndividuales] = useState(false);
+    const [openPromedioTotal, setOpenPromedioTotal] = useState(false);
+    const [promedioTotal, setPromedioTotal] = useState(null);
+    const [evaluacionesIndividuales, setEvaluacionesIndividuales] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchEncuestas = async () => {
+            if (!user.id_departamento) {
+                console.error('id_Departamento is undefined');
+                return;
+            }
             try {
-                const response = await axios.post('http://localhost:3000/api/department-head/encuestas', { id_Departamento: user.departamentoId });
-                console.log('Datos recibidos del backend:', response.data);
-                if (Array.isArray(response.data.data)) {
-                    console.log('Datos a setear en docentes:', response.data.data);
-                    setDocentes(response.data.data);
+                const response = await axios.get(`http://localhost:3000/api/department-head/encuestas/${user.id_departamento}`);
+                if (response.data && response.data.data && response.data.data.data && Array.isArray(response.data.data.data)) {
+                    const dataWithId = response.data.data.data.map((row) => ({ id: row.numeroEmpleado, ...row }));
+                    setDocentes(dataWithId);
                 } else {
-                    console.error('Los datos recibidos no son un arreglo:', response.data.data);
+                    console.warn('No se encontraron datos de encuestas o la estructura es incorrecta:', response.data);
                     setDocentes([]);
                 }
             } catch (error) {
@@ -35,15 +42,21 @@ export const EvaluacionesPage = () => {
                 setDocentes([]);
             }
         };
-
+        
         fetchEncuestas();
-    }, [user.departamentoId]);
+    }, [user.id_departamento]);
 
     const handleVerSecciones = (numeroEmpleado, nombreCompleto) => {
-        const docenteSeleccionado = docentes.find(docente => docente.numeroEmpleado === numeroEmpleado);
-        setDocenteNombreSeleccionado(nombreCompleto);
-        setSeccionesDocenteSeleccionado(docenteSeleccionado ? docenteSeleccionado.secciones : []);
-        setOpen(true);
+        const docente = docentes.find((doc) => doc.numeroEmpleado === numeroEmpleado);
+        if (docente) {
+            setSeccionesDocenteSeleccionado(docente.secciones);
+            setDocenteNombreSeleccionado(nombreCompleto);
+            setDocenteSeleccionado(docente);
+            setPromedioTotal(docente.promedioTotal);
+            setOpen(true);
+        } else {
+            console.error('No se encontró el docente');
+        }
     };
 
     const handleCloseModal = () => {
@@ -69,13 +82,48 @@ export const EvaluacionesPage = () => {
         },
     ];
 
+    const handleVerEvaluacionesIndividuales = (seccion) => {
+        if (docenteSeleccionado) {
+            const seccionSeleccionada = docenteSeleccionado.secciones.find(s => s.seccion === seccion);
+            if (seccionSeleccionada && Array.isArray(seccionSeleccionada.evaluacionesIndividuales)) {
+                setEvaluacionesIndividuales(seccionSeleccionada.evaluacionesIndividuales);
+            } else {
+                setEvaluacionesIndividuales([]); // Establece un array vacío si no hay evaluaciones
+            }
+            setOpenEvaluacionesIndividuales(true);
+        } else {
+            console.error('No hay docente seleccionado');
+        }
+    };
+
+    const handleVerPromedioTotal = () => {
+        setOpenPromedioTotal(true);
+    };
+
     const seccionesColumns = [
-        { field: 'seccion', headerName: 'Sección', flex: 1 },
-        { field: 'promedioPregunta1', headerName: 'Promedio Pregunta 1', flex: 1 },
-        { field: 'promedioPregunta2', headerName: 'Promedio Pregunta 2', flex: 1 },
-        { field: 'promedioPregunta3', headerName: 'Promedio Pregunta 3', flex: 1 },
-        { field: 'promedioPregunta4', headerName: 'Promedio Pregunta 4', flex: 1 },
-        { field: 'promedioPregunta5', headerName: 'Promedio Pregunta 5', flex: 1 },
+        { field: 'seccion', headerName: 'Sección', width:150},
+        { field: 'promedioPregunta1', headerName: 'Promedio Pregunta 1', width:150 },
+        { field: 'promedioPregunta2', headerName: 'Promedio Pregunta 2', width:150 },
+        { field: 'promedioPregunta3', headerName: 'Promedio Pregunta 3', width:150 },
+        { field: 'promedioPregunta4', headerName: 'Promedio Pregunta 4', width:150 },
+        { field: 'promedioPregunta5', headerName: 'Promedio Pregunta 5', width:150 },
+        {
+            field: 'actions',
+            headerName: 'Acciones',
+            width:450,
+            renderCell: (params) => (
+                <>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleVerEvaluacionesIndividuales(params.row.seccion)}
+                    style={{ marginRight: '10px' }}
+                >
+                    Evaluaciones Individuales
+                </Button>
+                </>
+            ),
+        },
     ];
 
     return (
@@ -86,25 +134,34 @@ export const EvaluacionesPage = () => {
             <br />
             <br />
 
-            <TextField
-                label="Buscar Docente"
-                variant="outlined"
-                fullWidth
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ marginBottom: 20, width: '33%' }}
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    ),
-                }}
-            />
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20 }}>
+                <TextField
+                    label="Buscar Docente"
+                    variant="outlined"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ width: '33%' }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+                <Button
+                    variant="contained"
+                    color="inherit"
+                    onClick={handleVerPromedioTotal}
+                    style={{ marginLeft: 'auto' }}
+                >
+                    Promedio Total
+                </Button>
+            </div>
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={Array.isArray(docentes) ? docentes.filter((docente) => docente.nombreCompleto.toLowerCase().includes(searchTerm.toLowerCase())) : []}
+                    rows={docentes}
                     columns={columns}
                     pageSize={5}
                     checkboxSelection={false}
@@ -118,7 +175,7 @@ export const EvaluacionesPage = () => {
                     {seccionesDocenteSeleccionado.length > 0 ? (
                         <div style={{ height: 400, width: '100%' }}>
                             <DataGrid
-                                rows={seccionesDocenteSeleccionado}
+                                rows={seccionesDocenteSeleccionado.map((seccion, index) => ({ ...seccion, id: index }))}
                                 columns={seccionesColumns}
                                 pageSize={5}
                                 localeText={esESLocaleText}
@@ -130,6 +187,58 @@ export const EvaluacionesPage = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseModal} color="primary">
+                        Cerrar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog open={openEvaluacionesIndividuales} onClose={() => setOpenEvaluacionesIndividuales(false)} fullWidth maxWidth="md">
+                <DialogTitle>Evaluaciones Individuales</DialogTitle>
+                <DialogContent>
+                    <div style={{ height: 400, width: '100%' }}>
+                        <DataGrid
+                            rows={(evaluacionesIndividuales && Array.isArray(evaluacionesIndividuales))
+                                ? evaluacionesIndividuales.map((evaluacion, index) => ({ ...evaluacion, id: index }))
+                                : []    
+                            }            
+                            columns={[
+                                { field: 'pregunta1', headerName: 'Pregunta 1', flex: 2},
+                                { field: 'pregunta2', headerName: 'Pregunta 2', flex: 2 },
+                                { field: 'pregunta3', headerName: 'Pregunta 3', flex: 2 },
+                                { field: 'pregunta4', headerName: 'Pregunta 4', flex: 2 },
+                                { field: 'pregunta5', headerName: 'Pregunta 5', flex: 2 },
+                            ]}
+                            pageSize={5}
+                            localeText={esESLocaleText}
+                        />
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenEvaluacionesIndividuales(false)} color="primary">
+                        Cerrar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog open={openPromedioTotal} fullWidth maxWidth="sm">
+                <DialogTitle>Promedio Total</DialogTitle>
+                <DialogContent>
+                    {promedioTotal ? (
+                        <center>
+                            <div>
+                                <Typography>Promedio Pregunta 1: &emsp; {promedioTotal.promedioPregunta1}</Typography>
+                                <Typography>Promedio Pregunta 2: &emsp; {promedioTotal.promedioPregunta2}</Typography>
+                                <Typography>Promedio Pregunta 3: &emsp; {promedioTotal.promedioPregunta3}</Typography>
+                                <Typography>Promedio Pregunta 4: &emsp; {promedioTotal.promedioPregunta4}</Typography>
+                                <Typography>Promedio Pregunta 5: &emsp; {promedioTotal.promedioPregunta5}</Typography>
+                            </div>
+                        </center>
+                    ) : (
+                        <Typography>No hay datos de promedio total disponibles.</Typography>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenPromedioTotal(false)} color="primary">
                         Cerrar
                     </Button>
                 </DialogActions>

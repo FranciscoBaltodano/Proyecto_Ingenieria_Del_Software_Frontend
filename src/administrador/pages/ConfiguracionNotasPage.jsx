@@ -1,17 +1,17 @@
 import { AdministradorLayout } from '../layout/AdministradorLayout'
 import { Divider, Typography } from '@mui/material'
-import { FormMatriculaModificar } from '../components/FormMatriculaModificar'
+import { FormCrearNota } from '../components/FormCrearNota'
 
-export const ConfiguracionMatriculaModificarPage =()=>{
+export const ConfiguracionNotasPage =()=>{
     return (
         <AdministradorLayout>
         <Typography variant="h5" component="h1" gutterBottom>
-          Modificando Notas
+          Configuracion Notas
         </Typography>
         
         <Divider sx={{ marginBottom: 2 }} />
         
-        <FormMatriculaModificar/>
+        <FormCrearNota/>
         
     </AdministradorLayout>
     )

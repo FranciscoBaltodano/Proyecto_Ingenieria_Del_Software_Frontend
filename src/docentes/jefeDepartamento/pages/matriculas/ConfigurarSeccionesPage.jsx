@@ -57,6 +57,15 @@ export const ConfigurarSeccionesPage = () => {
     filtrarAsignaturas(value);
   };
 
+  const actualizarSecciones = async () => {
+    try {
+      const seccionesRes = await axios.get(`/api/department-head/secciones/${selectedAsignatura.codigo}`);
+      setSecciones(seccionesRes.data.data);
+    } catch (error) {
+      console.error("Error al actualizar las secciones:", error);
+    }
+  };
+
   useEffect(() => {
     const getAsignaturasByDepartamento = async () => {
       try {
@@ -69,6 +78,8 @@ export const ConfigurarSeccionesPage = () => {
     };
     getAsignaturasByDepartamento();
   }, [user.id_departamento]);
+
+  
 
   const handleOpenModal = async (codigoAsignatura, nombre, uv) => {
     setSelectedAsignatura({ codigo: codigoAsignatura, nombre: nombre, uv:uv });
@@ -465,6 +476,7 @@ export const ConfigurarSeccionesPage = () => {
                 section={selectedSection}
                 asignatura={selectedAsignatura}
                 onClose={handleCloseModificar}
+                onUpdateSecciones={actualizarSecciones}
               />
             )}
         </Box>

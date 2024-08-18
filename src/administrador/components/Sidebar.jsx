@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import { Description as NewspaperIcon, Menu as MenuIcon, Home as HomeIcon, Person as PersonIcon, Assignment as AssignmentIcon, Group as GroupIcon, EventNote as EventNoteIcon, ExitToApp as ExitToAppIcon } from '@mui/icons-material';
+import { Box, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Typography  } from '@mui/material';
+import { Description as NewspaperIcon, Menu as MenuIcon, Home as HomeIcon, Person as PersonIcon, Assignment as AssignmentIcon, Group as GroupIcon, EventNote as EventNoteIcon, ExitToApp as ExitToAppIcon, NoteAltOutlined as NoteAltOutlinedIcon } from '@mui/icons-material';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import logoUNAHconLetras from '/assets/logoUNAHconLetras.webp';
@@ -13,6 +13,8 @@ const menuItems = [
   { text: 'Cancelaciones', icon: <AssignmentIcon />, to: '/admin/cancelaciones' },
   { text: 'Admisiones', icon: <EventNoteIcon />, to: '/admin/admisiones' },
   { text: 'Matrícula', icon: <GroupIcon />, to: '/admin/matricula' },
+  { text: 'Notas', icon: <NoteAltOutlinedIcon  />, to: '/admin/notas' },
+
 ];
 
 export const Sidebar = () => {

@@ -162,7 +162,7 @@ export const ListaDeEsperaPage = () => {
       }
     },
     { field: "Cupos", headerName: "Cupos", width: 100 },
-    { field: "matriculados", headerName: "Matriculados", width: 100 },
+    //{ field: "matriculados", headerName: "Matriculados", width: 100 },
     {
       field: "actions",
       headerName: "Acción",
@@ -186,7 +186,7 @@ export const ListaDeEsperaPage = () => {
     {
       field: 'id_estudiante',
       headerName: 'Estudiante',
-      width: 250,
+      flex:3,
       renderCell: (params) => {
         const { Nombre, Apellido } = params.row.estudiante.usuario || {};
         return `${Nombre || 'Desconocido'} ${Apellido || 'Desconocido'}`;
@@ -194,7 +194,7 @@ export const ListaDeEsperaPage = () => {
     },
     { field: 'numeroCuenta', 
       headerName: 'Número de Cuenta', 
-      width: 150, 
+      flex:3, 
       renderCell: (params) => {
         const { numeroCuenta} = params.row.estudiante || {};
         return `${numeroCuenta || 'Desconocido'} `;
@@ -202,7 +202,7 @@ export const ListaDeEsperaPage = () => {
     },
     { field: 'fecha', 
       headerName: 'Fecha y Hora  Solicitud', 
-      width: 200,
+      flex:3,
       renderCell: (params) => {
         const fecha = new Date(params.value);
         return `${fecha.toLocaleDateString()} - ${fecha.toLocaleTimeString()}`;

@@ -5,13 +5,12 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '../../../contexts/AuthContext'; 
 import axios from 'axios';
 
-export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) => {
+export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose,onUpdateSecciones  }) => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const { user } = useAuth();
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [redirectToSeccionPage, setRedirectToSeccionPage] = useState(false);
   const [dias, setDias] = useState([]);
   const [diasSecciones, setDiasSecciones] = useState([]);
   const [edificios, setEdificios] = useState([]);
@@ -156,8 +155,7 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
         id_Secciones: section,
         id_Docentes: data.id_Docentes,
         id_Aula: data.id_Aula,
-        id_Edificios: data.id_Edificio,
-        Hora_inicio: startTime,
+        id_Edificios: edificios.find(edificio => edificio.Nombre === data.id_Edificio).id_Edificio,        Hora_inicio: startTime,
         Hora_Final: endTime,
         Cupos: value,
         dias: selectedDias
@@ -174,24 +172,29 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose }) 
         id_Secciones: section,
         id_Docentes: data.id_Docentes,
         id_Aula: data.id_Aula,
-        id_Edificios: data.id_Edificio,
+        id_Edificios: data.id_Edificio, // Enviar el ID del edificio
         Hora_inicio: startTime,
         Hora_Final: endTime,
         Cupos: value,
         dias: selectedDias
       });
+      console.log('Form data:', data);
+      console.log('Edificio ID:', data.id_Edificio);
+  
       if (response.status === 200) {
         setSnackbarMessage('Sección modificada exitosamente');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
-        
-         
+
+        // Llama a la función de actualización
+        onUpdateSecciones();
+
         // Cerrar el modal después de un breve retraso
         setTimeout(() => {
           if (onClose) {
             onClose();
           }
-        }, 2000);
+        }, 3000);
       }
     } catch (error) {
       console.error('Error al modificar la sección:', error);

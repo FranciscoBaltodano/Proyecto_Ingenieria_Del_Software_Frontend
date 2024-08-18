@@ -18,7 +18,7 @@ const docentesIcon = (
 </svg>
 );
 
-const planificacionIcon = (
+const NoteAltOutlinedIcon = (
   <svg fill="#2010f4" height="200px" width="200px" version="1.1" viewBox="0 0 512 512" stroke="#2010f4"><g id="SVGRepo_bgCarrier" ></g><g id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M480.6,11H31.4C20.1,11,11,20.1,11,31.4v350.7c0,11.3,9.1,20.4,20.4,20.4h204.2v57.7h-29.8c-11.3,0-20.4,9.1-20.4,20.4 c0,11.3,9.1,20.4,20.4,20.4h100.5c11.3,0,20.4-9.1,20.4-20.4c0-11.3-9.1-20.4-20.4-20.4h-29.8v-57.7h204.2 c11.3,0,20.4-9.1,20.4-20.4V31.4C501,20.1,491.9,11,480.6,11z M460.2,361.7H51.8V51.8h408.3V361.7z"></path> <path d="m162.6,227.1c2.5,11.3 6.9,21.9 13,31.3-7,8.2-8.5,22.2-1,29.7 7.6,7.6 21.5,6 29.7-1 9.4,6.1 20,10.5 31.3,13 0.9,10.7 9.6,21.7 20.3,21.7 10.7,0 19.5-10.9 20.3-21.7 11.3-2.5 21.9-6.9 31.3-13 8.2,7 22.2,8.5 29.7,1 7.6-7.6 6-21.5-1-29.7 6.1-9.4 10.5-20 13-31.3 10.7-0.9 21.7-9.6 21.7-20.3 0-10.7-10.9-19.5-21.7-20.3-2.5-11.3-6.9-21.9-13-31.3 7-8.2 8.5-22.2 1-29.7-7.6-7.6-21.5-6-29.7,1-9.4-6.1-20-10.5-31.3-13-0.9-10.7-9.6-21.7-20.3-21.7-10.7,0-19.5,10.9-20.3,21.7-11.3,2.5-21.9,6.9-31.3,13-8.2-7-22.2-8.5-29.7-1-7.6,7.6-6,21.5 1,29.7-6.1,9.4-10.5,20-13,31.3-10.7,0.9-21.7,9.6-21.7,20.3 2.84217e-14,10.6 10.9,19.4 21.7,20.3zm93.4-70.6c27.7,0 50.3,22.6 50.3,50.3 0,27.7-22.6,50.3-50.3,50.3-27.7,0-50.3-22.5-50.3-50.3 0-27.8 22.6-50.3 50.3-50.3z"></path> </g> </g> </g></svg>
 );
 
@@ -43,6 +43,8 @@ export const InicioPage = () => {
     { text: 'Cancelaciones', to: '/admin/cancelaciones', description: 'Manejo de cancelaciones', icon: cancelacionesIcon },
     { text: 'Admisiones', to: '/admin/admisiones', description: 'Administrar admisiones', icon: admisionesIcon },
     { text: 'Matrícula', to: '/admin/matricula', description: 'Gestión de matrículas', icon: gestionIcon },
+    { text: 'Notas', to: '/admin/notas', description: 'Gestión de notas', icon: NoteAltOutlinedIcon },
+
   ];
 
   return (
