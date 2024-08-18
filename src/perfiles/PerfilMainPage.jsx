@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { FotoPerfil } from './components/FotoPerfil';
 import './../index.css';
+import { ReiniciarContrasena } from './components/ReiniciarContrasena';
 
 export const PerfilMainPage = () => {
   const { user } = useAuth();
@@ -154,6 +155,14 @@ export const PerfilMainPage = () => {
 
   return (
     <Box sx={{ flexGrow: 1, borderRadius:'15px', padding:'30px' , width:'100%', boxShadow:'2px 2px 10px 0px #D0D0D0', backgroundColor:'#F9F9F9' }}>
+      
+
+      { user.numeroCuenta && (
+          <Grid container direction='row-reverse'>
+            <ReiniciarContrasena numeroCuenta={user.numeroCuenta} />
+          </Grid>
+        )
+      }
 
       <Grid container>
 

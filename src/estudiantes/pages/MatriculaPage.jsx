@@ -244,8 +244,10 @@ export const MatriculaPage = () => {
 
   // Función para obtener la información de la API
   const fetchMatriculaData = async () => {
+    console.log('Número de cuenta:', numeroCuenta);
+
     try {
-      const response = await axios.get(`http://localhost:3000/api/matricula/validar-adicion/${numeroCuenta}`);
+      const response = await axios.get(`/api/matricula/validar-adicion/${numeroCuenta}`);
       console.log('Data de matrícula:', response.data);
       
       // Configurar el Snackbar en función de la respuesta
@@ -261,6 +263,7 @@ export const MatriculaPage = () => {
       setSnackbarOpen(true); // Mostrar Snackbar
     } catch (error) {
       console.error('Error al obtener datos de matrícula:', error);
+
       setSnackbarMessage('Error al obtener datos de matrícula.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true); // Mostrar Snackbar
