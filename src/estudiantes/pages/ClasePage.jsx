@@ -43,7 +43,6 @@ export const ClasePage = () => {
        */}
 
       <Box sx={{ width: '100%', mb:'100px' }}>
-        <Typography variant='body2' sx={{ textAlign:'center', mb:'20px' }}>{JSON.stringify( seccion.id_Docentes )}</Typography>
         <Tabs value={tabIndex} onChange={handleTabChange} aria-label="Clase Page Tabs">
           <Tab label={seccion?.codigoAsignatura ? seccion?.codigoAsignatura : 'Información' } />
           <Tab label={<div>Chat <Forum fontSize='small' /></div>} />

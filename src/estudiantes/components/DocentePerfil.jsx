@@ -33,27 +33,6 @@ import { CheckCircle, Email, Favorite, PersonAdd } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
 
 
-const containerStyle = {
-  width: '100%',
-  height: '50vh', // 50% de la altura de la pantalla
-  background: 'lightblue',
-  position: 'relative',
-  overflow: 'hidden',
-  zIndex: 1, // Asegura que el fondo animado esté debajo del Card
-};
-
-const backgroundStyle = {
-  content: '""',
-  position: 'absolute',
-  top: '-50%',
-  left: '-50%',
-  width: '200%',
-  height: '200%',
-  background: 'radial-gradient(circle, #3498db 10%, transparent 20%), radial-gradient(circle, transparent 10%, #3498db 20%)',
-  backgroundSize: '30px 30px',
-  animation: 'moveBackground 8s linear infinite',
-};
-
 const keyframes = `
   @keyframes moveBackground {
     0% {
@@ -67,9 +46,6 @@ const keyframes = `
 
 const cardStyle = {
   position: 'absolute',
-  top: '400px',
-  left: '50%',
-  transform: 'translate(-50%, -60%)',
   width: 'calc(100% - 40px)',
   maxWidth: '1000px',
   backgroundColor: 'white',
@@ -77,7 +53,7 @@ const cardStyle = {
   borderRadius: '8px',
   zIndex: 2, 
   paddingTop: '0px', 
-  marginTop: '100px', 
+  marginTop: '10px', 
 };
 
 
@@ -129,31 +105,47 @@ const modalStyle = {
   alignItems: 'center',
 };
 
-export const DocentePerfil = ( { id_Usuario, isFriend } ) => {
+export const DocentePerfil = ( { id_Usuario } ) => {
   const { user } = useAuth();
   const [perfil, setPerfil] = useState(null);
+  const [idDocente, setIdDocente] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [solicitudEnviada, setSolicitudEnviada] = useState(false);
 
-  console.log('isFriend', isFriend);
   
   useEffect(() => {
-    const fetchPerfil = async () => {
+    const fetchId = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/student/perfil/${id_Usuario}`);
-        setPerfil(response.data.data);
-        console.log(response.data.data);
-        
+        const response = await axios.get(`/api/teacher/idUser/${id_Usuario}`);
+        console.log( response.data.id_usuario);
+        setIdDocente(response.data.id_usuario);
+        fetchPerfil(response.data.id_usuario);
+
       } catch (error) {
         console.error(error);
       } finally {
         setLoading(false);
       }
     };
-    fetchPerfil();
+    fetchId();
+  
   }, [id_Usuario]);
+  
+  const fetchPerfil = async (idDocente) => {
+    try {
+      // const response = await axios.get(`http://localhost:3000/api/student/perfil/${id_Usuario}`);
+      const response = await axios.get(`http://localhost:3000/api/student/perfil/${idDocente}`);
+      setPerfil(response.data.data);
+      console.log(response.data.data);
+      
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -174,7 +166,7 @@ export const DocentePerfil = ( { id_Usuario, isFriend } ) => {
   }
 
   if (!perfil) {
-    return <Typography variant="h6">Perfil no encontrado</Typography>;
+    return <Typography variant="h6">Perfil no encontradoo</Typography>;
   }
 
   const { Nombre, Apellido, Imagen, Perfiles, estudiante, Correo, empleado } = perfil;
@@ -219,14 +211,7 @@ export const DocentePerfil = ( { id_Usuario, isFriend } ) => {
     <>
       <style>{keyframes}</style>
       <Box sx={{ position: 'relative', height: '75vh', overflow: 'auto' , borderRadius:'40px'}}>
-      <Box sx={containerStyle}>
-          <Box sx={backgroundStyle}></Box>
-        </Box>
-        <Avatar
-          alt="Usuario"
-          src={Imagen}
-          sx={avatarStyle}
-        />
+
         <Card sx={cardStyle}>
           <CardContent>
             <Box sx={buttonsContainerStyle}>
@@ -240,15 +225,7 @@ export const DocentePerfil = ( { id_Usuario, isFriend } ) => {
             >
               Email
             </Button>
-            {isFriend ? 
-              <Button 
-                variant="text" 
-                color='success'
-                endIcon={<Favorite />} 
-              >
-                Ya son amigos
-              </Button>
-             :
+
               <Button 
               variant="text" 
               color={solicitudEnviada ? 'success' : 'primary'} 
@@ -257,11 +234,16 @@ export const DocentePerfil = ( { id_Usuario, isFriend } ) => {
               >
                 {solicitudEnviada ? 'Solicitud enviada' : 'Agregar'}
               </Button>
-            }
             </Box>
-            <Typography variant="h4" component="div" gutterBottom sx={{ textAlign: 'center', mb: 1 }} mt={{ xs:'130px', sm:'0px'}}    >
-              {`${Nombre} ${Apellido}`}
+
+            <Grid container justifyContent='center' spacing={2}>
+            <Typography variant="h4" component="div" gutterBottom sx={{ textAlign: 'center', mb: 1 , mr:1}} mt={{ xs:'130px', sm:'0px'}}    >
+              {`${Nombre} ${Apellido}`}   
             </Typography>
+            
+            <Avatar alt="Usuario" src={Imagen}/>
+            
+            </Grid>
             <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 4 }}>
               {Descripcion}
             </Typography>
