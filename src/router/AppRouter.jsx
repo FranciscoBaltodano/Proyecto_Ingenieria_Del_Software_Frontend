@@ -12,6 +12,7 @@ import { DocentesRoutes } from "../docentes/routes/DocentesRoutes";
 import { ReinicioClaveRoutes } from "../reinicioClave/routes/ReinicioClaveRoutes";
 import { PerfilView } from "../perfiles/components/PerfilView";
 import { SolicitudAceptadaPage } from "../perfiles/SolicitudAceptadaPage";
+import { ForgotPasswordPage } from "../login/pages/ForgotPasswordPage";
 
 
 export const AppRouter = () => {
@@ -29,6 +30,8 @@ export const AppRouter = () => {
 
         <Route path="perfiles/:id_Usuario"      element={<PerfilView/>} />
         <Route path="solicitudAceptada/"         element={<SolicitudAceptadaPage/>} />
+
+        <Route path="cambiarContrasena/:id"      element={<ForgotPasswordPage/>} />  
         
         {/* <Route path="docentes/*"         element={<DocentesRoutes/>} /> */}
         {/* <Route path="jefedepartamento/*"    element={<JefeDepartamentoRoutes/>} /> 

@@ -4,7 +4,8 @@ import axios from 'axios';
 import { Button, Grid, Tabs, Tab, Box, Typography } from '@mui/material';
 import { GroupChat } from '../../chats/components/GroupChat';
 import { ClasesLayout } from '../layout/ClasesLayout';
-import { Forum } from '@mui/icons-material';
+import { AssignmentInd, Forum } from '@mui/icons-material';
+import { DocentePerfil } from '../components/DocentePerfil';
 
 export const ClasePage = () => {
   const { id } = useParams();
@@ -42,9 +43,11 @@ export const ClasePage = () => {
        */}
 
       <Box sx={{ width: '100%', mb:'100px' }}>
+        <Typography variant='body2' sx={{ textAlign:'center', mb:'20px' }}>{JSON.stringify( seccion.id_Docentes )}</Typography>
         <Tabs value={tabIndex} onChange={handleTabChange} aria-label="Clase Page Tabs">
           <Tab label={seccion?.codigoAsignatura ? seccion?.codigoAsignatura : 'Información' } />
           <Tab label={<div>Chat <Forum fontSize='small' /></div>} />
+          <Tab label={<div>Docente <AssignmentInd fontSize='small' /></div>} />
         </Tabs>
         <Box sx={{ padding: 2 }}>
           {tabIndex === 1 && seccion.nombreChat && 
@@ -68,6 +71,9 @@ export const ClasePage = () => {
                 ></iframe>
               )}
             </div>
+          )}
+          {tabIndex === 2 && (
+            <DocentePerfil id_Usuario={seccion.id_Docentes} />
           )}
         </Box>
       </Box>
