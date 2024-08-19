@@ -1,124 +1,5 @@
 
 
-// import axios from 'axios';
-// import { useAuth } from '../../contexts/AuthContext';
-// import { useNavigate } from 'react-router-dom';
-// import React, { useState, useEffect } from 'react';
-// import { EstudianteLayout } from '../layout/EstudianteLayout';
-// import { Menu } from '../../components/Menu';
-// import { AddCircle, Cancel, Receipt, HourglassEmpty } from '@mui/icons-material';
-// import { Divider, Snackbar, Alert } from '@mui/material';
-
-// export const MatriculaPage = () => {
-//   const navigate = useNavigate();
-//   const { user: { numeroCuenta } } = useAuth();
-//   const [loading, setLoading] = useState(true);
-//   const [snackbarOpen, setSnackbarOpen] = useState(false);
-//   const [snackbarMessage, setSnackbarMessage] = useState('');
-//   const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success' or 'error'
-
-//   // Función para obtener la información de la API
-//   const fetchMatriculaData = async () => {
-//     try {
-//       const response = await axios.get(`http://localhost:3000/api/matricula/validar-adicion/${numeroCuenta}`);
-//       console.log('Data de matrícula:', response.data);
-      
-//       // Configurar el Snackbar en función de la respuesta
-//       if (response.data.puedeMatricular) {
-//         setSnackbarMessage(response.data.mensaje);
-//         setSnackbarSeverity('success');
-//       } else {
-//         setSnackbarMessage(response.data.mensaje);
-//         setSnackbarSeverity('error');
-//       }
-//       setSnackbarOpen(true); // Mostrar Snackbar
-//     } catch (error) {
-//       console.error('Error al obtener datos de matrícula:', error);
-//       setSnackbarMessage('Error al obtener datos de matrícula.');
-//       setSnackbarSeverity('error');
-//       setSnackbarOpen(true); // Mostrar Snackbar
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // Usar useEffect para llamar a la función fetchMatriculaData cuando el componente se monte
-//   useEffect(() => {
-//     console.log('Número de cuenta:', numeroCuenta);
-//     fetchMatriculaData(); // Llama a la función para obtener datos
-//   }, [numeroCuenta]); // Dependencia de numeroCuenta
-
-//   // Función para manejar el cierre del Snackbar
-//   const handleCloseSnackbar = () => {
-//     setSnackbarOpen(false);
-//   };
-//   const menuItems = [
-//     {
-//       text: 'Adicionar Asignatura',
-//       to: '/estudiantes/matricula/adicionar',
-//       description: 'Añade una nueva asignatura al registro.',
-//       icon: <AddCircle sx={{ color: '#4CAF50' }} /> // Verde
-//     },
-//     {
-//       text: 'Cancelar Asignatura',
-//       to: '/estudiantes/matricula/cancelar',
-//       description: 'Cancela una asignatura registrada.',
-//       icon: <Cancel sx={{ color: '#F44336' }} /> // Rojo
-//     },
-//   ];
-
-//   const menu2Items = [
-//     {
-//       text: 'Forma03',
-//       to: '/estudiantes/matricula/forma03',
-//       description: 'Revisa tus clases matriculadas oficialmente.',
-//       icon: <Receipt sx={{ color: '#03A9F4' }} /> // Azul claro
-//     },
-//     {
-//       text: 'Lista de asignaturas en espera',
-//       to: '/estudiantes/matricula/listaEspera',
-//       description: 'Consulta la lista de asignaturas que tienes en espera.',
-//       icon: <HourglassEmpty sx={{ color: '#64B5F6' }} /> // Azul más claro
-//     },
-//   ];
-
-//   return (
-//     <EstudianteLayout titulo='Matricula'>
-//       <Menu menuItems={menuItems} />
-//       <Divider sx={{ margin: '2rem 0' }} />
-//       <Menu menuItems={menu2Items} />
-
-
-//       <Snackbar 
-//         open={snackbarOpen} 
-//         autoHideDuration={4000} 
-//         onClose={handleCloseSnackbar}
-//         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-//       >
-//         <Alert variant='filled' onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
-//           {snackbarMessage}
-//         </Alert>
-//       </Snackbar>
-//     </EstudianteLayout>
-//   );
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { NavLink } from 'react-router-dom';
 
 import axios from 'axios';
@@ -127,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { EstudianteLayout } from '../layout/EstudianteLayout';
 import { AddCircle, Cancel, Receipt, HourglassEmpty } from '@mui/icons-material';
-import { Divider, Snackbar, Alert, Typography, Grid, Box } from '@mui/material';
+import { Divider, Snackbar, Alert, Typography, Grid, Box, CircularProgress } from '@mui/material';
 
 // Componente Menu
 
@@ -323,7 +204,13 @@ export const MatriculaPage = () => {
 
   return (
     <EstudianteLayout titulo='Matricula'>
-      <Menu menuItems={menuItems} disabledItems={disabledItems} onDisabledItemClick={handleDisabledItemClick} />
+      {loading ?
+        <Grid container justifyContent='center'>
+          <CircularProgress sx={{ margin: '2rem' }} />
+        </Grid>
+       :
+        <Menu menuItems={menuItems} disabledItems={disabledItems} onDisabledItemClick={handleDisabledItemClick} />
+      }
       <Divider sx={{ margin: '2rem 0' }} />
       <Menu menuItems={menu2Items} />
     

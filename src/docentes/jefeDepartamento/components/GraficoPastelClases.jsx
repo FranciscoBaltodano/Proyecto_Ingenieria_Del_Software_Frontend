@@ -323,6 +323,15 @@ export const GraficoPastelClases = () => {
     }, [id_departamento])
     
 
+    const calculatePercentages = (clase) => {
+        const total = clase.RPB + clase.APB + clase.ADB + clase.NSP;
+        return {
+            RPB: (clase.RPB / total) * 100 || 0,
+            APB: (clase.APB / total) * 100 || 0,
+            ADB: (clase.ADB / total) * 100 || 0,
+            NSP: (clase.NSP / total) * 100 || 0
+        };
+    };
 
   return (
     <>
@@ -333,33 +342,43 @@ export const GraficoPastelClases = () => {
         :
         (
             <Grid display='flex' container spacing={0} >
-                
-                {/* { dataPrueba.map((clase, index) => ( */}
-                { data.map((clase, index) => (
-                    <Grid key={index} display='flex' item xs={12} sm={6} md={4} lg={3} xl={2} sx={{ padding:'5px' }}>
-                        <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' flexGrow={1} sx={{boxShadow:'2px 2px 10px 0px #D0D0D0', padding:'0px',  backgroundColor:'#FCFDFD',borderRadius: '15px'}}>
-                            <PieChart
-                                series={[ 
-                                    { 
-                                        innerRadius: 65, 
-                                        cornerRadius: 7,
-                                        data: [
-                                            { value:  (!clase.APB && !clase.NSP && !clase.RPB) && 1 , color:'#CECECE' }, 
-                                            { value: clase.RPB, color:'red' },
-                                            { value: clase.APB, color:'green' }, 
-                                            { value: clase.ADB , color:'grey' }, 
-                                            { value: clase.NSP, color:'#F5E108' }
-                                        ],
-                                        highlightScope: { faded: 'global', highlighted: 'item' },
-                                        faded: { innerRadius: 50, additionalRadius: -10, color: 'gray' },
-                                    }]}
-                                {...pieParams}
-                            />
-                            <Typography>{clase.clase}</Typography>
-                        </Box>
-                    </Grid>
-                ))}
-
+                { dataPrueba.map((clase, index) => {
+                    // {data.map((clase, index) => {
+                    const percentages = calculatePercentages(clase);
+                    const roundedPercentages = {
+                        RPB: Math.round(percentages.RPB),
+                        APB: Math.round(percentages.APB),
+                        ADB: Math.round(percentages.ADB),
+                        NSP: Math.round(percentages.NSP)
+                    };
+                    const maxPercentage = Math.max(roundedPercentages.RPB, roundedPercentages.APB, roundedPercentages.ADB, roundedPercentages.NSP);
+            
+                    return (
+                        <Grid key={index} display='flex' item xs={12} sm={6} lg={3} sx={{ padding: '25px' }}>
+                            <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' flexGrow={1} sx={{ boxShadow: '2px 2px 10px 0px #D0D0D0', padding: '20px', backgroundColor: '#FCFDFD', borderRadius: '15px' }}>
+                                <PieChart
+                                    series={[
+                                        {
+                                            innerRadius: 65,
+                                            cornerRadius: 7,
+                                            data: [
+                                                { value: (!clase.APB && !clase.NSP && !clase.RPB) && 1, color: '#EBEAEA' },
+                                                { value: roundedPercentages.RPB, color: 'red', label: `${roundedPercentages.RPB}%` },
+                                                { value: roundedPercentages.APB, color: 'green', label: `${roundedPercentages.APB}%` },
+                                                { value: roundedPercentages.ADB, color: 'grey', label: `${roundedPercentages.ADB}%` },
+                                                { value: roundedPercentages.NSP, color: '#F5E108', label: `${roundedPercentages.NSP}%` }
+                                            ],
+                                            highlightScope: { faded: 'global', highlighted: 'item' },
+                                            faded: { innerRadius: 50, additionalRadius: -10, color: 'gray' },
+                                        }]}
+                                    {...pieParams}
+                                />
+                                
+                                <Typography>{clase.clase}</Typography>
+                            </Box>
+                        </Grid>
+                    );
+                })}
             </Grid>
         )
         }

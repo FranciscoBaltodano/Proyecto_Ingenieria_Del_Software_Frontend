@@ -131,7 +131,7 @@ export const EstadisticasPage = () => {
                     <Chip icon={<RunCircleRounded style={{ color:'grey' }}  />} label="Abandono" variant="outlined" color='default' />
                 </Grid>
 
-                <Grid display='flex' container spacing={2} sx={{ mt: 0 , borderRadius: '15px',boxShadow:'2px 2px 10px 0px #D0D0D0', padding:'0px',  backgroundColor:'#FCFDFD' }}>
+                <Grid display='flex' container spacing={2} sx={{ mt: 0 , borderRadius: '15px',boxShadow:'2px 2px 10px 0px #D0D0D0', padding:'0px',  backgroundColor:'#F5F7F7' }}>
                     <GraficoPastelClases />
                 </Grid>
             </Grid>
