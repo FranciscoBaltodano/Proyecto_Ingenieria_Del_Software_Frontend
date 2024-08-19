@@ -36,10 +36,10 @@ export const GraficoPastelClases = () => {
         {
             "clase": "Circuitos Eléctricos para Ingenieria en Sistemas",
             "codigo": "IS-311",
-            "RPB": 0,
-            "APB": 0,
-            "ADB": 0,
-            "NSP": 0
+            "RPB": 3,
+            "APB": 4,
+            "ADB": 5,
+            "NSP": 10
         },
         {
             "clase": "Algoritmos y Estructura de Datos",
@@ -342,8 +342,8 @@ export const GraficoPastelClases = () => {
         :
         (
             <Grid display='flex' container spacing={0} >
-                { dataPrueba.map((clase, index) => {
-                    // {data.map((clase, index) => {
+                {/* { dataPrueba.map((clase, index) => { */}
+                {data.map((clase, index) => {
                     const percentages = calculatePercentages(clase);
                     const roundedPercentages = {
                         RPB: Math.round(percentages.RPB),
@@ -360,19 +360,29 @@ export const GraficoPastelClases = () => {
                                     series={[
                                         {
                                             innerRadius: 65,
-                                            cornerRadius: 7,
+                                            cornerRadius: 4,
                                             data: [
                                                 { value: (!clase.APB && !clase.NSP && !clase.RPB) && 1, color: '#EBEAEA' },
-                                                { value: roundedPercentages.RPB, color: 'red', label: `${roundedPercentages.RPB}%` },
-                                                { value: roundedPercentages.APB, color: 'green', label: `${roundedPercentages.APB}%` },
-                                                { value: roundedPercentages.ADB, color: 'grey', label: `${roundedPercentages.ADB}%` },
-                                                { value: roundedPercentages.NSP, color: '#F5E108', label: `${roundedPercentages.NSP}%` }
+                                                { value: clase.RPB, color: 'red',       label: `${roundedPercentages.RPB}%` },
+                                                { value: clase.APB, color: 'green',     label: `${roundedPercentages.APB}%` },
+                                                { value: clase.ADB, color: 'grey',      label: `${roundedPercentages.ADB}%` },
+                                                { value: clase.NSP, color: '#F5E108',   label: `${roundedPercentages.NSP}%` }
                                             ],
                                             highlightScope: { faded: 'global', highlighted: 'item' },
                                             faded: { innerRadius: 50, additionalRadius: -10, color: 'gray' },
                                         }]}
                                     {...pieParams}
                                 />
+
+                            <Box display='flex' justifyContent='center' alignItems='center' sx={{ mt: 2, position: 'absolute', mb:'40px' }}>
+                            <Typography
+                                variant="h6"
+                                component="div"
+
+                            >
+                                {maxPercentage}%
+                            </Typography>
+                            </Box>
                                 
                                 <Typography>{clase.clase}</Typography>
                             </Box>
