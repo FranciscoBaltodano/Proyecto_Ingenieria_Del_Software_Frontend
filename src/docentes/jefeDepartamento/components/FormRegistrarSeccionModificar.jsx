@@ -155,12 +155,14 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose,onU
         id_Secciones: section,
         id_Docentes: data.id_Docentes,
         id_Aula: data.id_Aula,
-        id_Edificios: edificios.find(edificio => edificio.Nombre === data.id_Edificio).id_Edificio,        Hora_inicio: startTime,
+        id_Edificios: edificios.find(edificio => edificio.Nombre === data.id_Edificio).id_Edficios,        
+        Hora_inicio: startTime,
         Hora_Final: endTime,
         Cupos: value,
         dias: selectedDias
       };
-  
+      console.log('edificio a enviar:', edificios.find(edificio => edificio.Nombre === data.id_Edificio).id_Edficios);
+
       console.log('Datos a enviar:', updatedData);
       console.log('URL de la petición:', 'http://localhost:3000/api/department-head/useccion');
   
