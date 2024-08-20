@@ -152,10 +152,6 @@ export const FormRegistrarSeccionPage = () => {
         <Typography variant="h5" component="h1" gutterBottom>
           Departamento: {user.departamento}
         </Typography>
-        <Typography variant="h5" component="h1" gutterBottom>
-          Id del departamento: {user.id_departamento}
-        </Typography>
-
         <div>
           <Typography variant="h5" component="h1" gutterBottom>
             Asignatura seleccionada: {asignatura.nombre}

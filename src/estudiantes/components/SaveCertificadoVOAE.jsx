@@ -73,7 +73,7 @@ export const SaveCertificadoVOAE = ({ numeroCuenta }) => {
           variant="filled"
           sx={{ width: '100%' }}
         >
-          Ocurrio un error, Intente más tarde.
+          No tiene notas registradas en el sistema.
         </Alert>
       </Snackbar>
 
