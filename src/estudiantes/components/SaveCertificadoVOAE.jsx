@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, CircularProgress, Snackbar } from '@mui/material';
 import Alert from '@mui/material/Alert';
+import { FileDownload } from '@mui/icons-material';
 
 export const SaveCertificadoVOAE = ({ numeroCuenta }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,12 +56,14 @@ export const SaveCertificadoVOAE = ({ numeroCuenta }) => {
       <style>{EstilosPdf}</style>
       <Button 
         variant="contained" 
-        color="error" 
+        color="success" 
         onClick={handleDownload}
         disabled={isLoading}
         className="custom-button"
+        endIcon={isLoading ? null : (<FileDownload />)}
+        sx={{ width: '500px', height: '50px', fontSize: '1.2rem', fontWeight: 'bold', borderRadius: '10px' }}
       >
-        {isLoading ? <CircularProgress size={24} /> : 'Descargar PDF'}
+        {isLoading ? <CircularProgress size={24} /> : 'Descargar Certificado Académico'}
       </Button>
 
       <Snackbar open={open} autoHideDuration={3000} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} onClose={handleClose}>
@@ -70,7 +73,7 @@ export const SaveCertificadoVOAE = ({ numeroCuenta }) => {
           variant="filled"
           sx={{ width: '100%' }}
         >
-          No hay datos de estudiantes por el momento, intente más tarde.
+          Ocurrio un error, Intente más tarde.
         </Alert>
       </Snackbar>
 
