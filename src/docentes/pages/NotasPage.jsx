@@ -128,7 +128,7 @@ export const NotasPage = () => {
     setSelectedSeccionName('');
     setSelectedSeccionId('');
   };
-
+/*
   const handleAbrirNotas = (idSeccion, nombreSeccion, procesoId) => {
     setSelectedSeccionName(nombreSeccion);
     setSelectedSeccionId(idSeccion);
@@ -136,6 +136,11 @@ export const NotasPage = () => {
     fetchEstudiantes(idSeccion);
     setOpenNotasModal(true);
   };
+*/
+const handleAbrirNotas = (index) => {
+  setSelectedEstudianteIndex(index);
+  setOpenNotasModal(true);
+};
 
   const handleCloseNotasModal = () => {
     setOpenNotasModal(false);
@@ -160,15 +165,28 @@ export const NotasPage = () => {
   
   const handleGuardarNotas = async () => {
     try {
-      const notasPayload = estudiantesSecciones.map((estudiante, index) => ({
-        id_Secciones: selectedSeccionId,
-        id_Docentes: user.numeroEmpleado,
-        id_Estudiante: estudiante.estudiante[0].numeroCuenta,
-        nota: parseInt(notas[index].nota, 10),
-        proceso: procesoNotas[0].id_ProcesoNotas,
-        detail: '',
-      }));
-
+      // Crear un payload solo con las notas que se han modificado
+      const notasPayload = estudiantesSecciones.map((estudiante, index) => {
+        if (notas[index].nota) { // Solo incluir estudiantes con notas no vacías
+          return {
+            id_Secciones: selectedSeccionId,
+            id_Docentes: user.numeroEmpleado,
+            id_Estudiante: estudiante.estudiante[0].numeroCuenta,
+            nota: parseInt(notas[index].nota, 10),
+            proceso: procesoNotas[0].id_ProcesoNotas,
+           // detail: '',
+          };
+        }
+        return null;
+      }).filter(item => item !== null); // Filtrar las entradas nulas
+  
+      if (notasPayload.length === 0) {
+        setSnackbarMessage('No hay notas para guardar.');
+        setSnackbarSeverity('warning');
+        setOpenSnackbar(true);
+        return;
+      }
+  
       const response = await fetch('http://localhost:3000/api/teacher/notas', {
         method: 'POST',
         headers: {
@@ -176,21 +194,19 @@ export const NotasPage = () => {
         },
         body: JSON.stringify(notasPayload),
       });
-
+  
       if (!response.ok) {
         throw new Error('Error al guardar las notas');
       }
-
+  
       const data = await response.json();
       const message = data.message || 'Notas procesadas';
-      const results = data.results || [];
-      if (results.length > 0) {
-        setSnackbarMessage(results[0].message || message);
-      } else {
-        setSnackbarMessage(message);
-      }
+      setSnackbarMessage(message);
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
+  
+      // Refresca la lista de estudiantes y sus notas
+      fetchEstudiantes(selectedSeccionId);
       handleCloseNotasModal();
     } catch (error) {
       console.error('Error:', error.message);
@@ -199,25 +215,22 @@ export const NotasPage = () => {
       setOpenSnackbar(true);
     }
   };
-
- 
+  
 
   const handleGuardarCambios = async () => {
     try {
-       const estudiante = estudiantesSecciones[selectedEstudianteIndex];
-       const seccion = selectedSeccionId;
-        const updatedNota = {
-          id_Secciones: seccion, // Usar el ID de la sección
-          id_Docentes: user.numeroEmpleado,
-          id_Estudiante: estudiante.estudiante[0].numeroCuenta,
-          nota: parseInt(notaModificada, 10),
-          proceso: procesoNotas[0].id_ProcesoNotas,
-          detail: '',
-        };
+      const estudiante = estudiantesSecciones[selectedEstudianteIndex];
+      const seccion = selectedSeccionId;
   
-      console.log('Datos de la nota actualizada:', updatedNota);
-  
-      const response = await fetch('http://localhost:3000/api/teacher/notas', {
+      const updatedNota = {
+        id_Secciones: seccion,
+        id_Docentes: user.numeroEmpleado,
+        id_Estudiante: estudiante.estudiante[0].numeroCuenta,
+        nota: parseInt(notaModificada, 10),
+        proceso: procesoNotas[0].id_ProcesoNotas,
+      };
+  console.log('que imprime este chiste',updatedNota);
+      const response = await fetch('http://localhost:3000/api/teacher/notasU', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -230,8 +243,7 @@ export const NotasPage = () => {
       }
   
       const data = await response.json();
-      const message = data.message || 'Nota modificada';
-      setSnackbarMessage(message);
+      setSnackbarMessage(data.message || 'Nota modificada');
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
       setOpenModificarNotaModal(false);
@@ -243,6 +255,7 @@ export const NotasPage = () => {
       setOpenSnackbar(true);
     }
   };
+  
   
   
   const normalizeText = (text) => {
@@ -261,7 +274,7 @@ export const NotasPage = () => {
     {
       field: 'actions',
       headerName: 'Acciones',
-      width: 350,
+      width: 180,
       renderCell: (params) => (
         <>
           <Button
@@ -272,16 +285,7 @@ export const NotasPage = () => {
           >
             Ver Notas
           </Button>
-          <Button
-            variant="contained"
-            color="inherit"
-            onClick={() => handleAbrirNotas(params.row.id_Secciones, params.row.nombreAsignatura, selectedProcesoId)}
-            style={{ marginLeft: 10 }}
-            disabled={!isButtonEnabled}
-            endIcon={<AddIcon />}
-          >
-            Añadir Notas
-          </Button>
+          
         </>
       ),
     },
@@ -315,13 +319,22 @@ export const NotasPage = () => {
     {
       field: 'actions',
       headerName: 'Acciones',
-      width: 210,
+      width: 400, 
       renderCell: (params) => (
         <>
           <Button
             variant="contained"
+            color="primary"
+            onClick={() => handleAbrirNotas(params.row.id)}
+            disabled={!isButtonEnabled}
+            endIcon={<AddIcon />}
+          >
+            Añadir Notas
+          </Button>
+          <Button
+            variant="contained"
             color="inherit"
-            onClick={() => handleModificarNota(params.row.id)} 
+            onClick={() => handleModificarNota(params.row.id)}
             style={{ marginLeft: 10 }}
             disabled={!isButtonEnabled}
             endIcon={<EditIcon />}
@@ -331,7 +344,8 @@ export const NotasPage = () => {
         </>
       ),
     },
-  ]
+  ];
+  
   
 //console.log('que hace este chiste',selectedSeccionId)
 //console.log('tuopa',estudiantesSecciones)
@@ -404,42 +418,36 @@ export const NotasPage = () => {
   </DialogActions>
 </Dialog>
 
-      <Dialog open={openNotasModal} fullWidth maxWidth="md">
-        <DialogTitle>
-          {`Añadir Notas - Sección: ${selectedSeccionName}`}
-        </DialogTitle>
-        <DialogContent>
-          {estudiantesSecciones.length > 0 ? (
-            estudiantesSecciones.map((estudiante, index) => (
-              <div key={index} style={{ marginBottom: 20 }}>
-                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', flexWrap: 'nowrap' }}>
-                  <Typography variant="subtitle1" style={{ width: '100%' }}>
-                    {`${estudiante.Nombre} ${estudiante.Apellido} (${estudiante.estudiante[0]?.numeroCuenta || 'N/A'})`}
-                  </Typography>
-                  <TextField
-                    label="Nota"
-                    variant="outlined"
-                    value={notas[index]?.nota || ''}
-                    onChange={(e) => handleNotaChange(index, 'nota', e.target.value)}
-                    style={{ marginTop: '5px', width: 300 }}
-                  />
-                </div>
-                <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-              </div>
-            ))
-          ) : (
-            <Typography>No se encontraron estudiantes para la sección seleccionada.</Typography>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleGuardarNotas} color="primary">
-            Guardar Notas
-          </Button>
-          <Button onClick={handleCloseNotasModal} color="inherit">
-            Cancelar
-          </Button>
-        </DialogActions>
-      </Dialog>
+<Dialog open={openNotasModal} fullWidth maxWidth="md">
+  <DialogTitle>
+    {`Añadir Nota - Estudiante: ${estudiantesSecciones[selectedEstudianteIndex]?.Nombre} ${estudiantesSecciones[selectedEstudianteIndex]?.Apellido}`}
+  </DialogTitle>
+  <DialogContent>
+    <div style={{ marginBottom: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', flexWrap: 'nowrap' }}>
+        <Typography variant="subtitle1" style={{ width: '100%' }}>
+          {`${estudiantesSecciones[selectedEstudianteIndex]?.Nombre} ${estudiantesSecciones[selectedEstudianteIndex]?.Apellido} (${estudiantesSecciones[selectedEstudianteIndex]?.estudiante[0]?.numeroCuenta || 'N/A'})`}
+        </Typography>
+        <TextField
+          label="Nota"
+          variant="outlined"
+          value={notas[selectedEstudianteIndex]?.nota || ''}
+          onChange={(e) => handleNotaChange(selectedEstudianteIndex, 'nota', e.target.value)}
+          style={{ marginTop: '5px', width: 300 }}
+        />
+      </div>
+      <Divider style={{ marginTop: 10, marginBottom: 10 }} />
+    </div>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleGuardarNotas} color="primary">
+      Guardar Nota
+    </Button>
+    <Button onClick={handleCloseNotasModal} color="inherit">
+      Cancelar
+    </Button>
+  </DialogActions>
+</Dialog>
 
       <Dialog open={openModificarNotaModal} fullWidth maxWidth="sm">
   <DialogTitle>
