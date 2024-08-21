@@ -268,7 +268,6 @@ export const ConfigurarSeccionesPage = () => {
       }
     },
     { field: "Cupos", headerName: "Cupos", width: 100 },
-    { field: "matriculados", headerName: "Matriculados", width: 100 },
     {
       field: "actions",
       headerName: "Accion",
