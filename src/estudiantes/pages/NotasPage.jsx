@@ -22,7 +22,6 @@ export const NotasPage = () => {
     pregunta4: '',
     pregunta5: '',
   });
-  const [encuestasCompletadas, setEncuestasCompletadas] = useState({});
 
   useEffect(() => {
     const fetchSecciones = async () => {
@@ -31,30 +30,15 @@ export const NotasPage = () => {
         if (!response.ok) throw new Error('Error en la respuesta de la API');
         const data = await response.json();
         setSecciones(data);
-  
-        // Obtener el estado de las encuestas completadas
-        const encuestaStatuses = {};
-        await Promise.all(data.map(async (seccion) => {
-          try {
-            const res = await fetch(`/api/student/verificar-encuesta/${seccion.id_Secciones}/${user.numeroCuenta}`);
-            if (!res.ok) throw new Error('Error al verificar encuesta');
-            const encuestaData = await res.json();
-            encuestaStatuses[seccion.id_Secciones] = encuestaData.completada || false;
-          } catch (error) {
-            console.error(`Error al verificar encuesta para sección ${seccion.id_Secciones}:`, error);
-            encuestaStatuses[seccion.id_Secciones] = false; // Asumir que no está completada en caso de error
-          }
-        }));
-        setEncuestasCompletadas(encuestaStatuses);
       } catch (error) {
         console.error('Error al obtener las secciones:', error);
         handleSnackbarOpen('Error al obtener las secciones', 'error');
       }
     };
-  
+
     fetchSecciones();
   }, [user]);
-  
+
   const handleVerNota = async (seccionId) => {
     try {
       const response = await fetch(`/api/student/notas/${seccionId}/${user.numeroCuenta}`);
@@ -85,6 +69,7 @@ export const NotasPage = () => {
   };
 
   const handleSubmitEncuesta = async () => {
+    // Convertir los valores de las preguntas a enteros
     const encuestaData = {
       id_Seccion: selectedSeccion,
       id_Estudiante: user.numeroCuenta,
@@ -94,7 +79,10 @@ export const NotasPage = () => {
       pregunta4: parseInt(encuesta.pregunta4, 10),
       pregunta5: parseInt(encuesta.pregunta5, 10),
     };
-  
+    
+    // Mostrar los datos de la encuesta en la consola
+    console.log('Datos de la encuesta a enviar:', encuestaData);
+
     try {
       const response = await fetch('/api/student/encuesta', {
         method: 'POST',
@@ -103,15 +91,10 @@ export const NotasPage = () => {
         },
         body: JSON.stringify(encuestaData),
       });
-  
+
       if (response.ok) {
         handleSnackbarOpen('Encuesta enviada exitosamente', 'success');
         setOpenEncuesta(false);
-        setEncuestasCompletadas(prevState => ({
-          ...prevState,
-          [selectedSeccion]: true
-        }));
-        // Actualizar las notas después de enviar la encuesta
         handleVerNota(selectedSeccion);
       } else {
         const data = await response.json();
@@ -122,7 +105,7 @@ export const NotasPage = () => {
       handleSnackbarOpen('Error al enviar la encuesta', 'error');
     }
   };
-  
+
   const handleSnackbarOpen = (message, severity) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
@@ -141,23 +124,18 @@ export const NotasPage = () => {
     {
       field: 'acciones',
       headerName: 'Acciones',
-      width: 250,
-      renderCell: (params) => {
-        const encuestaCompletada = encuestasCompletadas[params.row.id_Secciones];
-        return (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleVerNota(params.row.id_Secciones)}
-            disabled={encuestaCompletada === undefined || !encuestaCompletada}
-          >
-            {encuestaCompletada ? 'Ver Notas' : 'Completar Encuesta'}
-          </Button>
-        );
-      },
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleVerNota(params.row.id_Secciones)}
+        >
+          Encuesta
+        </Button>
+      ),
     },
   ];
-  
 
   return (
     <EstudianteLayout titulo='Notas'>
@@ -208,9 +186,9 @@ export const NotasPage = () => {
             border: '2px solid #000',
             boxShadow: 24,
             p: 4,
-            overflow: 'auto',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
+            overflow: 'auto', // Permite el scroll si es necesario
+            scrollbarWidth: 'none', // Oculta la barra de desplazamiento en Firefox
+            msOverflowStyle: 'none', // Oculta la barra de desplazamiento en Internet Explorer y Edge
           }}
         >
           <IconButton
@@ -294,7 +272,7 @@ export const NotasPage = () => {
               variant="contained"
               color="primary"
               onClick={handleSubmitEncuesta}
-              sx={{ width: '33%' }}
+              sx={{ width: '33%' }} // Ancho del 33%
             >
               Enviar Encuesta
             </Button>
