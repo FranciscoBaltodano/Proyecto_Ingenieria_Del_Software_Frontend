@@ -170,7 +170,7 @@ const handleAbrirNotas = (index) => {
             id_Estudiante: estudiante.estudiante[0].numeroCuenta,
             nota: parseInt(notas[index].nota, 10),
             proceso: procesoNotas[0].id_ProcesoNotas,
-            detail: notas[index].abd ? '1' : '0',      
+            detail: notas[index].abd ? 1 : 0,      
                 
           };
           
