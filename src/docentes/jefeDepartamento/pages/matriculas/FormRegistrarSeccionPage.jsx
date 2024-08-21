@@ -77,7 +77,7 @@ export const FormRegistrarSeccionPage = () => {
         const [diasRes, edificioRes, docenteRes] = await Promise.all([
           axios.get('http://localhost:3000/api/department-head/dias'),
           axios.get(`http://localhost:3000/api/department-head/edificios/${user.id_centro}`),
-          axios.post('http://localhost:3000/api/department-head/docentes/activos', { id_Departamento: user.id_departamento })
+          axios.get(`http://localhost:3000/api/department-head/docentes/activos/${user.id_centro}/${user.id_departamento}` ),
         ]);
 
         setDias(diasRes.data.data);

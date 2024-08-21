@@ -89,7 +89,7 @@ export const ConfigurarSeccionesPage = () => {
         axios.get(`/api/department-head/secciones/${codigoAsignatura}`),
         axios.get('/api/department-head/edificios'),
         axios.get('/api/department-head/aulas'),
-        axios.post('http://localhost:3000/api/department-head/docentes/activos', { id_Departamento: user.id_departamento })
+        axios.get(`http://localhost:3000/api/department-head/docentes/activos/${user.id_centro}/${user.id_departamento}` ),
       ]);
       setSecciones(seccionesRes.data.data);
       setEdificios(edificiosRes.data.data);
