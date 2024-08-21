@@ -3,79 +3,87 @@ import { EstudianteLayout } from '../layout/EstudianteLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { Grid, Button } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
-import { SaveCertificadoVOAE } from '../components/SaveCertificadoVOAE';
 
 export const NotasPage = () => {
   const { user } = useAuth();
-  const [notas, setNotas] = useState([]);
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false); // Comienza como deshabilitado
+  const [secciones, setSecciones] = useState([]);
+  const [notas, setNotas] = useState(null);
+  const [selectedSeccion, setSelectedSeccion] = useState(null);
 
   useEffect(() => {
-    const fetchNotas = async () => {
+    const fetchSecciones = async () => {
       try {
-        const response = await fetch(`/api/notas/${user.seccion}/${user.id}`);
+        const response = await fetch(`/api/student/secciones/${user.numeroCuenta}`);
         const data = await response.json();
-        
-        if (data.message === 'evalua al docente') {
-          alert('Por favor, evalúa al docente antes de ver las notas.');
-          setIsButtonEnabled(false); // Deshabilita el botón si no ha evaluado
-        } else {
-          setNotas([data]); // Ajusta el estado de notas si la evaluación existe
-          setIsButtonEnabled(true); // Habilita el botón porque la evaluación está completa
-        }
+        setSecciones(data);
       } catch (error) {
-        console.error('Error al obtener las notas:', error);
+        console.error('Error al obtener las secciones:', error);
       }
     };
 
-    fetchNotas();
+    fetchSecciones();
   }, [user]);
 
-  const columnasEstudiantes = [
-    { field: 'Nombre', headerName: 'Nombre', width: 150 },
-    { field: 'Apellido', headerName: 'Apellido', width: 150 },
-    { field: 'numeroCuenta', headerName: 'Número de Cuenta', width: 150 },
-    { field: 'nota', headerName: 'Nota', width: 120 },
-    { field: 'obs', headerName: 'Observación', width: 120 },
+  const handleVerNota = async (seccionId) => {
+    try {
+      const response = await fetch(`/api/student/notas/${seccionId}/${user.numeroCuenta}`);
+      if (response.status === 403) {
+        alert('Debes completar la encuesta antes de ver las notas.');
+      } else {
+        const data = await response.json();
+        setNotas(data);
+        setSelectedSeccion(seccionId);
+      }
+    } catch (error) {
+      console.error('Error al obtener las notas:', error);
+    }
+  };
+
+  const columnasSecciones = [
+    { field: 'codigoAsignatura', headerName: 'Código Asignatura', width: 150 },
+    { field: 'nombreAsignatura', headerName: 'Nombre Asignatura', width: 200 },
+    { field: 'Hora_inicio', headerName: 'Sección', width: 120 },
+    { field: 'nombreDocente', headerName: 'Nombre Docente', width: 200 },
     {
-      field: 'actions',
+      field: 'acciones',
       headerName: 'Acciones',
-      width: 210,
-      renderCell: () => (
+      width: 150,
+      renderCell: (params) => (
         <Button
           variant="contained"
-          color="inherit"
-          onClick={() => alert('Modificar Nota')}
-          style={{ marginLeft: 10 }}
-          disabled={!isButtonEnabled}
-          endIcon={<EditIcon />}
+          color="primary"
+          onClick={() => handleVerNota(params.row.id_Secciones)}
         >
-          Modificar Nota
+          Ver Nota
         </Button>
       ),
     },
   ];
 
   return (
-    <EstudianteLayout titulo='Notas'>
-      <Grid container justifyContent='center' spacing={2}>
-        <SaveCertificadoVOAE numeroCuenta={user.numeroCuenta} />
-      </Grid>
-
-      <br />
-      <br />
+    <EstudianteLayout titulo='Secciones'>
       <Grid container justifyContent='center' spacing={2}>
         <div style={{ height: 400, width: '100%' }}>
           <DataGrid
-            rows={notas}
-            columns={columnasEstudiantes}
+            rows={secciones}
+            columns={columnasSecciones}
             pageSize={5}
             rowsPerPageOptions={[5]}
-            getRowId={(row) => row.id} // Asegúrate de que cada fila tenga un ID único
+            getRowId={(row) => row.id_Secciones}
           />
         </div>
       </Grid>
+
+      {notas && selectedSeccion && (
+        <div>
+          <h3>Notas de la sección {selectedSeccion}</h3>
+          <ul>
+            {notas.map((nota, index) => (
+              <li key={index}>{nota}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </EstudianteLayout>
   );
 };
