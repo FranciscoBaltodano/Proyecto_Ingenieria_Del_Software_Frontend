@@ -34,7 +34,7 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose,onU
         const [diasRes, edificioRes, docenteRes, seccionResponse, diasSeccionesRes] = await Promise.all([
           axios.get('http://localhost:3000/api/department-head/dias'),
           axios.get(`http://localhost:3000/api/department-head/edificios/${user.id_centro}`),
-          axios.post('http://localhost:3000/api/department-head/docentes/activos', { id_Departamento: user.id_departamento }),
+          axios.get(`http://localhost:3000/api/department-head/docentes/activos/${user.id_centro}/${user.id_departamento}`),
           axios.get(`http://localhost:3000/api/department-head/seccionesFiltro/${section}`),
           axios.get(`http://localhost:3000/api/department-head/dias/${section}`)
         ]);
@@ -83,6 +83,8 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose,onU
   }, [section, setValue, user.id_centro, user.id_departamento]);
 
   const fetchAulas = async (idEdificio) => {
+   
+
     try {
       console.log('Fetching aulas for edificio:', idEdificio);
       const aulasRes = await axios.get(`http://localhost:3000/api/department-head/aulas/${idEdificio}`);
@@ -201,6 +203,8 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose,onU
     } catch (error) {
       console.error('Error al modificar la sección:', error);
       console.error('Detalles del error:', error.response);
+
+      
       setSnackbarMessage('Error al modificar la sección. Por favor, intente de nuevo.');
       setSnackbarSeverity('error');
       setOpenSnackbar(true);

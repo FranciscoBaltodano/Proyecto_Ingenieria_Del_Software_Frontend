@@ -165,7 +165,60 @@ const handleAbrirNotas = (index) => {
     setOpenModificarNotaModal(true);
   };
   
-
+  
+  // const handleGuardarNotas = async () => {
+  //   try {
+  //     // Crear un payload solo con las notas que se han modificado
+  //     const notasPayload = estudiantesSecciones.map((estudiante, index) => {
+  //       if (notas[index].nota) { // Solo incluir estudiantes con notas no vacías
+  //         return {
+  //           id_Secciones: selectedSeccionId,
+  //           id_Docentes: user.numeroEmpleado,
+  //           id_Estudiante: estudiante.estudiante[0].numeroCuenta,
+  //           nota: parseInt(notas[index].nota, 10),
+  //           proceso: procesoNotas[0].id_ProcesoNotas,
+  //          // detail: '',
+  //         };
+  //       }
+  //       return null;
+  //     }).filter(item => item !== null); // Filtrar las entradas nulas
+  
+  //     if (notasPayload.length === 0) {
+  //       setSnackbarMessage('No hay notas para guardar.');
+  //       setSnackbarSeverity('warning');
+  //       setOpenSnackbar(true);
+  //       return;
+  //     }
+  
+  //     const response = await fetch('http://localhost:3000/api/teacher/notas', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(notasPayload),
+  //     });
+  
+  //     if (!response.ok) {
+  //       throw new Error('Error al guardar las notas');
+  //     }
+  
+  //     const data = await response.json();
+  //     const message = data.message;
+  //     setSnackbarMessage(message);
+  //     setSnackbarSeverity('success');
+  //     setOpenSnackbar(true);
+  
+  //     // Refresca la lista de estudiantes y sus notas
+  //     fetchEstudiantes(selectedSeccionId);
+  //     handleCloseNotasModal();
+  //   } catch (error) {
+  //     console.error('Error:', error.message);
+  //     setSnackbarMessage(error.message || 'Error al guardar las notas');
+  //     setSnackbarSeverity('error');
+  //     setOpenSnackbar(true);
+  //   }
+  // };
+  
   const handleGuardarNotas = async () => {
     try {
       // Crear un payload solo con las notas que se han modificado
@@ -264,7 +317,7 @@ const handleAbrirNotas = (index) => {
       setOpenSnackbar(true);
     }
   };
-
+  
   
   
   const normalizeText = (text) => {

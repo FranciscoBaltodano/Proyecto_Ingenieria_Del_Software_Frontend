@@ -26,14 +26,33 @@ export const CalificacionesPage = () => {
         navigate('/jefeDepartamento/docentes');
     };
 
+    // const fetchDocentesActivos = async () => {
+    //     try {
+    //         const response = await fetch(`http://localhost:3000/api/department-head/docentes/activos`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({id_Departamento: user.id_departamento}),
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('Error al obtener la lista de docentes activos');
+    //         }
+
+    //         const data = await response.json();
+    //         setDocentesActivos(data.data);
+    //     } catch (error) {
+    //         console.error('Error:', error.message);
+    //     }
+    // };
     const fetchDocentesActivos = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/department-head/docentes/activos', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:3000/api/department-head/docentes/activos/${user.id_centro}/${user.id_departamento}`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id_Departamento: user.id_departamento }),
+                }
             });
 
             if (!response.ok) {
