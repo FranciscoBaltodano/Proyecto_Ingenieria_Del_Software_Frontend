@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   Button, Dialog, DialogActions, DialogContent, DialogTitle,
-  Typography, InputAdornment, TextField, Snackbar, Alert, Divider
+  Typography, InputAdornment, TextField, Snackbar, Alert, Divider,
+  Checkbox,FormControlLabel
 } from '@mui/material';
 import { DocenteLayout } from '../../docentes/layout/DocenteLayout';
 import { useAuth } from '../../contexts/AuthContext';
@@ -11,8 +12,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Cancel';
+
+
 
 export const NotasPage = () => {
   const { user } = useAuth();
@@ -27,7 +28,6 @@ export const NotasPage = () => {
   const [notas, setNotas] = useState([]);
   const [procesoNotas, setProcesoNotas] = useState([]);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const [selectedProcesoId, setSelectedProcesoId] = useState(null);
   const [selectedEstudianteIndex, setSelectedEstudianteIndex] = useState(null);
   const [notaModificada, setNotaModificada] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -144,6 +144,7 @@ const handleAbrirNotas = (index) => {
 
   const handleCloseNotasModal = () => {
     setOpenNotasModal(false);
+    fetchEstudiantes(selectedSeccionId); // Refrescar los estudiantes con el ID de la sección actual
     setEstudiantesSecciones([]);
     setSelectedSeccionName('');
     setSelectedSeccionId('');
@@ -151,9 +152,11 @@ const handleAbrirNotas = (index) => {
 
   const handleNotaChange = (index, field, value) => {
     const newNotas = [...notas];
-    newNotas[index][field] = value;
+    newNotas[index] = {
+      ...newNotas[index],
+      [field]: value
+    };
     setNotas(newNotas);
-    
   };
 
   const handleModificarNota = (index) => {
@@ -162,7 +165,7 @@ const handleAbrirNotas = (index) => {
     setOpenModificarNotaModal(true);
   };
   
-  
+
   const handleGuardarNotas = async () => {
     try {
       // Crear un payload solo con las notas que se han modificado
@@ -174,12 +177,15 @@ const handleAbrirNotas = (index) => {
             id_Estudiante: estudiante.estudiante[0].numeroCuenta,
             nota: parseInt(notas[index].nota, 10),
             proceso: procesoNotas[0].id_ProcesoNotas,
-           // detail: '',
+            detail: notas[index].abd ? '1' : '0',      
+                
           };
+          
         }
         return null;
+
       }).filter(item => item !== null); // Filtrar las entradas nulas
-  
+      console.log('Datos a enviar:', notasPayload);
       if (notasPayload.length === 0) {
         setSnackbarMessage('No hay notas para guardar.');
         setSnackbarSeverity('warning');
@@ -195,19 +201,21 @@ const handleAbrirNotas = (index) => {
         body: JSON.stringify(notasPayload),
       });
   
+      // Manejo de la respuesta de error
       if (!response.ok) {
-        throw new Error('Error al guardar las notas');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al guardar las notas');
       }
   
+      // Manejo de la respuesta de éxito
       const data = await response.json();
-      const message = data.message || 'Notas procesadas';
-      setSnackbarMessage(message);
+      setSnackbarMessage(data.message || 'Notas guardadas exitosamente');
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
   
       // Refresca la lista de estudiantes y sus notas
       fetchEstudiantes(selectedSeccionId);
-      handleCloseNotasModal();
+      setOpenNotasModal(false);
     } catch (error) {
       console.error('Error:', error.message);
       setSnackbarMessage(error.message || 'Error al guardar las notas');
@@ -215,7 +223,7 @@ const handleAbrirNotas = (index) => {
       setOpenSnackbar(true);
     }
   };
-  
+
 
   const handleGuardarCambios = async () => {
     try {
@@ -229,7 +237,7 @@ const handleAbrirNotas = (index) => {
         nota: parseInt(notaModificada, 10),
         proceso: procesoNotas[0].id_ProcesoNotas,
       };
-  console.log('que imprime este chiste',updatedNota);
+  
       const response = await fetch('http://localhost:3000/api/teacher/notasU', {
         method: 'PUT',
         headers: {
@@ -239,7 +247,8 @@ const handleAbrirNotas = (index) => {
       });
   
       if (!response.ok) {
-        throw new Error('Error al modificar la nota');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al modificar la nota');
       }
   
       const data = await response.json();
@@ -255,7 +264,7 @@ const handleAbrirNotas = (index) => {
       setOpenSnackbar(true);
     }
   };
-  
+
   
   
   const normalizeText = (text) => {
@@ -434,6 +443,17 @@ const handleAbrirNotas = (index) => {
           value={notas[selectedEstudianteIndex]?.nota || ''}
           onChange={(e) => handleNotaChange(selectedEstudianteIndex, 'nota', e.target.value)}
           style={{ marginTop: '5px', width: 300 }}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={notas[selectedEstudianteIndex]?.abd || false}
+              onChange={(e) => handleNotaChange(selectedEstudianteIndex, 'abd', e.target.checked)}
+              color="primary"
+            />
+          }
+          label="ABD"
+          style={{ marginLeft: 10 }}
         />
       </div>
       <Divider style={{ marginTop: 10, marginBottom: 10 }} />
