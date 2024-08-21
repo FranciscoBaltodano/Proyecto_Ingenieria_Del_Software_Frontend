@@ -154,17 +154,17 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose,onU
     try {
       // Preparar los datos para enviar
       const updatedData = {
-        id_Secciones: section,
-        id_Docentes: data.id_Docentes,
-        id_Aula: data.id_Aula,
-        id_Edificios: edificios.find(edificio => edificio.Nombre === data.id_Edificio).id_Edficios,        
+        id_Secciones: parseInt(section),
+        id_Docentes: parseInt(data.id_Docentes),
+        id_Aula: parseInt(data.id_Aula),
+        id_Edificios: edificios.find(edificio => edificio.Nombre === data.id_Edificio).id_Edficios,
         Hora_inicio: startTime,
         Hora_Final: endTime,
-        Cupos: value,
-        dias: selectedDias
+        Cupos: parseInt(value),
+        dias: selectedDias,
       };
+  
       console.log('edificio a enviar:', edificios.find(edificio => edificio.Nombre === data.id_Edificio).id_Edficios);
-
       console.log('Datos a enviar:', updatedData);
       console.log('URL de la petición:', 'http://localhost:3000/api/department-head/useccion');
   
@@ -172,27 +172,15 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose,onU
       const response = await axios.put('http://localhost:3000/api/department-head/useccion', updatedData);
   
       console.log('Respuesta del servidor:', response);
-      console.log('Datos a enviar:', {
-        id_Secciones: section,
-        id_Docentes: data.id_Docentes,
-        id_Aula: data.id_Aula,
-        id_Edificios: data.id_Edificio, // Enviar el ID del edificio
-        Hora_inicio: startTime,
-        Hora_Final: endTime,
-        Cupos: value,
-        dias: selectedDias
-      });
-      console.log('Form data:', data);
-      console.log('Edificio ID:', data.id_Edificio);
   
       if (response.status === 200) {
         setSnackbarMessage('Sección modificada exitosamente');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
-
+  
         // Llama a la función de actualización
         onUpdateSecciones();
-
+  
         // Cerrar el modal después de un breve retraso
         setTimeout(() => {
           if (onClose) {
@@ -203,14 +191,21 @@ export const FormRegistrarSeccionModificar = ({ section, asignatura, onClose,onU
     } catch (error) {
       console.error('Error al modificar la sección:', error);
       console.error('Detalles del error:', error.response);
-
-      
-      setSnackbarMessage('Error al modificar la sección. Por favor, intente de nuevo.');
+  
+      // Verifica si hay una respuesta del backend con mensajes personalizados
+      if (error.response && error.response.data && error.response.data.message) {
+        // Usa el mensaje proporcionado por el backend
+        setSnackbarMessage(error.response.data.message);
+      } else {
+        // Usa un mensaje genérico si no hay uno específico
+        setSnackbarMessage('Error al modificar la sección. Por favor, intente de nuevo.');
+      }
+  
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
     }
   };
-
+  
 
 
   return (
